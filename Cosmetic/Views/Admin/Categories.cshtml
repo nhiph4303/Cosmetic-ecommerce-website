@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Shop.Models.Category>
+
+@{
+	ViewData["Title"] = "Category Management";
+	Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+}
+
+<div class="dashboard-page-content">
+	<div class="row mb-9 align-items-center justify-content-between">
+		<div class="col-sm-6 mb-8 mb-sm-0">
+			<h2 class="fs-4 mb-0">Category Management</h2>
+		</div>
+		<div class="col-sm-6 col-md-3 d-flex flex-wrap justify-content-sm-end">
+			<input class="form-control border-primary w-100" type="text" placeholder="Search Categories">
+		</div>
+	</div>
+	<div class="card mb-4 rounded-4 p-7">
+		<div class="card-body p-0">
+			<div class="row">
+				<div class="col-md-3">
+					<form>
+						<div class="mb-8">
+							<label for="product_id" class="mb-5 fs-13px ls-1 fw-semibold text-uppercase">ID</label>
+							<input type="text" placeholder="Type here" class="form-control" id="product_id">
+						</div>
+						<div class="mb-8">
+							<label for="product_name" class="mb-5 fs-13px ls-1 fw-semibold text-uppercase">Name</label>
+							<input type="text" placeholder="Type here" class="form-control" id="product_name">
+						</div>
+						<div class="mb-8">
+							<label class="mb-5 fs-13px ls-1 fw-semibold text-uppercase">Status</label>
+							<select class="form-select">
+								<option>Available</option>
+								<option>Out Of Stock</option>
+							</select>
+						</div>
+						<div class="mb-8">
+							<label class="mb-5 fs-13px ls-1 fw-semibold text-uppercase">Description</label>
+							<textarea placeholder="Type here" class="form-control"></textarea>
+						</div>
+						<div class="d-grid">
+							<button class="btn btn-primary">Create category</button>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-9">
+					<div class="card-body px-0 pt-7 pb-0">
+						<div class="table-responsive">
+							<table class="table table-hover align-middle table-nowrap mb-0 table-borderless">
+								<thead class="table-light">
+									<tr>
+										<th class="align-middle" scope="col">
+											@Html.DisplayNameFor(model => model.ID)
+										</th>
+										<th class="align-middle" scope="col">
+											@Html.DisplayNameFor(model => model.Name)
+										</th>
+										<th class="align-middle" scope="col">
+											@Html.DisplayNameFor(model => model.Description)
+										</th>
+										<th class="align-middle" scope="col">
+											@Html.DisplayNameFor(model => model.Status)
+										</th>
+										<th class="align-middle text-center" scope="col">
+											Action
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var item in Model)
+									{
+										<tr>
+											<td>@Html.DisplayFor(modelItem => item.ID)</td>
+											<td class="text-body-emphasis">@Html.DisplayFor(modelItem => item.Name)</td>
+											<td class="text-body-emphasis">@Html.DisplayFor(modelItem => item.Description)</td>
+											<td>
+												<span class="badge rounded-lg rounded-pill alert py-3 px-4 mb-0 alert-success border-0 text-capitalize fs-12">@Html.DisplayFor(modelItem => item.Status)</span>
+											</td>
+											<td class="text-center">
+												<div class="d-flex flex-nowrap justify-content-center">
+													<a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-primary py-4 px-5 btn-xs fs-13px me-4"><i class="far fa-pen me-2"></i> Edit</a>
+													<a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-outline-primary btn-hover-bg-danger btn-hover-border-danger btn-hover-text-light py-4 px-5 fs-13px btn-xs me-4"><i class="far fa-trash me-2"></i> Delete</a>
+												</div>
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

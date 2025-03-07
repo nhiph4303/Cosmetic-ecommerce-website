@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Shop.Models.Product>
+
+@{
+	ViewData["Title"] = "Product Management";
+	Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+}
+<div class="dashboard-page-content">
+	<div class="row mb-9 align-items-center justify-content-between">
+		<div class="col-md-6 mb-8 mb-md-0">
+			<h2 class="fs-4 mb-0">Product Management</h2>
+		</div>
+		<div class="col-md-6 d-flex flex-wrap justify-content-md-end">
+			<a href="#" class="btn btn-outline-primary btn-hover-bg-primary me-4">
+				Export
+			</a>
+			<a href="#" class="btn btn-outline-primary btn-hover-bg-primary me-4">
+				Import
+			</a>
+			<a href="#" class="btn btn-primary">
+				Create new
+			</a>
+		</div>
+	</div>
+	<div class="card mb-4 rounded-4 p-7">
+		<div class="card-header bg-transparent px-0 pt-0 pb-7">
+			<div class="row align-items-center justify-content-between">
+				<div class="col-md-4 col-12 mr-auto mb-md-0 mb-6">
+					<select class="form-select">
+						<option selected data-select2-id="3">All Categories</option>
+						<option>Women's Clothing</option>
+						<option>Men's Clothing</option>
+						<option>Cellphones</option>
+						<option>Computer &amp; Office</option>
+						<option>Consumer Electronics</option>
+						<option>Jewelry &amp; Accessories</option>
+						<option>Home &amp; Garden</option>
+						<option>Luggage &amp; Bags</option>
+						<option>Shoes</option>
+						<option>Mother &amp; Kids</option>
+					</select>
+				</div>
+				<div class="col-md-8">
+					<div class="row justify-content-end flex-nowrap d-flex">
+						<div class="col-lg-4 col-md-6 col-6">
+							<input type="date" class="form-control bg-input border-0">
+						</div>
+						<div class="col-lg-4 col-md-6 col-6">
+							<select class="form-select">
+								<option>Status</option>
+								<option>All</option>
+								<option>Paid</option>
+								<option>Chargeback</option>
+								<option>Refund</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-body px-0 pt-7 pb-0">
+			<div class="table-responsive">
+				<table class="table table-hover align-middle table-nowrap mb-0">
+					<thead class="table-light">
+						<tr>
+							<th class="align-middle text-center" scope="col">
+								@Html.DisplayNameFor(model => model.ID)
+							</th>
+							@* <th class="align-middle" scope="col"> *@
+							@* 	@Html.DisplayNameFor(model => model.ImageURL) *@
+							@* </th> *@
+							<th class="align-middle text-center" scope="col">
+								@Html.DisplayNameFor(model => model.Name)
+							</th>
+							<th class="align-middle" scope="col">
+								@Html.DisplayNameFor(model => model.Price)
+							</th>
+							<th class="align-middle" scope="col">
+								@Html.DisplayNameFor(model => model.Status)
+							</th>
+							<th class="align-middle text-center" scope="col">
+								@Html.DisplayNameFor(model => model.InStock)
+							</th>
+							<th class="align-middle text-center" scope="col">
+								Actions
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td class="text-center">@Html.DisplayFor(modelItem => item.ID)</td>
+								<td>
+									<div class="d-flex align-items-center flex-nowrap">
+										<a href="../shop/product-details-v1.html" title="Flowers cotton dress">
+											<img src="#" data-src="../assets/images/products/product-03-75x100.jpg" alt="Flowers cotton dress" class="lazy-image" width="60" height="80">
+										</a>
+										<a href="../shop/product-details-v1.html" title="Flowers cotton dress" class="ms-6">
+											<p class="fw-semibold text-body-emphasis mb-0">@Html.DisplayFor(modelItem => item.Name)</p>
+										</a>
+									</div>
+								</td>
+								<td>@Html.DisplayFor(modelItem => item.Price)</td>
+								<td>
+									<span class="badge rounded-lg rounded-pill alert py-3 px-4 mb-0 alert-success border-0 text-capitalize fs-12">@Html.DisplayFor(modelItem => item.Status)</span>
+								</td>
+								<td class="text-center">@Html.DisplayFor(modelItem => item.InStock)</td>
+								<td class="text-center">
+									<div class="d-flex flex-nowrap justify-content-center">
+										<a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-primary py-4 px-5 btn-xs fs-13px me-4"><i class="far fa-pen me-2"></i> Edit</a>
+										<a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-outline-primary btn-hover-bg-danger btn-hover-border-danger btn-hover-text-light py-4 px-5 fs-13px btn-xs me-4"><i class="far fa-trash me-2"></i> Delete</a>
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<nav aria-label="Page navigation example" class="mt-6 mb-4">
+		<ul class="pagination justify-content-start">
+			<li class="page-item active mx-3"><a class="page-link" href="#">01</a></li>
+			<li class="page-item mx-3"><a class="page-link" href="#">02</a></li>
+			<li class="page-item mx-3"><a class="page-link" href="#">03</a></li>
+			<li class="page-item mx-3"><a class="page-link dot" href="#">...</a></li>
+			<li class="page-item mx-3"><a class="page-link" href="#">16</a></li>
+			<li class="page-item mx-3">
+				<a class="page-link" href="#"><i class="far fa-chevron-right"></i></a>
+			</li>
+		</ul>
+	</nav>
+</div>

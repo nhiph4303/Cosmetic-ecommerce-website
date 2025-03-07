@@ -1,0 +1,129 @@
+﻿@model IEnumerable<Shop.Models.Order>
+
+@{
+	ViewData["Title"] = "Order Management";
+	Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+}
+<div class="dashboard-page-content">
+	<div class="row mb-9 align-items-center justify-content-between">
+		<div class="col-md-6 mb-8 mb-md-0">
+			<h2 class="fs-4 mb-0">Order Management</h2>
+		</div>
+		<div class="col-md-6 d-flex flex-wrap justify-content-md-end">
+			<a asp-controller="Orders" asp-action="Create" class="btn btn-primary">
+				Create new
+			</a>
+		</div>
+	</div>
+	<div class="card mb-4 rounded-4 p-7">
+		<div class="card-header bg-transparent px-0 pt-0 pb-7">
+			<div class="row align-items-center justify-content-between">
+				<div class="col-md-4 col-12 mr-auto mb-md-0 mb-6">
+					<input type="text" placeholder="Search..." class="form-control bg-input border-0">
+				</div>
+				<div class="col-md-8">
+					<div class=" row justify-content-end flex-nowrap d-flex">
+						<div class="col-lg-3 col-md-6 col-6">
+							<select class="form-select">
+								<option>Cancel</option>
+								<option>Done</option>
+							</select>
+						</div>
+						@* <div class="col-lg-3 col-md-6 col-6"> *@
+						@* 	<select class="form-select"> *@
+						@* 		<option>Show 20</option> *@
+						@* 		<option>Show 30</option> *@
+						@* 		<option>Show 40</option> *@
+						@* 	</select> *@
+						@* </div> *@
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-body px-0 pt-7 pb-0">
+			<div class="table-responsive">
+				<table class="table table-hover align-middle table-nowrap mb-0 table-borderless">
+					<thead class="table-light">
+						<tr>
+							<th class="align-middle" scope="col">
+								@Html.DisplayNameFor(model => model.ID)
+							</th>
+							<th class="text-body-emphasis" scope="col">
+								@Html.DisplayNameFor(model => model.Name)
+							</th>
+							<th class="align-middle" scope="col">
+								@Html.DisplayNameFor(model => model.Email)
+							</th>
+							<th class="align-middle" scope="col">
+								@Html.DisplayNameFor(model => model.TotalPrice)
+							</th>
+							<th class="text-body-emphasis" scope="col">
+								@Html.DisplayNameFor(model => model.Status)
+							</th>
+							<th class="align-middle" scope="col">
+								@Html.DisplayNameFor(model => model.Date)
+							</th>
+							<th class="align-middle text-center" scope="col">
+								Actions
+							</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>@Html.DisplayFor(modelItem => item.ID)</td>
+								<td class="text-body-emphasi" s>@Html.DisplayFor(modelItem => item.Name)</td>
+								<td class="text-body-emphasis">@Html.DisplayFor(modelItem => item.Email)</td>
+								<td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+								@{
+									var statusText = (item.Status ?? "").Trim().ToLower();
+									var statusClass = statusText switch
+									{
+										"pending" => "alert-warning", 
+										"received" => "alert-success", 
+										"cancel" => "alert-danger", 
+										_ => "alert-secondary" 
+									};
+								}
+								<td>
+									<span class="badge rounded-lg rounded-pill alert py-3 px-4 mb-0 border-0 text-capitalize fs-12 @statusClass">
+										@Html.DisplayFor(modelItem => item.Status)
+									</span>
+								</td>
+								<td>@Html.DisplayFor(modelItem => item.Date)</td>
+								<td class="text-center">
+									<div class="d-flex flex-nowrap justify-content-center">
+										<a asp-action="Details" asp-route-id="@item.ID" class="btn btn-primary py-4 fs-13px btn-xs me-4">Detail</a>
+										@* <div class="dropdown no-caret"> *@
+										@* 	<a href="#" data-bs-toggle="dropdown" class="dropdown-toggle btn btn-outline-primary btn-xs hover-white btn-hover-bg-primary py-4 px-5"> *@
+										@* 		<i class="far fa-ellipsis-h"></i> *@
+										@* 	</a> *@
+										@* 	<div class="dropdown-menu dropdown-menu-end m-0"> *@
+										@* 		<a class="dropdown-item" asp-action="Edit" asp-route-id="@item.ID">Edit</a> *@
+										@* 		<a class="dropdown-item text-danger" href="#">Delete</a> *@
+										@* 	</div> *@
+										@* </div> *@
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	@* <nav aria-label="Page navigation example" class="mt-6 mb-4"> *@
+	@* 	<ul class="pagination justify-content-start"> *@
+	@* 		<li class="page-item active mx-3"><a class="page-link" href="#">01</a></li> *@
+	@* 		<li class="page-item mx-3"><a class="page-link" href="#">02</a></li> *@
+	@* 		<li class="page-item mx-3"><a class="page-link" href="#">03</a></li> *@
+	@* 		<li class="page-item mx-3"><a class="page-link dot" href="#">...</a></li> *@
+	@* 		<li class="page-item mx-3"><a class="page-link" href="#">16</a></li> *@
+	@* 		<li class="page-item mx-3"> *@
+	@* 			<a class="page-link" href="#"><i class="far fa-chevron-right"></i></a> *@
+	@* 		</li> *@
+	@* 	</ul> *@
+	@* </nav> *@
+</div>
