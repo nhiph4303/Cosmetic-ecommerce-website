@@ -52,34 +52,30 @@ namespace Cosmetic.Controllers
         {
             if (categoryId.HasValue)
             {
-                var categoryExists = await _context.Category.AnyAsync(c => c.ID == categoryId);
-                if (!categoryExists)
+                var category = await _context.Category
+                                              .FirstOrDefaultAsync(c => c.ID == categoryId.Value && c.Status == "active");
+
+                if (category == null)
                 {
                     return Content("Invalid category!");
                 }
             }
 
-            // Truy vấn danh mục
-            var categories = await _context.Category
-                .Where(c => c.Status == "active")
-                .OrderBy(c => c.Name)
-                .ToListAsync();
-
-            // Truy vấn sản phẩm theo categoryId, nếu có
+            // theo id
             var products = _context.Product.AsQueryable();
 
             if (categoryId.HasValue)
             {
-                products = products.Where(p => p.CategoryID == categoryId);
+                products = products.Where(p => p.CategoryID == categoryId.Value); // id
             }
 
-            // Xử lý lọc theo phạm vi giá
+            // sort giá
             if (minPrice.HasValue && maxPrice.HasValue)
             {
                 products = products.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
             }
 
-            // Xử lý sắp xếp theo tên
+            // sort tên
             if (orderby == "alphabet-asc")
             {
                 products = products.OrderBy(p => p.Name);
@@ -89,17 +85,16 @@ namespace Cosmetic.Controllers
                 products = products.OrderByDescending(p => p.Name);
             }
 
-            // Lấy kết quả
             var productList = await products.ToListAsync();
 
-            // Truyền các dữ liệu cần thiết vào ViewBag
+            // truyền data
             ViewBag.SelectedCategoryId = categoryId;
-            ViewBag.Categories = categories;
+            ViewBag.Categories = await _context.Category.Where(c => c.Status == "active").ToListAsync();
             ViewBag.OrderBy = orderby;
             ViewBag.MinPrice = minPrice;
             ViewBag.MaxPrice = maxPrice;
 
-            return View(productList);  // Trả về danh sách sản phẩm đã được lọc và sắp xếp
+            return View(productList);
         }
 
         public IActionResult ProductDetail()
