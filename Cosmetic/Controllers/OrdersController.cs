@@ -20,10 +20,21 @@ namespace Cosmetic.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Order.ToListAsync());
+        //}
+        public IActionResult Index()
         {
-            return View(await _context.Order.ToListAsync());
+            var orders = _context.Order
+                .Include(o => o.Customer)  // Load dữ liệu từ bảng Customer
+                .OrderByDescending(o => o.Date)
+                .ToList();
+
+            return View(orders);
         }
+
+
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -34,7 +45,8 @@ namespace Cosmetic.Controllers
             }
 
             var order = await _context.Order
-                .FirstOrDefaultAsync(m => m.ID == id);
+               .Include(o => o.Customer)
+               .FirstOrDefaultAsync(m => m.ID == id);
             if (order == null)
             {
                 return NotFound();

@@ -15,6 +15,7 @@
 			<div class="row align-items-center">
 				<div class="col-md-6 mb-lg-0 mb-6">
 					<span class="d-inline-block"><i class="far fa-calendar me-3"></i>@Model.Date.ToString("dddd, MMM d, yyyy, h:mmtt") </span>
+
 					<br>
 					<small class="text-muted">Order ID: @Model.ID</small>
 				</div>
@@ -41,8 +42,10 @@
 						</div>
 						<div class="media-body">
 							<h6 class="mb-4">Customer</h6>
-							<p class="mb-4">
-								<b>Name: </b>@Model.Name <b>  Email: </b>@Model.Email <b>  Phone number: </b>0908070605
+							<p class="mb-4 d-flex">
+								<span class="me-4"><b>Name:</b> @Model.Customer?.Name</span>
+								<span class="me-4"><b>Email:</b> @Model.Customer?.Email</span>
+								<span><b>Phone number:</b> @Model.Customer?.PhoneNumber</span>
 							</p>
 						</div>
 					</div>
@@ -56,10 +59,10 @@
 						</div>
 						<div class="media-body">
 							<h6 class="mb-4">Order info</h6>
-							<p class="mb-4">
-								<b>Shipping: </b>Fargo express
-								<b>  Pay method: </b>COD
-								<b>  Status: </b>Finish
+							<p class="mb-4 d-flex">
+								<span class="me-4"><b>Shipping:</b> VN Express</span>
+								<span class="me-4"><b>Pay method:</b> COD</span>
+								<span><b>Status:</b> @Model.Status</span>
 							</p>
 						</div>
 					</div>
@@ -74,7 +77,7 @@
 						<div class="media-body">
 							<h6 class="mb-4">Deliver to</h6>
 							<p class="mb-4">
-								Tashkent, Uzbekistan Block A, House 123, Floor 2 Po Box 10000
+								@Model.Customer?.Address
 							</p>
 						</div>
 					</div>

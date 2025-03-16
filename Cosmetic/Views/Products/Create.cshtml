@@ -7,7 +7,7 @@
 
 <div class="dashboard-page-content">
     <div class="row mb-9 align-items-center">
-        <div class="col-xxl-9">
+        <div class="col-xxl-12">
             <div class="row">
                 <div class="col-sm-6 mb-8 mb-sm-0">
                     <h2 class="fs-4 mb-0">Create Product</h2>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xxl-9">
+        <div class="col-xxl-12">
             <div class="card rounded-4">
                 <div class="card-body p-7">
                     <div class="row mx-n7">
@@ -25,7 +25,13 @@
                             <section class="p-xl-5">
                                 <form asp-action="Create" method="post" enctype="multipart/form-data">
                                     <input type="hidden" asp-for="ID" />
-
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="ID">ID</label>
+                                        <div class="col-lg-9">
+                                            <input asp-for="ID" class="form-control" placeholder="Type here" />
+                                            <span asp-validation-for="ID" class="text-danger"></span>
+                                        </div>
+                                    </div>
                                     <div class="row mb-8" >
                                         <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Name">Name</label>
                                         <div class="col-lg-9">
@@ -33,7 +39,6 @@
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
                                     </div>
-
                                     <div class="row mb-8">
                                         <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Price">Price</label>
                                         <div class="col-lg-9">
@@ -41,7 +46,6 @@
                                             <span asp-validation-for="Price" class="text-danger"></span>
                                         </div>
                                     </div>
-
                                     <div class="row mb-8">
                                         <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="InStock">In Stock</label>
                                         <div class="col-lg-9">
@@ -59,48 +63,31 @@
                                             <span asp-validation-for="Status" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    @* <div class="row mb-8"> *@
-                                    @*     <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase">Category</label> *@
-                                    @*     <div class="col-lg-9"> *@
-                                    @*         <select asp-for="Status" class="form-select" name="Status"> *@
-                                    @*             <option value="available">Available</option> *@
-                                    @*             <option value="out of stock">Out Of Stock</option> *@
-                                    @*         </select> *@
-                                    @*         <span asp-validation-for="Status" class="text-danger"></span> *@
-                                    @*     </div> *@
-                                    @* </div> *@
                                     <div class="row mb-8">
-    <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="CategoryID">Category</label>
-    <div class="col-lg-9">
-        <select asp-for="CategoryID" class="form-select">
-            <option value="">-- Select Category --</option>
-            @foreach (var category in (List<Shop.Models.Category>)ViewBag.Categories)
-            {
-                <option value="@category.ID" selected="@(Model.CategoryID == category.ID ? "selected" : "")">@category.Name</option>
-            }
-        </select>
-    </div>
-</div>
-
-
-
-
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="CategoryID">Category</label>
+                                        <div class="col-lg-9">
+                                            <select class="form-select" id="CategoryID" name="CategoryID">
+                                                <option value="">Select Category</option>
+                                                @foreach (var category in ViewBag.Categories)
+                                                {
+                                                    <option value="@category.ID">@category.Name</option>
+                                                }
+                                            </select>
+                                            <span asp-validation-for="CategoryID" class="text-danger"></span>
+                                        </div>
+                                    </div>
                                     <div class="row mb-8">
                                         <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase">Image</label>
                                         <div class="col-lg-9">
                                             <div class="input-upload">
                                                 <div class="mb-7">
-                                                    <!-- Ảnh mặc định -->
                                                     <img id="previewImage" src="../assets/images/dashboard/upload.svg" width="102" class="d-block mx-auto" alt="Preview">
                                                 </div>
-                                                <!-- Input file -->
                                                 <input class="form-control" type="file" id="imageUpload" name="ImageFile" accept="image/*">
                                                 <span class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
-
-
                                     <br>
                                     <button class="btn btn-primary" type="submit">Create</button>
                                     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
@@ -122,10 +109,10 @@
             const reader = new FileReader();
 
             reader.onload = function(e) {
-                document.getElementById("previewImage").src = e.target.result; // Gán ảnh mới vào img
+                document.getElementById("previewImage").src = e.target.result; 
             };
 
-            reader.readAsDataURL(file); // Đọc file
+            reader.readAsDataURL(file); 
         }
     });
 </script>
