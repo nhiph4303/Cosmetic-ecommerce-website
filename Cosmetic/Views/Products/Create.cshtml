@@ -76,7 +76,7 @@
             <option value="">-- Select Category --</option>
             @foreach (var category in (List<Shop.Models.Category>)ViewBag.Categories)
             {
-                <option value="@category.ID" @(Model.CategoryID == category.ID ? "selected" : "")>@category.Name</option>
+                <option value="@category.ID" selected="@(Model.CategoryID == category.ID ? "selected" : "")">@category.Name</option>
             }
         </select>
     </div>
