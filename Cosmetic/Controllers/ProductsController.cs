@@ -20,10 +20,23 @@ namespace Cosmetic.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Product.ToListAsync());
+        //}
+       
+        public IActionResult Index()
         {
-            return View(await _context.Product.ToListAsync());
+            var products = _context.Product
+                                    .Include(p => p.Category)  
+                                    .OrderByDescending(p => p.CreateTime)  
+                                    .ToList();
+       
+            return View(products);
         }
+
+
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -44,10 +57,19 @@ namespace Cosmetic.Controllers
         }
 
         // GET: Products/Create
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
         public IActionResult Create()
         {
+            var categories = _context.Category.ToList();
+
+            ViewBag.Categories = categories;
+
             return View();
         }
+
 
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -72,31 +94,19 @@ namespace Cosmetic.Controllers
         //}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Price,InStock,Status,CategoryID")] Product product, IFormFile ImageFile)
+        public async Task<IActionResult> Create([Bind("Name,Price,InStock,Status,CategoryID")] Product product, IFormFile? ImageFile)
         {
-            // Get the categories from the database
-            var categories = await _context.Category.ToListAsync();
-
-            if (categories == null || !categories.Any())
-            {
-                TempData["Error"] = "No categories found in the database.";
-                return View();  // Return the view if no categories
-            }
-
-            // Pass the categories list to ViewBag for usage in the dropdown
-            ViewBag.Categories = categories;
-
             if (!ModelState.IsValid)
             {
+                TempData["Error"] = "Validation failed. Please check your inputs.";
                 return View(product);
             }
 
             try
             {
-                // Check if an image was uploaded
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/assets/images/products");
                     Directory.CreateDirectory(uploadsFolder);
 
                     var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
@@ -107,13 +117,14 @@ namespace Cosmetic.Controllers
                         await ImageFile.CopyToAsync(stream);
                     }
 
-                    product.Image = "/uploads/" + uniqueFileName;  // Save image path to database
+                    product.Image = "/assets/images/products/" + uniqueFileName;
                 }
                 else
                 {
-                    product.Image = "/assets/images/dashboard/upload.svg"; // Default image if none uploaded
+                    product.Image = "/assets/images/dashboard/upload.svg";
                 }
 
+                product.CreateTime = DateTime.Now;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
 
@@ -136,11 +147,26 @@ namespace Cosmetic.Controllers
 
 
 
-
-
-
-
         // GET: Products/Edit/5
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var product = await _context.Product.FindAsync(id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Lấy danh sách danh mục và truyền vào ViewBag
+        //    var categories = await _context.Category.ToListAsync();
+        //    ViewBag.Categories = categories;
+
+        //    return View(product);
+        //}
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -148,65 +174,171 @@ namespace Cosmetic.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Product
+                .Include(p => p.Category)  // Ensure that the related Category is loaded
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (product == null)
             {
                 return NotFound();
             }
+
+            // Create SelectList from the Category list and set the selected item based on CategoryID
+            ViewBag.Categories = new SelectList(await _context.Category.ToListAsync(), "ID", "Name", product.CategoryID);
+
             return View(product);
         }
+
+
+
+
+
+
 
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Price,Image,InStock,Status")] Product product)
+        //{
+        //    if (id != product.ID)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(product);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!ProductExists(product.ID))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(product);
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Price,Image,InStock,Status")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Price,InStock,Status,CategoryID,Image")] Product product, IFormFile? ImageFile)
         {
             if (id != product.ID)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            // Kiểm tra nếu ModelState hợp lệ
+            ModelState.Remove("ImageFile"); // Loại bỏ kiểm tra bắt buộc cho ImageFile nếu cần
+
+            if (!ModelState.IsValid)
             {
-                try
+                TempData["Error"] = "Validation failed. Please check your inputs.";
+                ViewBag.Categories = new SelectList(await _context.Category.ToListAsync(), "ID", "Name", product.CategoryID);
+                return View(product);
+            }
+
+            try
+            {
+                var existingProduct = await _context.Product.FindAsync(id);
+                if (existingProduct == null)
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                // Nếu có ảnh mới được chọn, cập nhật ảnh
+                if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    if (!ProductExists(product.ID))
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/assets/images/products");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        return NotFound();
+                        await ImageFile.CopyToAsync(stream);
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    // Cập nhật đường dẫn ảnh mới
+                    existingProduct.Image = "/assets/images/products/" + uniqueFileName;
                 }
+
+                // Cập nhật các thông tin khác
+                existingProduct.Name = product.Name;
+                existingProduct.Price = product.Price;
+                existingProduct.InStock = product.InStock;
+                existingProduct.Status = product.Status;
+                existingProduct.CategoryID = product.CategoryID;
+
+                _context.Update(existingProduct);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Product has been updated!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Product.Any(e => e.ID == product.ID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
+
+
+
+
+
+
+
+
+
+
+
         // GET: Products/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var product = await _context.Product
+        //        .FirstOrDefaultAsync(m => m.ID == id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(product);
+        //}
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            var product = await _context.Product.FindAsync(id);
+            if (product != null)
             {
-                return NotFound();
+                _context.Product.Remove(product);
             }
 
-            var product = await _context.Product
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
 
-            return View(product);
         }
 
         // POST: Products/Delete/5
@@ -224,9 +356,11 @@ namespace Cosmetic.Controllers
         //    return RedirectToAction(nameof(Index));
         //}
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Product.FindAsync(id);
+
             if (product == null)
             {
                 return Json(new { success = false, message = "Product not found!" });
@@ -235,8 +369,9 @@ namespace Cosmetic.Controllers
             _context.Product.Remove(product);
             await _context.SaveChangesAsync();
 
-            return Json(new { success = true });
+            return Json(new { success = true, id = id });
         }
+
 
         private bool ProductExists(int id)
         {

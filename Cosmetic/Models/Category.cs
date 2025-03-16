@@ -12,6 +12,8 @@ namespace Shop.Models
 
         public String Status { get; set; }
 
+        public DateTime CreateTime { get; set; }
+
     }
 }
 

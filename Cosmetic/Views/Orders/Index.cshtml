@@ -46,14 +46,14 @@
 					<thead class="table-light">
 						<tr>
 							<th class="align-middle" scope="col">
-								@Html.DisplayNameFor(model => model.ID)
+								#
 							</th>
 							<th class="text-body-emphasis" scope="col">
-								@Html.DisplayNameFor(model => model.Name)
+								Customer Name
 							</th>
-							<th class="align-middle" scope="col">
-								@Html.DisplayNameFor(model => model.Email)
-							</th>
+							@* <th class="align-middle" scope="col"> *@
+							@* 	@Html.DisplayNameFor(model => model.Email) *@
+							@* </th> *@
 							<th class="align-middle" scope="col">
 								@Html.DisplayNameFor(model => model.TotalPrice)
 							</th>
@@ -63,6 +63,9 @@
 							<th class="align-middle" scope="col">
 								@Html.DisplayNameFor(model => model.Date)
 							</th>
+							<th class="align-middle" scope="col">
+								@Html.DisplayNameFor(model => model.Note)
+							</th>
 							<th class="align-middle text-center" scope="col">
 								Actions
 							</th>
@@ -70,22 +73,17 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach (var item in Model)
+						@foreach (var (item, index) in Model.Select((value, i) => (value, i)))
 						{
 							<tr>
-								<td>@Html.DisplayFor(modelItem => item.ID)</td>
-								<td class="text-body-emphasi" s>@Html.DisplayFor(modelItem => item.Name)</td>
-								<td class="text-body-emphasis">@Html.DisplayFor(modelItem => item.Email)</td>
+								<td>@(index + 1)</td>
+								@* <td class="text-body-emphasi" s>@Html.DisplayFor(modelItem => item.Name)</td> *@
+								@* <td class="text-body-emphasis">@Html.DisplayFor(modelItem => item.Email)</td> *@
+								<td>@item.Customer?.Name</td>
 								<td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
 								@{
 									var statusText = (item.Status ?? "").Trim().ToLower();
-									var statusClass = statusText switch
-									{
-										"pending" => "alert-warning", 
-										"received" => "alert-success", 
-										"cancel" => "alert-danger", 
-										_ => "alert-secondary" 
-									};
+									var statusClass = statusText == "cancel" ? "alert-danger" : "alert-success";
 								}
 								<td>
 									<span class="badge rounded-lg rounded-pill alert py-3 px-4 mb-0 border-0 text-capitalize fs-12 @statusClass">
@@ -93,6 +91,7 @@
 									</span>
 								</td>
 								<td>@Html.DisplayFor(modelItem => item.Date)</td>
+								<td>@Html.DisplayFor(modelItem => item.Note)</td>
 								<td class="text-center">
 									<div class="d-flex flex-nowrap justify-content-center">
 										<a asp-action="Details" asp-route-id="@item.ID" class="btn btn-primary py-4 fs-13px btn-xs me-4">Detail</a>

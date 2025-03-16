@@ -36809,7 +36809,7 @@ ul.single-product-meta li span:first-child {
 
 .dashboard-wrapper .db-sidebar {
     flex: 0 1 320px;
-    max-width: 320px
+    max-width: 205px
 }
 
 @media(max-width: 991.98px) {
@@ -36861,7 +36861,7 @@ ul.single-product-meta li span:first-child {
 @media(min-width: 1200px) {
     .dashboard-wrapper .db-sidebar .sticky-area {
         position: relative;
-        width: 320px;
+        width: 205px;
         height: 100vh !important;
         overflow-y: auto;
         transform: translate(0,0) !important

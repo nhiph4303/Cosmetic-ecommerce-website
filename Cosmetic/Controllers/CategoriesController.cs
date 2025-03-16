@@ -20,10 +20,18 @@ namespace Cosmetic.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var categories = await _context.Category.ToListAsync();
+        //    return View(categories);
+        //}
+        public IActionResult Index()
         {
-            var categories = await _context.Category.ToListAsync();
-            return View(categories);
+            var categories = _context.Category
+                                    .OrderByDescending(c => c.CreateTime) 
+                                    .ToList();
+
+            return View(categories); 
         }
 
 
@@ -60,9 +68,13 @@ namespace Cosmetic.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //_context.Add(category);
+                //await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
+                category.CreateTime = DateTime.Now;
+                _context.Category.Add(category); 
+                _context.SaveChanges(); 
+                return RedirectToAction("Index");
             }
             return View(category);
         }
@@ -104,6 +116,8 @@ namespace Cosmetic.Controllers
             {
                 try
                 {
+                    category.CreateTime = DateTime.Now;
+
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
@@ -122,6 +136,7 @@ namespace Cosmetic.Controllers
             }
             return View(category);
         }
+
 
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -163,7 +178,7 @@ namespace Cosmetic.Controllers
         {
             var category = await _context.Category.FindAsync(id);
 
-            if (category == null) // Nếu không tìm thấy, trả về lỗi JSON
+            if (category == null)
             {
                 return Json(new { success = false, message = "Category not found!" });
             }
