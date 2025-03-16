@@ -7,22 +7,18 @@ namespace Shop.Models
         [Key]
         public int ID { get; set; }
 
-        [Required, StringLength(50)]
-        public String Name { get; set; }
+        public String Name { get; set; }        
 
-        [Required, StringLength(255)]
-        public String Password { get; set; }
-
-        [Required, EmailAddress, StringLength(100)]
+        [EmailAddress]
         public String Email { get; set; }
 
-        [Required, StringLength(100)]
+        public String Password { get; set; }
+
         public String Address { get; set; }
 
-        [Required, StringLength(10)]
+        [StringLength(10)]
         public String PhoneNumber { get; set; }
 
-        [Required]
         public String Status { get; set; }
     }
 }

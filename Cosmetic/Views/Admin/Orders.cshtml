@@ -56,12 +56,12 @@
 							<th class="align-middle" scope="col">
 								@Html.DisplayNameFor(model => model.ID)
 							</th>
-							<th class="text-body-emphasis" scope="col">
-								@Html.DisplayNameFor(model => model.Name)
-							</th>
-							<th class="align-middle" scope="col">
-								@Html.DisplayNameFor(model => model.Email)
-							</th>
+							@* <th class="text-body-emphasis" scope="col"> *@
+							@* 	@Html.DisplayNameFor(model => model.Name) *@
+							@* </th> *@
+							@* <th class="align-middle" scope="col"> *@
+							@* 	@Html.DisplayNameFor(model => model.Email) *@
+							@* </th> *@
 							<th class="align-middle" scope="col">
 								@Html.DisplayNameFor(model => model.TotalPrice)
 							</th>
@@ -82,8 +82,8 @@
 						{
 							<tr>
 								<td>@Html.DisplayFor(modelItem => item.ID)</td>
-								<td class="text-body-emphasi"s>@Html.DisplayFor(modelItem => item.Name)</td>
-								<td class="text-body-emphasis">@Html.DisplayFor(modelItem => item.Email)</td>
+								@* <td class="text-body-emphasi"s>@Html.DisplayFor(modelItem => item.Name)</td> *@
+								@* <td class="text-body-emphasis">@Html.DisplayFor(modelItem => item.Email)</td> *@
 								<td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
 							
 								<td>
