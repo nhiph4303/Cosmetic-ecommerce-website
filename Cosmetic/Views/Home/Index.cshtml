@@ -65,10 +65,6 @@
                     <h3 class="fs-3 mb-0 fw-normal font-primary">Shop Categories</h3>
                 </div>
                 <div class="col-md-6 mb-11 text-md-end" data-animate="fadeInUp">
-                    @* <a asp-controller="Home" asp-action="Category" class="btn btn-link p-0 mt-2 fw-semibold text-decoration-none"> *@
-                    @*     Shop All Categories *@
-                    @*     <i class="icon fa-solid fa-arrow-right"></i> *@
-                    @* </a> *@
                     <a href="@Url.Action("Category", "Home")" class="btn btn-link p-0 mt-2 fw-semibold text-decoration-none">
                         Shop All Categories
                         <i class="icon fa-solid fa-arrow-right"></i>
@@ -84,8 +80,7 @@
                         <div class="card-img-overlay d-inline-flex flex-column p-8 justify-content-end text-center bg-dark bg-opacity-25">
                             <h3 class="card-title text-white lh-45px font-primary fw-normal fs-3">Eyes</h3>
                             <div>
-                                <a asp-controller="Home" asp-action="Category"
-                                   class="btn btn btn-link p-0 fw-semibold text-white border-bottom border-0 rounded-0 border-currentColor text-decoration-none">
+                                <a asp-controller="Home" asp-action="Category" asp-route-categoryId="4" class="btn btn btn-link p-0 fw-semibold text-white border-bottom border-0 rounded-0 border-currentColor text-decoration-none">
                                     Shop Now
                                 </a>
                             </div>
@@ -101,8 +96,7 @@
                                 Lips
                             </h3>
                             <div>
-                                <a asp-controller="Home" asp-action="Category"
-                                   class="btn btn btn-link p-0 fw-semibold text-white border-bottom border-0 rounded-0 border-currentColor text-decoration-none">
+                                <a asp-controller="Home" asp-action="Category" asp-route-categoryId="6" class="btn btn btn-link p-0 fw-semibold text-white border-bottom border-0 rounded-0 border-currentColor text-decoration-none">
                                     Shop Now
                                 </a>
                             </div>
@@ -119,8 +113,7 @@
                                 Accessories & Applicators
                             </h3>
                             <div>
-                                <a asp-controller="Home" asp-action="Category"
-                                   class="btn btn btn-link p-0 fw-semibold text-white border-bottom border-0 rounded-0 border-currentColor text-decoration-none">
+                                <a asp-controller="Home" asp-action="Category" asp-route-categoryId="10" class="btn btn btn-link p-0 fw-semibold text-white border-bottom border-0 rounded-0 border-currentColor text-decoration-none">
                                     Shop Now
                                 </a>
                             </div>
