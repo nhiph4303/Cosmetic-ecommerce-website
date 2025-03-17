@@ -27,8 +27,8 @@
                     <li class="list-inline-item me-0">
                         <form method="get" action="@Url.Action("Category", "Home")">
                             <select class="form-select" name="orderby" onchange="this.form.submit()">
-                                <option value="alphabet-asc" selected="@(ViewBag.OrderBy != null && ViewBag.OrderBy == "alphabet-asc")">Alphabetically, A-Z</option>
-                                <option value="alphabet-desc" selected="@(ViewBag.OrderBy != null && ViewBag.OrderBy == "alphabet-desc")">Alphabetically, Z-A</option>
+                                <option value="alphabet-asc" selected="@(ViewBag.OrderBy != null && ViewBag.OrderBy == "alphabet-asc")">Sort by Alphabetically, A-Z</option>
+                                <option value="alphabet-desc" selected="@(ViewBag.OrderBy != null && ViewBag.OrderBy == "alphabet-desc")">Sort by Alphabetically, Z-A</option>
                             </select>
                         </form>
                     </li>
