@@ -22,20 +22,24 @@
 
     <section class="container container-xxl">
         <div class="tool-bar mb-11 align-items-center justify-content-between d-lg-flex">
-            <div class="tool-bar-right align-items-center d-flex ">
-                <ul class="list-unstyled d-flex align-items-center list-inline mb-0 ms-auto">
-                    <li class="list-inline-item me-0">
-                        <form method="get" action="@Url.Action("Category", "Home")">
-                            <select class="form-select" name="orderby" onchange="this.form.submit()">
-                                <option value="alphabet-asc" selected="@(ViewBag.OrderBy != null && ViewBag.OrderBy == "alphabet-asc")">Sort by name: A to Z</option>
-                                <option value="alphabet-desc" selected="@(ViewBag.OrderBy != null && ViewBag.OrderBy == "alphabet-desc")">Sort by name: Z to A</option>
-                            </select>
-                        </form>
-                    </li>
-                </ul>
+            <div class="tool-bar-right align-items-center d-flex ms-2">
+                <form method="get" action="@Url.Action("Category", "Home")">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortByDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sort by
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="sortByDropdown">
+                            <li><a class="dropdown-item" href="#" onclick="this.closest('form').submit();">Alphabetically, A-Z</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="this.closest('form').submit();">Alphabetically, Z-A</a></li>
+                        </ul>
+                        <input type="hidden" name="orderby" value="@ViewBag.OrderBy" />
+                    </div>
+                </form>
             </div>
         </div>
     </section>
+
+
 
     <div class="container container-xxl pb-16 pb-lg-18">
         <div class="row">
