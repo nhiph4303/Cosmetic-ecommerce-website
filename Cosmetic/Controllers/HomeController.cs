@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Cosmetic.Data;
 using Shop.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Cosmetic.Controllers
 {
@@ -32,22 +35,18 @@ namespace Cosmetic.Controllers
                                           .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name))
                                           .ToList();
 
-            Console.WriteLine($"Total products returned (All): {products.Count}");
-            Console.WriteLine($"Total products returned (Under $50): {productsUnder50.Count}");
+            Debug.WriteLine($"Total products returned (All): {products.Count}");
+            Debug.WriteLine($"Total products returned (Under $50): {productsUnder50.Count}");
 
-            // Trả về View và truyền dữ liệu cả hai: products và productsUnder50
             var viewModel = new ProductViewModel
             {
                 AllProducts = products,
                 ProductsUnder50 = productsUnder50
             };
 
-            return View(viewModel);  // Trả về viewModel chứa cả 2 danh sách
+            return View(viewModel);
         }
 
-
-
-        // Phương thức Category
         public async Task<IActionResult> Category(int? categoryId, string orderby, decimal? minPrice, decimal? maxPrice)
         {
             if (categoryId.HasValue)
@@ -61,21 +60,18 @@ namespace Cosmetic.Controllers
                 }
             }
 
-            // theo id
             var products = _context.Product.AsQueryable();
 
             if (categoryId.HasValue)
             {
-                products = products.Where(p => p.CategoryID == categoryId.Value); // id
+                products = products.Where(p => p.CategoryID == categoryId.Value);
             }
 
-            // sort giá
             if (minPrice.HasValue && maxPrice.HasValue)
             {
                 products = products.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
             }
 
-            // sort tên
             if (orderby == "alphabet-asc")
             {
                 products = products.OrderBy(p => p.Name);
@@ -87,7 +83,6 @@ namespace Cosmetic.Controllers
 
             var productList = await products.ToListAsync();
 
-            // truyền data
             ViewBag.SelectedCategoryId = categoryId;
             ViewBag.Categories = await _context.Category.Where(c => c.Status == "active").ToListAsync();
             ViewBag.OrderBy = orderby;
@@ -127,22 +122,13 @@ namespace Cosmetic.Controllers
             return View();
         }
 
+
+
         public IActionResult Register()
         {
             return View();
         }
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error");
-        }
-
-
     }
-
-    // Inside the HomeController class
     public class ProductViewModel
     {
         public List<Product> AllProducts { get; set; } = new List<Product>();
