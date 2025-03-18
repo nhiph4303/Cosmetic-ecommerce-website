@@ -1,9 +1,23 @@
-﻿using Cosmetic.Data;
+﻿using System.Configuration;
+using Cosmetic.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Shop.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+void ConfigureServices(IServiceCollection services)
+{
+    // Thêm dịch vụ Identity
+    services.AddIdentity<Customer, IdentityRole>()
+            .AddEntityFrameworkStores<CosmeticContext>()
+            .AddDefaultTokenProviders();
+
+    // Thêm dịch vụ DbContext
+    services.AddDbContext<CosmeticContext>(options =>
+        options.UseMySql(builder.Configuration.GetConnectionString("CosmeticContext"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("CosmeticContext"))));
+}
 
 // Add session
 builder.Services.AddDistributedMemoryCache();
@@ -20,7 +34,7 @@ builder.Services.AddDbContext<CosmeticContext>(option =>
 
 builder.Services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<CosmeticContext>()
-    .AddDefaultTokenProviders();  // Chỉ cần khai báo AddDefaultIdentity
+    .AddDefaultTokenProviders();
 
 // Configure Identity options
 builder.Services.Configure<IdentityOptions>(options =>
