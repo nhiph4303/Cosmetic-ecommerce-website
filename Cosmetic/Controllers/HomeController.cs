@@ -29,7 +29,7 @@ namespace Cosmetic.Controllers
 
             // Lấy sản phẩm có giá dưới 50 đô
             var productsUnder50 = _context.Product
-                                          .Where(p => p.Price < 50 && categories.Contains(p.Category.Name))
+                                          .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name))
                                           .ToList();
 
             Console.WriteLine($"Total products returned (All): {products.Count}");
@@ -145,7 +145,7 @@ namespace Cosmetic.Controllers
     // Inside the HomeController class
     public class ProductViewModel
     {
-        public List<Product> AllProducts { get; set; }
-        public List<Product> ProductsUnder50 { get; set; }
+        public List<Product> AllProducts { get; set; } = new List<Product>();
+        public List<Product> ProductsUnder50 { get; set; } = new List<Product>();
     }
 }
