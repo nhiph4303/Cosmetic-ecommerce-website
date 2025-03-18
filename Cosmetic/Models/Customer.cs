@@ -1,24 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 namespace Shop.Models
 {
-    public class Customer
+    public class Customer : IdentityUser
     {
         [Key]
         public int ID { get; set; }
 
-        public String Name { get; set; }        
+        public string Name { get; set; }
 
         [EmailAddress]
-        public String Email { get; set; }
-
-        public String Password { get; set; }
-
-        public String Address { get; set; }
+        public string Address { get; set; }
 
         [StringLength(10)]
-        public String PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
-        public String Status { get; set; }
+        public string Status { get; set; }
     }
 }
