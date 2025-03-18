@@ -12,16 +12,11 @@
                 </div>
             </div>
             <div class="col-lg-5 col-md-8 mx-auto">
-                <form class>
+                <form>
                     <div class="mb-6">
-                        <label for="first_name" class="visually-hidden">Email address</label>
-                        <input name="first_name" id="first_name" type="text" class="form-control"
-                            placeholder="First name" required>
-                    </div>
-                    <div class="mb-6">
-                        <label for="last_name" class="visually-hidden">Email address</label>
-                        <input name="last_name" id="last_name" type="text" class="form-control" placeholder="Last name"
-                            required>
+                        <label for="full_name" class="visually-hidden">Email address</label>
+                        <input name="full_name" id="full_name" type="text" class="form-control"
+                            placeholder="Full name" required>
                     </div>
                     <div class="mb-6">
                         <label for="email" class="visually-hidden">Email address</label>
@@ -33,24 +28,27 @@
                         <input name="password" id="password" type="password" class="form-control" placeholder="Password"
                             required>
                     </div>
-                    <div class="form-check mb-7">
-                        <input name="agree" type="checkbox" class="form-check-input rounded-0" id="agree_terms">
-                        <label class="form-check-label text-secondary" for="agree_terms">
-                            Yes, I agree with Grace <a href="#" class="text-decoration-underline">Privacy Policy</a>
-                            and <a href="#" class="text-decoration-underline">Terms of Use</a>
-                        </label>
+                    <div class="mb-7">
+                        <label for="address" class="visually-hidden">Address</label>
+                        <textarea name="address" id="address" class="form-control" placeholder="Address" required></textarea>
                     </div>
+                    <div class="mb-7">
+                        <label for="phone_number" class="visually-hidden">Email address</label>
+                        <input name="phone_number" id="phone_number" type="tel" class="form-control" placeholder="Phone number"
+                               required>
+                    </div>
+                    
                     <button type="submit" value="Login" class="btn btn-primary w-100">Sign Up</button>
-                    <div class="border-bottom mt-10"></div>
-                    <div class="text-center mt-n4 lh-1 mb-7">
-                        <span class="fs-14 bg-body lh-1 px-4">or Sign Up with</span>
-                    </div>
-                    <div class="d-flex">
-                        <a href="#" class="btn btn-outline-primary w-100 px-2 font-weight-500 me-5"><i
-                                class="fab fa-facebook-f me-4" style="color: #2E58B2"></i>Facebook</a>
-                        <a href="#" class="btn btn-outline-primary w-100 px-2 font-weight-500 mt-0"><i
-                                class="fab fa-google me-4" style="color: #DD4B39"></i>Google</a>
-                    </div>
+                    @* <div class="border-bottom mt-10"></div> *@
+                    @* <div class="text-center mt-n4 lh-1 mb-7"> *@
+                    @*     <span class="fs-14 bg-body lh-1 px-4">or Sign Up with</span> *@
+                    @* </div> *@
+                    @* <div class="d-flex"> *@
+                    @*     <a href="#" class="btn btn-outline-primary w-100 px-2 font-weight-500 me-5"><i *@
+                    @*             class="fab fa-facebook-f me-4" style="color: #2E58B2"></i>Facebook</a> *@
+                    @*     <a href="#" class="btn btn-outline-primary w-100 px-2 font-weight-500 mt-0"><i *@
+                    @*             class="fab fa-google me-4" style="color: #DD4B39"></i>Google</a> *@
+                    @* </div> *@
                 </form>
             </div>
         </div>
