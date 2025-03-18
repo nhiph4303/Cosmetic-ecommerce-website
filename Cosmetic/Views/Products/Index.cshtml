@@ -30,6 +30,9 @@
 							<th class="align-middle text-center" scope="col">
 								@Html.DisplayNameFor(model => model.Name)
 							</th>
+							<th class="align-middle text-center" scope="col">
+								@Html.DisplayNameFor(model => model.Description)
+							</th>
 							<th class="align-middle" scope="col">
 								@Html.DisplayNameFor(model => model.Price)
 							</th>
@@ -63,6 +66,7 @@
 										</a>
 									</div>
 								</td>
+								<td>@Html.DisplayFor(modelItem => item.Description)</td>
 								<td>@Html.DisplayFor(modelItem => item.Price)</td>
 								<td class="text-center">@Html.DisplayFor(modelItem => item.InStock)</td>
 								@{
