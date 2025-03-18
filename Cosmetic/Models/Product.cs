@@ -10,6 +10,7 @@ namespace Shop.Models
 
         public String? Name { get; set; }
 
+        public String? Description { get; set; }
         public decimal? Price { get; set; }
 
         public string? Image { get; set; }

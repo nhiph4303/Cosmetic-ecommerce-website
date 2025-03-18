@@ -94,7 +94,7 @@ namespace Cosmetic.Controllers
         //}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Price,InStock,Status,CategoryID")] Product product, IFormFile? ImageFile)
+        public async Task<IActionResult> Create([Bind("Name,Description,Price,InStock,Status,CategoryID")] Product product, IFormFile? ImageFile)
         {
             if (!ModelState.IsValid)
             {
@@ -175,7 +175,7 @@ namespace Cosmetic.Controllers
             }
 
             var product = await _context.Product
-                .Include(p => p.Category)  // Ensure that the related Category is loaded
+                .Include(p => p.Category)  
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (product == null)
@@ -183,7 +183,6 @@ namespace Cosmetic.Controllers
                 return NotFound();
             }
 
-            // Create SelectList from the Category list and set the selected item based on CategoryID
             ViewBag.Categories = new SelectList(await _context.Category.ToListAsync(), "ID", "Name", product.CategoryID);
 
             return View(product);
@@ -231,15 +230,14 @@ namespace Cosmetic.Controllers
         //}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Price,InStock,Status,CategoryID,Image")] Product product, IFormFile? ImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Price,InStock,Status,CategoryID,Image")] Product product, IFormFile? ImageFile)
         {
             if (id != product.ID)
             {
                 return NotFound();
             }
 
-            // Kiểm tra nếu ModelState hợp lệ
-            ModelState.Remove("ImageFile"); // Loại bỏ kiểm tra bắt buộc cho ImageFile nếu cần
+            ModelState.Remove("ImageFile"); 
 
             if (!ModelState.IsValid)
             {
@@ -256,7 +254,6 @@ namespace Cosmetic.Controllers
                     return NotFound();
                 }
 
-                // Nếu có ảnh mới được chọn, cập nhật ảnh
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/assets/images/products");
@@ -270,12 +267,11 @@ namespace Cosmetic.Controllers
                         await ImageFile.CopyToAsync(stream);
                     }
 
-                    // Cập nhật đường dẫn ảnh mới
                     existingProduct.Image = "/assets/images/products/" + uniqueFileName;
                 }
 
-                // Cập nhật các thông tin khác
                 existingProduct.Name = product.Name;
+                existingProduct.Description = product.Description;
                 existingProduct.Price = product.Price;
                 existingProduct.InStock = product.InStock;
                 existingProduct.Status = product.Status;
