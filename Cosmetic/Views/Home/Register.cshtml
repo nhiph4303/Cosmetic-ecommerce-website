@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Shop.Models.Customer
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Register";
 }
@@ -6,49 +8,50 @@
 <main id="content" class="wrapper layout-page">
     <section class="pb-lg-20 pb-16">
         <div class="container">
-            <div class=" text-center pt-13 mb-12 mb-lg-15">
-                <div class="text-center">
-                    <h2 class="fs-36px mb-11 mb-lg-14">Register</h2>
-                </div>
+            <div class="text-center pt-13 mb-12 mb-lg-15">
+                <h2 class="fs-36px mb-11 mb-lg-14">Register</h2>
             </div>
             <div class="col-lg-5 col-md-8 mx-auto">
-                <form>
+                @* Sử dụng TempData để hiển thị thông báo sau khi redirect *@
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["Message"]
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+
+                @* Hiển thị tổng hợp lỗi nếu có *@
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <form asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
                     <div class="mb-6">
-                        <label for="full_name" class="visually-hidden">Email address</label>
-                        <input name="full_name" id="full_name" type="text" class="form-control"
-                            placeholder="Full name" required>
+                        <label for="Name" class="visually-hidden">Full Name</label>
+                        <input asp-for="Name" class="form-control" placeholder="Full name" required />
                     </div>
                     <div class="mb-6">
-                        <label for="email" class="visually-hidden">Email address</label>
-                        <input name="email" id="email" type="email" class="form-control" placeholder="Your email"
-                            required>
+                        <label for="Email" class="visually-hidden">Email address</label>
+                        <input asp-for="Email" class="form-control" placeholder="Your email" required />
                     </div>
                     <div class="mb-7">
-                        <label for="password" class="visually-hidden">Email address</label>
-                        <input name="password" id="password" type="password" class="form-control" placeholder="Password"
-                            required>
+                        <label for="Password" class="visually-hidden">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" required />
                     </div>
                     <div class="mb-7">
-                        <label for="address" class="visually-hidden">Address</label>
-                        <textarea name="address" id="address" class="form-control" placeholder="Address" required></textarea>
+                        <label for="Address" class="visually-hidden">Address</label>
+                        <textarea asp-for="Address" class="form-control" placeholder="Address" required></textarea>
                     </div>
                     <div class="mb-7">
-                        <label for="phone_number" class="visually-hidden">Email address</label>
-                        <input name="phone_number" id="phone_number" type="tel" class="form-control" placeholder="Phone number"
-                               required>
+                        <label for="PhoneNumber" class="visually-hidden">Phone number</label>
+                        <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="Phone number" required />
                     </div>
-                    
-                    <button type="submit" value="Login" class="btn btn-primary w-100">Sign Up</button>
-                    @* <div class="border-bottom mt-10"></div> *@
-                    @* <div class="text-center mt-n4 lh-1 mb-7"> *@
-                    @*     <span class="fs-14 bg-body lh-1 px-4">or Sign Up with</span> *@
-                    @* </div> *@
-                    @* <div class="d-flex"> *@
-                    @*     <a href="#" class="btn btn-outline-primary w-100 px-2 font-weight-500 me-5"><i *@
-                    @*             class="fab fa-facebook-f me-4" style="color: #2E58B2"></i>Facebook</a> *@
-                    @*     <a href="#" class="btn btn-outline-primary w-100 px-2 font-weight-500 mt-0"><i *@
-                    @*             class="fab fa-google me-4" style="color: #DD4B39"></i>Google</a> *@
-                    @* </div> *@
+                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                 </form>
             </div>
         </div>
