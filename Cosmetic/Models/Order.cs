@@ -11,7 +11,7 @@ namespace Shop.Models
         [ForeignKey("CustomerID")]
         public Customer? Customer { get; set; }
 
-        public int? CustomerID { get; set; }
+        public string? CustomerID { get; set; }
         
         [Display(Name = "Total Price")]
         public decimal TotalPrice { get; set; }

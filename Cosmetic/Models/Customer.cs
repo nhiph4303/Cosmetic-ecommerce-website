@@ -6,12 +6,11 @@ namespace Shop.Models
     public class Customer : IdentityUser
     {
         [Key]
-        public int ID { get; set; }
-
+        public string ID { get; set; }
+      
         public string Name { get; set; }
 
-        [EmailAddress]
-        public string Address { get; set; }
+        public String Address { get; set; }
 
         [StringLength(10)]
         public string PhoneNumber { get; set; }
