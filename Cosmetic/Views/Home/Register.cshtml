@@ -12,7 +12,6 @@
                 <h2 class="fs-36px mb-11 mb-lg-14">Register</h2>
             </div>
             <div class="col-lg-5 col-md-8 mx-auto">
-                @* Sử dụng TempData để hiển thị thông báo sau khi redirect *@
                 @if (TempData["Message"] != null)
                 {
                     <div class="alert alert-success">
@@ -22,27 +21,32 @@
                 @if (TempData["ErrorMessage"] != null)
                 {
                     <div class="alert alert-danger">
-                        @TempData["ErrorMessage"]
+                        @Html.Raw(TempData["ErrorMessage"])
                     </div>
                 }
 
-                @* Hiển thị tổng hợp lỗi nếu có *@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                 <form asp-action="Register" method="post">
                     @Html.AntiForgeryToken()
+
                     <div class="mb-6">
                         <label for="Name" class="visually-hidden">Full Name</label>
                         <input asp-for="Name" class="form-control" placeholder="Full name" required />
                     </div>
-                    @* <div class="mb-6"> *@
-                    @*     <label for="Email" class="visually-hidden">Email address</label> *@
-                    @*     <input asp-for="Email" class="form-control" placeholder="Your email" required /> *@
-                    @* </div> *@
-                    @* <div class="mb-7"> *@
-                    @*     <label for="Password" class="visually-hidden">Password</label> *@
-                    @*     <input asp-for="Password" type="password" class="form-control" placeholder="Password" required /> *@
-                    @* </div> *@
+
+                    <!-- Add Email Field -->
+                    <div class="mb-6">
+                        <label for="Email" class="visually-hidden">Email Address</label>
+                        <input asp-for="Email" class="form-control" placeholder="Email address" required />
+                    </div>
+
+                    <!-- Add Password Field -->
+                    <div class="mb-7">
+                        <label for="Password" class="visually-hidden">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" required />
+                    </div>
+
                     <div class="mb-7">
                         <label for="Address" class="visually-hidden">Address</label>
                         <textarea asp-for="Address" class="form-control" placeholder="Address" required></textarea>
@@ -51,6 +55,7 @@
                         <label for="PhoneNumber" class="visually-hidden">Phone number</label>
                         <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="Phone number" required />
                     </div>
+
                     <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                 </form>
             </div>
