@@ -148,7 +148,7 @@
                     <div>
                         <div class="card card-product grid-1 bg-transparent border-0" data-animate="fadeInUp">
                             <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                                <a asp-controller="Home" asp-action="ProductDetail" class="hover-zoom-in d-block" title="@product.Name">
+                                <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@product.ID" class="hover-zoom-in d-block" title="@product.Name">
                                     <img src="@Url.Content(product.Image)" class="img-fluid lazy-image w-100" alt="@product.Name" width="330" height="440">
                                 </a>
 
