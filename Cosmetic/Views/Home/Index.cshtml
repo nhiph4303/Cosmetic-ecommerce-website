@@ -233,8 +233,9 @@
                             that adorn the summer of bold girls.
                         </p>
                     </div>
+
                     <div class="d-flex countdown ms-n4 ms-md-n7" data-countdown="true"
-                         data-countdown-end="Jan 27, 2024 18:24:25">
+                         data-countdown-end="May 5, 2025 00:00:00">
                         <div class="countdown-item text-center px-md-7 px-4 fs-1">
                             <span class="day fw-normal text-primary font-primary"></span>
                         </div>
@@ -251,6 +252,7 @@
                             <span class="second fw-normal text-primary font-primary"></span>
                         </div>
                     </div>
+
                     <a href="#"
                        class="mt-11 btn btn-dark btn-hover-bg-primary btn-hover-border-primary transition-all-1 shadow px-lg-13">
                         Add to cart
@@ -260,6 +262,7 @@
             </div>
         </div>
     </section>
+
 
     <section id="under_25">
         <div class="container container-xxl pt-lg-19 pt-15 pb-6">
@@ -526,3 +529,27 @@
         </div>
     </section>
 </main>
+<script>
+    const targetDate = new Date("May 5, 2025 00:00:00").getTime();
+
+    const countdownInterval = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.querySelector(".day .countdown-value").textContent = days < 10 ? '0' + days : days;
+        document.querySelector(".hour .countdown-value").textContent = hours < 10 ? '0' + hours : hours;
+        document.querySelector(".minute .countdown-value").textContent = minutes < 10 ? '0' + minutes : minutes;
+        document.querySelector(".second .countdown-value").textContent = seconds < 10 ? '0' + seconds : seconds;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            document.querySelector(".countdown").classList.add("countdown-expired");
+            document.querySelector(".countdown").innerHTML = "Offer Expired!";
+        }
+    }, 1000);
+</script>
