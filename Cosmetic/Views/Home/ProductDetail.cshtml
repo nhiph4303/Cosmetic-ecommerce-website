@@ -9,87 +9,46 @@
                 <div class="position-sticky top-0">
                     <div class="slick-slider g-0 "
                          data-slick-options="{&#34;arrows&#34;:false,&#34;imageSize&#34;:{&#34;img&#34;:{&#34;height&#34;:720,&#34;width&#34;:540}},&#34;items&#34;:[{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-05.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-06.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-07.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-08.jpg&#34;}],&#34;slidesToShow&#34;:1}">
-                        <a href="../assets/images/shop/product-gallery-05.jpg" data-gallery="gallery4"
-                           data-thumb-src="@Url.Content("~/assets/images/gallery-product-01.webp")">
-                            <img src="#"
-                                 data-src="@Url.Content("~/assets/images/gallery-product-01.webp")" class="lazy-image"
-                                 width="540" height="720">
+
+                        <a href="@Url.Content(Model.Image)" data-gallery="gallery4">
+                            <img src="@Url.Content(Model.Image)" class="lazy-image" width="540" height="720" />
+
                         </a>
-                        <a href="../assets/images/shop/product-gallery-06.jpg" data-gallery="gallery4"
-                           data-thumb-src="@Url.Content("~/assets/images/gallery-product-01-2.webp")">
-                            <img src="#"
-                                 data-src="@Url.Content("~/assets/images/gallery-product-01-2.webp")" class="lazy-image"
-                                 width="540" height="720">
-                        </a>
-                        <a href="../assets/images/shop/product-gallery-07.jpg" data-gallery="gallery4"
-                           data-thumb-src="@Url.Content("~/assets/images/gallery-product-01-3.webp")">
-                            <img src="#"
-                                 data-src="@Url.Content("~/assets/images/gallery-product-01-3.webp")"class="lazy-image"
-                                 width="540" height="720">
-                        </a>
-                        <a href="../assets/images/shop/product-gallery-08.jpg" data-gallery="gallery4"
-                           data-thumb-src="@Url.Content("~/assets/images/gallery-product-01-4.webp")">
-                            <img src="#"
-                                 data-src="@Url.Content("~/assets/images/gallery-product-01-4.webp")" class="lazy-image"
-                                 width="540" height="720">
-                        </a>
+                        @* <a href="../assets/images/shop/product-gallery-05.jpg" data-gallery="gallery4" *@
+                        @*    data-thumb-src="@Url.Content("~/assets/images/gallery-product-01.webp")"> *@
+                        @*     <img src="#" *@
+                        @*          data-src="@Url.Content("~/assets/images/gallery-product-01.webp")" class="lazy-image" *@
+                        @*          width="540" height="720"> *@
+                        @* </a> *@
+                        @* <a href="../assets/images/shop/product-gallery-06.jpg" data-gallery="gallery4" *@
+                        @*    data-thumb-src="@Url.Content("~/assets/images/gallery-product-01-2.webp")"> *@
+                        @*     <img src="#" *@
+                        @*          data-src="@Url.Content("~/assets/images/gallery-product-01-2.webp")" class="lazy-image" *@
+                        @*          width="540" height="720"> *@
+                        @* </a> *@
+                        @* <a href="../assets/images/shop/product-gallery-07.jpg" data-gallery="gallery4" *@
+                        @*    data-thumb-src="@Url.Content("~/assets/images/gallery-product-01-3.webp")"> *@
+                        @*     <img src="#" *@
+                        @*          data-src="@Url.Content("~/assets/images/gallery-product-01-3.webp")"class="lazy-image" *@
+                        @*          width="540" height="720" alt> *@
+                        @* </a> *@
+                        @* <a href="../assets/images/shop/product-gallery-08.jpg" data-gallery="gallery4" *@
+                        @*    data-thumb-src="@Url.Content("~/assets/images/gallery-product-01-4.webp")"> *@
+                        @*     <img src="#" *@
+                        @*          data-src="@Url.Content("~/assets/images/gallery-product-01-4.webp")" class="lazy-image" *@
+                        @*          width="540" height="720" alt> *@
+                        @* </a> *@
                     </div>
                 </div>
             </div>
             <div class="col-md-6 pt-md-0 pt-10">
                 <p class="d-flex align-items-center mb-6">
                     <span class="text-decoration-line-through">39.00</span>
-                    <span class="fs-18px text-body-emphasis ps-6 fw-bold">29.00</span>
+                    <span class="fs-18px text-body-emphasis ps-6 fw-bold">@Model.Price</span>
                     <span class="badge text-bg-primary fs-6 fw-semibold ms-7 px-6 py-3">20%</span>
                 </p>
-                <h1 class="mb-4 pb-2 fs-4">Natural Coconut Cleansing Oil</h1>
-                <div class="d-flex align-items-center fs-15px mb-6">
-                    <p class="mb-0 fw-semibold text-body-emphasis">4.86</p>
-                    <div class="d-flex align-items-center fs-12px justify-content-center mb-0 px-6 rating-result">
-                        <div class="rating">
-                            <div class="empty-stars">
-                                <span class="star">
-                                    <i class="icon star-o fa-regular fa-star"></i>
-                                </span>
-                                <span class="star">
-                                    <i class="icon star-o fa-regular fa-star"></i>
-                                </span>
-                                <span class="star">
-                                    <i class="icon star-o fa-regular fa-star"></i>
-                                </span>
-                                <span class="star">
-                                    <i class="icon star-o fa-regular fa-star"></i>
-                                </span>
-                                <span class="star">
-                                    <i class="icon star-o fa-regular fa-star"></i>
-                                </span>
-                            </div>
-
-                            <div class="filled-stars" style="width: 80%">
-                                <span class="star">
-                                    <i class="icon star fa-solid fa-star"></i>
-                                </span>
-                                <span class="star">
-                                    <i class="icon star fa-solid fa-star"></i>
-                                </span>
-                                <span class="star">
-                                    <i class="icon star fa-solid fa-star"></i>
-                                </span>
-                                <span class="star">
-                                    <i class="icon star fa-solid fa-star"></i>
-                                </span>
-                                <span class="star">
-                                    <i class="icon star fa-solid fa-star"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#" class="border-start ps-6 text-body">Read 2947 reviews</a>
-                </div>
-                <p class="fs-15px">
-                    Niacinamide and Vitamin C are two anti-aging superstars but not usually
-                    formulated together because of their different pH levels.
-                </p>
+                <h1 class="mb-4 pb-2 fs-4">@Model.Name</h1>
+                <p class="fs-15px">@Model.Description</p>
                 <form>
                     <div class="row align-items-end">
                         <div class="col-sm-6 form-group">
@@ -138,7 +97,7 @@
                 <ul class="single-product-meta list-unstyled border-top pt-7 mt-7">
                     <li class="d-flex mb-4 pb-2 align-items-center">
                         <span class="text-body-emphasis fw-semibold fs-14px">Categories:</span>
-                        <span class="ps-4">Makeup, Skincare</span>
+                        <span class="ps-4">@Model.Category.Name</span>
                     </li>
                 </ul>
                 <div class="mt-11">
@@ -269,45 +228,6 @@
                                 Conditioner
                             </a>
                         </h4>
-                        <div class="d-flex align-items-center fs-12px justify-content-center">
-                            <div class="rating">
-                                <div class="empty-stars">
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                </div>
-
-                                <div class="filled-stars" style="width: 80%">
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                </div>
-                            </div><span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -351,45 +271,6 @@
                                 Facial Oil
                             </a>
                         </h4>
-                        <div class="d-flex align-items-center fs-12px justify-content-center">
-                            <div class="rating">
-                                <div class="empty-stars">
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                </div>
-
-                                <div class="filled-stars" style="width: 80%">
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                </div>
-                            </div><span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -436,45 +317,6 @@
                                 &amp; Body Wash
                             </a>
                         </h4>
-                        <div class="d-flex align-items-center fs-12px justify-content-center">
-                            <div class="rating">
-                                <div class="empty-stars">
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                </div>
-
-                                <div class="filled-stars" style="width: 80%">
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                </div>
-                            </div><span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -522,45 +364,6 @@
                                 Shampoo
                             </a>
                         </h4>
-                        <div class="d-flex align-items-center fs-12px justify-content-center">
-                            <div class="rating">
-                                <div class="empty-stars">
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                </div>
-
-                                <div class="filled-stars" style="width: 80%">
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                </div>
-                            </div><span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -609,45 +412,6 @@
                                 Wash
                             </a>
                         </h4>
-                        <div class="d-flex align-items-center fs-12px justify-content-center">
-                            <div class="rating">
-                                <div class="empty-stars">
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                </div>
-
-                                <div class="filled-stars" style="width: 80%">
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                </div>
-                            </div><span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -689,45 +453,6 @@
                                 Duo
                             </a>
                         </h4>
-                        <div class="d-flex align-items-center fs-12px justify-content-center">
-                            <div class="rating">
-                                <div class="empty-stars">
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                </div>
-
-                                <div class="filled-stars" style="width: 80%">
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                </div>
-                            </div><span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -769,45 +494,6 @@
                                 Spray
                             </a>
                         </h4>
-                        <div class="d-flex align-items-center fs-12px justify-content-center">
-                            <div class="rating">
-                                <div class="empty-stars">
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                </div>
-
-                                <div class="filled-stars" style="width: 80%">
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                </div>
-                            </div><span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -855,45 +541,6 @@
                                 Spray
                             </a>
                         </h4>
-                        <div class="d-flex align-items-center fs-12px justify-content-center">
-                            <div class="rating">
-                                <div class="empty-stars">
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star-o fa-regular fa-star"></i>
-                                    </span>
-                                </div>
-
-                                <div class="filled-stars" style="width: 80%">
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                    <span class="star">
-                                        <i class="icon star fa-solid fa-star"></i>
-                                    </span>
-                                </div>
-                            </div><span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-                        </div>
                     </div>
                 </div>
             </div>

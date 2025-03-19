@@ -34500,10 +34500,8 @@ svg.icon {
 
 .lazy-image {
     position: relative;
-    max-width: 100%;
-    height: auto;
     overflow: hidden;
-    display: inline-block
+    display: inline-block;
 }
 
     .lazy-image:before, .lazy-image:after {
@@ -34541,6 +34539,24 @@ svg.icon {
             background: linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.2) 20%,rgba(255,255,255,0.5) 60%,rgba(255,255,255,0) 100%);
             animation: placeholder-glow 1s cubic-bezier(.4,0,.2,1) infinite
         }
+
+.description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.see-more {
+    color: #007bff;
+    cursor: pointer;
+    display: none;
+}
+
+.description.full {
+    -webkit-line-clamp: unset; 
+}
+
 
 .bg-image, .bg-overlay {
     background-size: cover;
