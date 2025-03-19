@@ -8,8 +8,7 @@ using Shop.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
+using System;
 
 namespace Cosmetic.Controllers
 {
@@ -20,7 +19,8 @@ namespace Cosmetic.Controllers
         private readonly SignInManager<Customer> _signInManager;
         private readonly CosmeticContext _context;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<Customer> userManager, SignInManager<Customer> signInManager, CosmeticContext context)
+        public HomeController(ILogger<HomeController> logger, UserManager<Customer> userManager,
+                              SignInManager<Customer> signInManager, CosmeticContext context)
         {
             _logger = logger;
             _userManager = userManager;
@@ -30,13 +30,11 @@ namespace Cosmetic.Controllers
 
         public IActionResult Index()
         {
-            // sản phẩm trong các danh mục Eyes, Face, Lips
             var categories = new List<string> { "Eyes", "Face", "Lips" };
             var products = _context.Product
                                    .Where(p => p.Category != null && categories.Contains(p.Category.Name))
                                    .ToList();
 
-            //sản phẩm có giá dưới 50 đô
             var productsUnder50 = _context.Product
                                           .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name))
                                           .ToList();
@@ -59,7 +57,6 @@ namespace Cosmetic.Controllers
             {
                 var category = await _context.Category
                                               .FirstOrDefaultAsync(c => c.ID == categoryId.Value && c.Status == "active");
-
                 if (category == null)
                 {
                     return Content("Invalid category!");
@@ -98,10 +95,12 @@ namespace Cosmetic.Controllers
             return View(productList);
         }
 
-        //public IActionResult ProductDetail()
-        //{
-        //    return View();
-        //}
+        public class ProductDetailViewModel
+        {
+            public Product Product { get; set; }
+            public List<Product> RelatedProducts { get; set; }
+        }
+
         public async Task<IActionResult> ProductDetail(int id)
         {
             var product = await _context.Product
@@ -113,42 +112,27 @@ namespace Cosmetic.Controllers
                 return NotFound();
             }
 
-            return View(product);
+            var relatedProducts = await _context.Product
+                .Where(p => p.ID != id)
+                .Take(8)
+                .ToListAsync();
+
+            var viewModel = new ProductDetailViewModel
+            {
+                Product = product,
+                RelatedProducts = relatedProducts
+            };
+
+            return View(viewModel); // Trả về view với viewModel
         }
+    
 
+        public IActionResult ShoppingCart() => View();
+        public IActionResult CheckOut() => View();
+        public IActionResult AboutUs() => View();
+        public IActionResult Compare() => View();
+        public IActionResult Login() => View();
 
-        public IActionResult ShoppingCart()
-        {
-            return View();
-        }
-
-        public IActionResult CheckOut()
-        {
-            return View();
-        }
-
-        public IActionResult AboutUs()
-        {
-            return View();
-        }
-
-        public IActionResult Compare()
-        {
-            return View();
-        }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        // Action Register (GET)
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        // Action Register (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(Customer model)
@@ -168,7 +152,6 @@ namespace Cosmetic.Controllers
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
-
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -184,13 +167,13 @@ namespace Cosmetic.Controllers
             return View(model);
         }
 
-
-
-
+        // ViewModel cho trang Index (đã có sẵn)
         public class ProductViewModel
         {
             public List<Product> AllProducts { get; set; } = new List<Product>();
             public List<Product> ProductsUnder50 { get; set; } = new List<Product>();
         }
+
+        
     }
 }
