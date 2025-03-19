@@ -125,8 +125,7 @@ namespace Cosmetic.Controllers
 
             return View(viewModel); // Trả về view với viewModel
         }
-
-
+    
         public IActionResult ShoppingCart() => View();
         public IActionResult CheckOut() => View();
         public IActionResult AboutUs() => View();
@@ -173,7 +172,6 @@ namespace Cosmetic.Controllers
             public List<Product> AllProducts { get; set; } = new List<Product>();
             public List<Product> ProductsUnder50 { get; set; } = new List<Product>();
         }
-
 
     }
 }
