@@ -28,15 +28,18 @@ namespace Cosmetic.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchQuery)
         {
             var categories = new List<string> { "Eyes", "Face", "Lips" };
+
             var products = _context.Product
-                                   .Where(p => p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock")
+                                   .Where(p => (p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock") &&
+                                               (string.IsNullOrEmpty(searchQuery) || p.Name.Contains(searchQuery) || p.Category.Name.Contains(searchQuery)))
                                    .ToList();
 
             var productsUnder50 = _context.Product
-                                          .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock")
+                                          .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock" &&
+                                                      (string.IsNullOrEmpty(searchQuery) || p.Name.Contains(searchQuery) || p.Category.Name.Contains(searchQuery)))
                                           .ToList();
 
             Debug.WriteLine($"Total products returned (All): {products.Count}");
@@ -50,6 +53,7 @@ namespace Cosmetic.Controllers
 
             return View(viewModel);
         }
+
 
         public async Task<IActionResult> Category(int? categoryId, string orderby, decimal? minPrice, decimal? maxPrice)
         {
