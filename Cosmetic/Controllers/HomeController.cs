@@ -102,6 +102,20 @@ namespace Cosmetic.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> ProductDetail(int id)
+        {
+            var product = await _context.Product
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.ID == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
 
         public IActionResult ShoppingCart()
         {
