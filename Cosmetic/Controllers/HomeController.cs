@@ -3,15 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Cosmetic.Data;  
-using Shop.Models;  
+using Cosmetic.Data;
+using Shop.Models;
 
 namespace Cosmetic.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly CosmeticContext _context; 
+        private readonly CosmeticContext _context;
 
         public HomeController(ILogger<HomeController> logger, CosmeticContext context)
         {
@@ -21,43 +21,97 @@ namespace Cosmetic.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var categories = new List<string> { "Eyes", "Face", "Lips" };
+            var products = _context.Product
+                                   .Where(p => p.Category != null && categories.Contains(p.Category.Name))
+                                   .ToList();
+
+            var productsUnder50 = _context.Product
+                                          .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name))
+                                          .ToList();
+
+            Console.WriteLine($"Total products returned (All): {products.Count}");
+            Console.WriteLine($"Total products returned (Under $50): {productsUnder50.Count}");
+
+            var viewModel = new ProductViewModel
+            {
+                AllProducts = products,
+                ProductsUnder50 = productsUnder50
+            };
+
+            return View(viewModel);  
         }
 
-        public async Task<IActionResult> Category(int? categoryId)
+        public async Task<IActionResult> Category(int? categoryId, string orderby, decimal? minPrice, decimal? maxPrice)
         {
             if (categoryId.HasValue)
             {
-                var categoryExists = await _context.Category.AnyAsync(c => c.ID == categoryId);
-                if (!categoryExists)
+                var category = await _context.Category
+                                              .FirstOrDefaultAsync(c => c.ID == categoryId.Value && c.Status == "active");
+
+                if (category == null)
                 {
-                    return Content("Danh mục không hợp lệ!"); // Bạn có thể chuyển hướng về trang danh mục chính
+                    return Content("Invalid category!");
                 }
             }
 
-            var categories = await _context.Category
-                .Where(c => c.Status == "active")
-                .OrderBy(c => c.Name)
-                .ToListAsync();
+            // theo id
+            var products = _context.Product.AsQueryable();
 
-            var products = await _context.Product
-                .Where(p => !categoryId.HasValue || p.CategoryID == categoryId)
-                .OrderByDescending(p => p.CreateTime)
-                .ToListAsync();
+            if (categoryId.HasValue)
+            {
+                products = products.Where(p => p.CategoryID == categoryId.Value); // id
+            }
 
+            // sort giá
+            if (minPrice.HasValue && maxPrice.HasValue)
+            {
+                products = products.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
+            }
+
+            // sort tên
+            if (orderby == "alphabet-asc")
+            {
+                products = products.OrderBy(p => p.Name);
+            }
+            else if (orderby == "alphabet-desc")
+            {
+                products = products.OrderByDescending(p => p.Name);
+            }
+
+            var productList = await products.ToListAsync();
+
+            // truyền data
             ViewBag.SelectedCategoryId = categoryId;
-            ViewBag.Categories = categories;
+            ViewBag.Categories = await _context.Category.Where(c => c.Status == "active").ToListAsync();
+            ViewBag.OrderBy = orderby;
+            ViewBag.MinPrice = minPrice;
+            ViewBag.MaxPrice = maxPrice;
 
-            return View(products);
+            return View(productList);
         }
 
+        //public IActionResult ProductDetail()
+        //{
+        //    return View();
+        //}
+        public async Task<IActionResult> ProductDetail(int id)
+{
+    // Tìm sản phẩm theo id
+    var product = await _context.Product
+        .Include(p => p.Category) // Bao gồm thông tin Category nếu cần
+        .FirstOrDefaultAsync(p => p.ID == id);
+
+    if (product == null)
+    {
+        return NotFound(); // Nếu không tìm thấy sản phẩm, trả về 404
+    }
+
+    // Trả về view với thông tin sản phẩm
+    return View(product);
+}
 
 
-
-        public IActionResult ProductDetail()
-        {
-            return View();
-        }
 
         public IActionResult ShoppingCart()
         {
@@ -89,10 +143,20 @@ namespace Cosmetic.Controllers
             return View();
         }
 
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View("Error");
         }
+
+
+    }
+
+    // Inside the HomeController class
+    public class ProductViewModel
+    {
+        public List<Product> AllProducts { get; set; } = new List<Product>();
+        public List<Product> ProductsUnder50 { get; set; } = new List<Product>();
     }
 }
