@@ -30,13 +30,13 @@ namespace Cosmetic.Controllers
 
         public IActionResult Index()
         {
-            // Lấy tất cả sản phẩm trong các danh mục Eyes, Face, Lips
+            // sản phẩm trong các danh mục Eyes, Face, Lips
             var categories = new List<string> { "Eyes", "Face", "Lips" };
             var products = _context.Product
                                    .Where(p => p.Category != null && categories.Contains(p.Category.Name))
                                    .ToList();
 
-            // Lấy sản phẩm có giá dưới 50 đô
+            //sản phẩm có giá dưới 50 đô
             var productsUnder50 = _context.Product
                                           .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name))
                                           .ToList();
@@ -128,8 +128,6 @@ namespace Cosmetic.Controllers
             return View();
         }
 
-
-
         // Action Register (GET)
         public IActionResult Register()
         {
@@ -137,14 +135,13 @@ namespace Cosmetic.Controllers
         }
 
         // Action Register (POST)
-        // Action Register (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(Customer model)
         {
             if (ModelState.IsValid)
             {
-                model.Status = "active"; 
+                model.Status = "active";
 
                 var user = new Customer
                 {
@@ -153,7 +150,7 @@ namespace Cosmetic.Controllers
                     Name = model.Name,
                     Address = model.Address,
                     PhoneNumber = model.PhoneNumber,
-                    Status = model.Status 
+                    Status = model.Status
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -166,14 +163,13 @@ namespace Cosmetic.Controllers
                 }
                 else
                 {
-                    // Ghi lại chi tiết lỗi vào TempData
                     TempData["ErrorMessage"] = "An error occurred while creating the account.<br/>" +
                                                string.Join("<br/>", result.Errors.Select(e => e.Description));
                 }
             }
-
             return View(model);
         }
+
 
 
 
