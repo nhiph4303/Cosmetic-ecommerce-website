@@ -1,4 +1,4 @@
-﻿@{
+﻿﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Home Page - Anna Beauty";
 }
@@ -148,7 +148,7 @@
                     <div>
                         <div class="card card-product grid-1 bg-transparent border-0" data-animate="fadeInUp">
                             <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                                <a asp-controller="Home" asp-action="ProductDetail" class="hover-zoom-in d-block" title="@product.Name">
+                                <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@product.ID" class="hover-zoom-in d-block" title="@product.Name">
                                     <img src="@Url.Content(product.Image)" class="img-fluid lazy-image w-100" alt="@product.Name" width="330" height="440">
                                 </a>
 
@@ -164,13 +164,6 @@
                                        href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart">
                                         <i class="icon fs-6 icon-shopping-bag-open-light fa-solid fa-cart-shopping"></i>
                                     </a>
-                                    <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                                       href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Quick View">
-                                        <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                              class="d-flex align-items-center justify-content-center">
-                                            <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                        </span>
-                                    </a>
                                     <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
                                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Compare"
                                        asp-controller="Home" asp-action="Compare">
@@ -181,8 +174,8 @@
 
                             <div class="card-body text-center p-0">
                                 <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-                                    <del class="text-body fw-500 me-4 fs-13px">$@product.Price</del>
-                                    <ins class="text-decoration-none">$@product.Price</ins>
+                                    <del class="text-body fw-500 me-4 fs-13px">$@product.Price.00</del>
+                                    <ins class="text-decoration-none">$@product.Price.00</ins>
                                 </span>
 
                                 <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
@@ -240,7 +233,6 @@
                             that adorn the summer of bold girls.
                         </p>
                     </div>
-
                     <div class="d-flex countdown ms-n4 ms-md-n7" data-countdown="true"
                          data-countdown-end="May 5, 2025 00:00:00">
                         <div class="countdown-item text-center px-md-7 px-4 fs-1">
@@ -269,7 +261,6 @@
             </div>
         </div>
     </section>
-
 
     <section id="under_25">
         <div class="container container-xxl pt-lg-19 pt-15 pb-6">
@@ -311,13 +302,6 @@
                                        href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart">
                                         <i class="icon fs-6 icon-shopping-bag-open-light fa-solid fa-cart-shopping"></i>
                                     </a>
-                                    <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                                       href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Quick View">
-                                        <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                              class="d-flex align-items-center justify-content-center">
-                                            <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                        </span>
-                                    </a>
                                     <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
                                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Compare"
                                        asp-controller="Home" asp-action="Compare">
@@ -328,8 +312,8 @@
 
                             <div class="card-body text-center p-0">
                                 <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-                                    <del class="text-body fw-500 me-4 fs-13px">$@product.Price</del>
-                                    <ins class="text-decoration-none">$@product.Price</ins>
+                                    <del class="text-body fw-500 me-4 fs-13px">$@product.Price.00</del>
+                                    <ins class="text-decoration-none">$@product.Price.00</ins>
                                 </span>
 
                                 <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
@@ -373,60 +357,133 @@
         <div class="container container-xxl pt-lg-20 pt-13 pb-lg-21 pb-16">
             <div class="mb-md-15 mb-11">
                 <div class="text-center" data-animate="fadeInUp">
-                    <h2 class="font-primary fw-normal">Why Shop with Anna?</h2>
+                    <h2 class="font-primary fw-normal">Explore Previous Collections</h2>
                 </div>
             </div>
 
             <div class="row gy-30px">
-                <div class="col-md-4" data-animate="fadeInUp">
+                <div class="col-md-3" data-animate="fadeInUp">
                     <div>
                         <div class="d-flex justify-content-center">
-                            <img class="lazy-image img-fluid light-mode-img" src="#" data-src="@Url.Content("~/assets/images/image-box-11.png")" width="102" height="118" alt="Guaranteed PURE">
-                            <img class="lazy-image dark-mode-img img-fluid" src="#" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                            <img class="lazy-image img-fluid light-mode-img" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/collection1.webp")" width="1500" height="1500" alt="collection2">
+                            <img class="lazy-image dark-mode-img img-fluid" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
                                  alt="Guaranteed PURE">
                         </div>
 
                         <div class="card-body text-center pt-7 mt-3">
-                            <h3 class="fs-4 mb-6">Guaranteed PURE</h3>
-                            <p class="mb-0 px-lg-6">
-                                All Grace formulations adhere to strict purity standards and
-                                will never contain harsh or toxic ingredients
-                            </p>
+                            <a asp-controller="Home" asp-action="Category" class="fs-5 mb-6">Butterfly Cloud Collar</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4" data-animate="fadeInUp">
+                <div class="col-md-3" data-animate="fadeInUp">
                     <div>
                         <div class="d-flex justify-content-center">
-                            <img class="lazy-image img-fluid light-mode-img" src="#" data-src="@Url.Content("~/assets/images/image-box-02.png")" width="102" height="118"
-                                 alt="Completely Cruelty-Free">
-                            <img class="lazy-image dark-mode-img img-fluid" src="#" data-src="@Url.Content("~/assets/images/image-box-white-02.png")" width="102" height="118"
-                                 alt="Completely Cruelty-Free">
+                            <img class="lazy-image img-fluid light-mode-img" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/collection2.webp")" width="1500" height="1500" alt="collection3">
+                            <img class="lazy-image dark-mode-img img-fluid" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
                         </div>
+
                         <div class="card-body text-center pt-7 mt-3">
-                            <h3 class="fs-4 mb-6">Completely Cruelty-Free</h3>
-                            <p class="mb-0 px-lg-6">
-                                All Grace formulations adhere to strict purity standards and
-                                will never contain harsh or toxic ingredients
-                            </p>
+                            <a asp-controller="Home" asp-action="Category" class="fs-5 mb-6">Midsummer Fairytales Collection</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4" data-animate="fadeInUp">
+                <div class="col-md-3" data-animate="fadeInUp">
                     <div>
                         <div class="d-flex justify-content-center">
-                            <img class="lazy-image img-fluid light-mode-img" src="#" data-src="@Url.Content("~/assets/images/image-box-03.png")" width="102" height="118" alt="Ingredient Sourcing">
-                            <img class="lazy-image dark-mode-img img-fluid" src="#" data-src="@Url.Content("~/assets/images/image-box-white-03.png")" width="102" height="118"
-                                 alt="Ingredient Sourcing">
+                            <img class="lazy-image img-fluid light-mode-img" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/collection3.webp")" width="1500" height="1500" alt="collection4">
+                            <img class="lazy-image dark-mode-img img-fluid" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
                         </div>
+
                         <div class="card-body text-center pt-7 mt-3">
-                            <h3 class="fs-4 mb-6">Ingredient Sourcing</h3>
-                            <p class="mb-0 px-lg-6">
-                                All Grace formulations adhere to strict purity standards and
-                                will never contain harsh or toxic ingredients
-                            </p>
+                            <a asp-controller="Home" asp-action="Category" class="fs-5 mb-6">Little Angel Collection</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3" data-animate="fadeInUp">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <img class="lazy-image img-fluid light-mode-img" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/collection4.webp")" width="1500" height="1500" alt="collection4">
+                            <img class="lazy-image dark-mode-img img-fluid" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
+                        </div>
+
+                        <div class="card-body text-center pt-7 mt-3">
+                            <a asp-controller="Home" asp-action="Category" class="fs-5 mb-6">Swan Ballet</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" data-animate="fadeInUp">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <img class="lazy-image img-fluid light-mode-img" data-src="@Url.Content("~/assets/images/brand1.webp")" width="750" height="337" alt="Guaranteed PURE">
+                            <img class="lazy-image dark-mode-img img-fluid" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" data-animate="fadeInUp">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <img class="lazy-image img-fluid light-mode-img" data-src="@Url.Content("~/assets/images/brand2.webp")" width="750" height="337" alt="Guaranteed PURE">
+                            <img class="lazy-image dark-mode-img img-fluid" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" data-animate="fadeInUp">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <img class="lazy-image img-fluid light-mode-img" data-src="@Url.Content("~/assets/images/brand3.webp")" width="750" height="337" alt="Guaranteed PURE">
+                            <img class="lazy-image dark-mode-img img-fluid" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" data-animate="fadeInUp">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <img class="lazy-image img-fluid light-mode-img" data-src="@Url.Content("~/assets/images/brand4.webp")" width="750" height="337" alt="Guaranteed PURE">
+                            <img class="lazy-image dark-mode-img img-fluid" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" data-animate="fadeInUp">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <img class="lazy-image img-fluid light-mode-img" data-src="@Url.Content("~/assets/images/brand5.webp")" width="750" height="337" alt="Guaranteed PURE">
+                            <img class="lazy-image dark-mode-img img-fluid" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" data-animate="fadeInUp">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <img class="lazy-image img-fluid light-mode-img" data-src="@Url.Content("~/assets/images/brand1.webp")" width="750" height="337" alt="Guaranteed PURE">
+                            <img class="lazy-image dark-mode-img img-fluid" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12" data-animate="fadeInUp">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <img class="lazy-image img-fluid light-mode-img" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/liveyourfairytale.webp")" width="100%" height="100%" alt="Guaranteed PURE">
+                            <img class="lazy-image dark-mode-img img-fluid" asp-controller="Home" asp-action="Category" data-src="@Url.Content("~/assets/images/image-box-white-11.png")" width="102" height="118"
+                                 alt="Guaranteed PURE">
                         </div>
                     </div>
                 </div>
@@ -494,4 +551,3 @@
         }
     }, 1000);
 </script>
-
