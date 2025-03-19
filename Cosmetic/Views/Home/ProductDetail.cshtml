@@ -9,8 +9,10 @@
                 <div class="position-sticky top-0">
                     <div class="slick-slider g-0 "
                          data-slick-options="{&#34;arrows&#34;:false,&#34;imageSize&#34;:{&#34;img&#34;:{&#34;height&#34;:720,&#34;width&#34;:540}},&#34;items&#34;:[{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-05.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-06.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-07.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-08.jpg&#34;}],&#34;slidesToShow&#34;:1}">
+
                         <a href="@Url.Content(Model.Image)" data-gallery="gallery4">
                             <img src="@Url.Content(Model.Image)" class="lazy-image" width="540" height="720" />
+
                         </a>
                         @* <a href="../assets/images/shop/product-gallery-05.jpg" data-gallery="gallery4" *@
                         @*    data-thumb-src="@Url.Content("~/assets/images/gallery-product-01.webp")"> *@
@@ -545,5 +547,626 @@
         </div>
     </section>
     <div class="border-top w-100 h-1px"></div>
-    
+    <section class="container pt-15 pb-15 pt-lg-17 pb-lg-20">
+        <div class="text-center">
+            <h2 class="mb-12">Customer Reviews</h2>
+        </div>
+        <div class="mb-11">
+            <div class=" d-md-flex justify-content-between align-items-center">
+                <div class=" d-flex align-items-center">
+                    <h4 class="fs-1 me-9 mb-0">4.86</h4>
+                    <div class="p-0">
+                        <div class="d-flex align-items-center fs-6 ls-0 mb-4">
+                            <div class="rating">
+                                <div class="empty-stars">
+                                    <span class="star">
+                                        <i class="icon star-o fa-regular fa-star"></i>
+                                    </span>
+                                    <span class="star">
+                                        <i class="icon star-o fa-regular fa-star"></i>
+                                    </span>
+                                    <span class="star">
+                                        <i class="icon star-o fa-regular fa-star"></i>
+                                    </span>
+                                    <span class="star">
+                                        <i class="icon star-o fa-regular fa-star"></i>
+                                    </span>
+                                    <span class="star">
+                                        <i class="icon star-o fa-regular fa-star"></i>
+                                    </span>
+                                </div>
+
+                                <div class="filled-stars" style="width: 80%">
+                                    <span class="star">
+                                        <i class="icon star fa-solid fa-star"></i>
+                                    </span>
+                                    <span class="star">
+                                        <i class="icon star fa-solid fa-star"></i>
+                                    </span>
+                                    <span class="star">
+                                        <i class="icon star fa-solid fa-star"></i>
+                                    </span>
+                                    <span class="star">
+                                        <i class="icon star fa-solid fa-star"></i>
+                                    </span>
+                                    <span class="star">
+                                        <i class="icon star fa-solid fa-star"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-0">2947 Reviews, 18 Q&amp;As</p>
+                    </div>
+                </div>
+                <div class="text-md-end mt-md-0 mt-7">
+                    <a href="#customer-review" class="btn btn-outline-dark" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="customer-review">
+                        <svg class="icon">
+                            <use xlink:href="#icon-Pencil"></use>
+                        </svg>
+                        Wire A Review
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="collapse mb-14" id="customer-review">
+            <form class="product-review-form">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group mb-7">
+                            <label class="mb-4 fs-6 fw-semibold text-body-emphasis" for="reviewName">Name</label>
+                            <input id="reviewName" class="form-control" type="text" name="name">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group mb-4">
+                            <label class="mb-4 fs-6 fw-semibold text-body-emphasis" for="reviewEmail">Email</label>
+                            <input id="reviewEmail" type="email" name="email" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="mt-4 mb-5 fs-6 fw-semibold text-body-emphasis">Your Rating*</p>
+                    <div class="form-group mb-6 d-flex justify-content-start">
+                        <div class="rate-input">
+                            <input type="radio" id="star5" name="rate" value="5">
+                            <label for="star5" title="text" class="mb-0 mr-1 lh-1">
+                                <i class="far fa-star"></i>
+                            </label>
+                            <input type="radio" id="star4" name="rate" value="5">
+                            <label for="star4" title="text" class="mb-0 mr-1 lh-1">
+                                <i class="far fa-star"></i>
+                            </label>
+                            <input type="radio" id="star3" name="rate" value="5">
+                            <label for="star3" title="text" class="mb-0 mr-1 lh-1">
+                                <i class="far fa-star"></i>
+                            </label>
+                            <input type="radio" id="star2" name="rate" value="5">
+                            <label for="star2" title="text" class="mb-0 mr-1 lh-1">
+                                <i class="far fa-star"></i>
+                            </label>
+                            <input type="radio" id="star1" name="rate" value="5">
+                            <label for="star1" title="text" class="mb-0 mr-1 lh-1">
+                                <i class="far fa-star"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-7">
+                    <label class="mb-4 fs-6 fw-semibold text-body-emphasis" for="reviewTitle">
+                        Title of
+                        Review:
+                    </label>
+                    <input id="reviewTitle" type="text" name="title" class="form-control">
+                </div>
+                <div class="form-group mb-10">
+                    <label class="mb-4 fs-6 fw-semibold text-body-emphasis" for="reviewMessage">
+                        How was your overall
+                        experience?
+                    </label>
+                    <textarea id="reviewMessage" class="form-control" name="message" rows="5"></textarea>
+                </div>
+                <div class="d-flex">
+                    <div class="me-4">
+                        <div class="input-group align-items-center">
+                            <input type="file" name="img" class="form-control border" id="reviewrAddPhoto">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="product-filter-review">
+            <h3 class="fs-5">Filter Review</h3>
+            <ul class="list-inline mb-8 mx-n3 filter-review">
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Foundation
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Coverage
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Skin
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Color
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Shade
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Make up
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Face
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Ingredients
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Moisturizer
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Pure
+                    </a>
+                </li>
+                <li class="list-inline-item spacing">
+                    <a href="#"
+                       class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                        Nature
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500"
+                       data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                       aria-controls="collapseExample">
+                        ...
+                    </a>
+                </li>
+                <li class="collapse m-3 list-inline-item collapse" id="collapseExample">
+                    <ul class="list-inline list-inline-item">
+                        <li class="list-inline-item">
+                            <a href="#"
+                               class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                                Good Value
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="list-inline list-inline-item">
+                        <li class="list-inline-item">
+                            <a href="#"
+                               class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                                Lightweight
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="list-inline list-inline-item">
+                        <li class="list-inline-item">
+                            <a href="#"
+                               class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                                Smells Great
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="list-inline list-inline-item">
+                        <li class="list-inline-item">
+                            <a href="#"
+                               class="btn btn-outline btn-hove-border-body-emphasis-color btn-border-1 py-4 px-6 fw-500">
+                                Easy To Use
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="row gy-15px align-items-center spacing-02">
+                <div class="col-auto search-review w-100 px-4">
+                    <div class="form-group product-review-form">
+                        <div class="input-group-prepend position-absolute z-index-10">
+                            <button class="btn btn-link text-secondary fs-15px px-7" type="submit">
+                                <i class="far fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                        <input type="text" id="search_reviews" name="search_reviews"
+                               class="form-control fs-15px pe-7 ps-13  rounded" placeholder="Search reviews">
+                        <label for="search_reviews" class="visually-hidden">Search reviews</label>
+                    </div>
+                </div>
+                <div class="col-auto dropdown skin-goal px-4">
+                    <label for="skin_goal" class="visually-hidden">Skin goal</label>
+                    <select name="skin_goal" id="skin_goal" class="form-select">
+                        <option>Skin goal</option>
+                        <option>Looking Pores</option>
+                        <option>Clear Skin</option>
+                        <option>Chicagon</option>
+                        <option>Dewy-Looking Skin</option>
+                        <option>Radiant</option>
+                    </select>
+                </div>
+                <div class="col-auto dropdown skin-goal px-4">
+                    <label for="image_video" class="visually-hidden">Image &amp; Video</label>
+                    <select name="image_video" id="image_video" class="form-select">
+                        <option>Image &amp; Video</option>
+                        <option>Newest</option>
+                        <option>Oldest</option>
+                    </select>
+                </div>
+                <div class="col-auto dropdown skin-goal px-4">
+                    <label for="sort_by" class="visually-hidden">Sort by</label>
+                    <select name="sort_by" id="sort_by" class="form-select">
+                        <option>Sort by</option>
+                        <option>Newest</option>
+                        <option>Oldest</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class=" mt-12">
+            <h3 class="fs-5">2947 Reviews</h3>
+            <div class="border-bottom pb-7 pt-10">
+                <div class="d-flex align-items-center mb-6">
+                    <div class="d-flex align-items-center fs-15px ls-0">
+                        <div class="rating">
+                            <div class="empty-stars">
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                            </div>
+
+                            <div class="filled-stars" style="width: 80%">
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fs-3px mx-5"><i class="fas fa-circle"></i></span>
+                    <span class="fs-14">5 day ago</span>
+                </div>
+                <div class="d-flex justify-content-start align-items-center mb-5">
+                    <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
+                         class="me-6 lazy-image rounded-circle" width="60" height="60" alt="Avatar">
+                    <div>
+                        <h5 class="mt-0 mb-4 fs-14px text-uppercase ls-1">JENNIFER C.</h5>
+                        <p class="mb-0">/ Orlando, FL</p>
+                    </div>
+                </div>
+                <p class="fw-semibold fs-6 text-body-emphasis mb-5">Favorite Foundation</p>
+                <p class="mb-10 fs-6">
+                    I order the samples so as not to make mistakes when choosing my color Is a
+                    good product as a light shade but the sample doesn&#39;t contain enough product to cover the
+                    skin and decide clearly, around my eyes I used the “peach bisque”. I used with primer all mu
+                    face and finished texture is good. At the end for my latin tan skin a choose “golden peach” But
+                    is out of stock the primer I think is a good match.
+                </p>
+                
+            </div>
+            <div class="border-bottom pb-7 pt-10">
+                <div class="d-flex align-items-center mb-6">
+                    <div class="d-flex align-items-center fs-15px ls-0">
+                        <div class="rating">
+                            <div class="empty-stars">
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                            </div>
+
+                            <div class="filled-stars" style="width: 80%">
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fs-3px mx-5"><i class="fas fa-circle"></i></span>
+                    <span class="fs-14">3 day ago</span>
+                </div>
+                <div class="d-flex justify-content-start align-items-center mb-5">
+                    <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
+                         class="me-6 lazy-image rounded-circle" width="60" height="60" alt="Avatar">
+                    <div>
+                        <h5 class="mt-0 mb-4 fs-14px text-uppercase ls-1">JENNIFER C.</h5>
+                        <p class="mb-0">/ Georgia</p>
+                    </div>
+                </div>
+                <p class="fw-semibold fs-6 text-body-emphasis mb-5">Good as light coverage</p>
+                <p class="mb-10 fs-6">
+                    The foundation feels light on my face, and the color matches great. Also the
+                    customer service is phenomenal. I would purchase again.
+                </p>
+                <div class="mb-10">
+                    <img src="#" data-src="@Url.Content("~/assets/images/product-03.webp")"
+                         class="mx-3 w-auto lazy-image">
+                </div>
+            </div>
+            <div class="border-bottom pb-7 pt-10">
+                <div class="d-flex align-items-center mb-6">
+                    <div class="d-flex align-items-center fs-15px ls-0">
+                        <div class="rating">
+                            <div class="empty-stars">
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                            </div>
+
+                            <div class="filled-stars" style="width: 80%">
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fs-3px mx-5"><i class="fas fa-circle"></i></span>
+                    <span class="fs-14">3 day ago</span>
+                </div>
+                <div class="d-flex justify-content-start align-items-center mb-5">
+                    <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
+                         class="me-6 lazy-image rounded-circle" width="60" height="60" alt="Avatar">
+                    <div>
+                        <h5 class="mt-0 mb-4 fs-14px text-uppercase ls-1">JENNIFER C.</h5>
+                        <p class="mb-0">/ Orlando, FL</p>
+                    </div>
+                </div>
+                <p class="fw-semibold fs-6 text-body-emphasis mb-5">Favorite Foundation</p>
+                <p class="mb-10 fs-6">
+                    The foundation feels light on my face, and the color matches great. Also the
+                    customer service is phenomenal. I would purchase again.
+                </p>
+                <div class="mb-10">
+                    <img src="#" data-src="@Url.Content("~/assets/images/product-03.webp")"
+                         class="mx-3 w-auto lazy-image">
+                </div>
+               
+            </div>
+            <div class="border-bottom pb-7 pt-10">
+                <div class="d-flex align-items-center mb-6">
+                    <div class="d-flex align-items-center fs-15px ls-0">
+                        <div class="rating">
+                            <div class="empty-stars">
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                            </div>
+
+                            <div class="filled-stars" style="width: 80%">
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fs-3px mx-5"><i class="fas fa-circle"></i></span>
+                    <span class="fs-14">3 day ago</span>
+                </div>
+                <div class="d-flex justify-content-start align-items-center mb-5">
+                    <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
+                         class="me-6 lazy-image rounded-circle" width="60" height="60" alt="Avatar">
+                    <div>
+                        <h5 class="mt-0 mb-4 fs-14px text-uppercase ls-1">JENNIFER C.</h5>
+                        <p class="mb-0">/ Orlando, FL</p>
+                    </div>
+                </div>
+                <p class="fw-semibold fs-6 text-body-emphasis mb-5">Favorite Foundation</p>
+                <p class="mb-10 fs-6">
+                    I order the samples so as not to make mistakes when choosing my color Is a
+                    good product as a light shade but the sample doesn’t contain enough product to cover the skin
+                    and decide clearly, around my eyes I used the “peach bisque”.I used with primer all mu face and
+                    finished texture is good. At the end for my latin tan skin a choose “golden peach” But is out of
+                    stock the primer I think is a good match.
+                </p>
+                
+            </div>
+            <div class="border-bottom pb-7 pt-10">
+                <div class="d-flex align-items-center mb-6">
+                    <div class="d-flex align-items-center fs-15px ls-0">
+                        <div class="rating">
+                            <div class="empty-stars">
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star-o fa-regular fa-star"></i>
+                                </span>
+                            </div>
+
+                            <div class="filled-stars" style="width: 80%">
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                                <span class="star">
+                                    <i class="icon star fa-solid fa-star"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fs-3px mx-5"><i class="fas fa-circle"></i></span>
+                    <span class="fs-14">3 day ago</span>
+                </div>
+                <div class="d-flex justify-content-start align-items-center mb-5">
+                    <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
+                         class="me-6 lazy-image rounded-circle" width="60" height="60" alt="Avatar">
+                    <div>
+                        <h5 class="mt-0 mb-4 fs-14px text-uppercase ls-1">JENNIFER C.</h5>
+                        <p class="mb-0">/ Orlando, FL</p>
+                    </div>
+                </div>
+                <p class="fw-semibold fs-6 text-body-emphasis mb-5">Good as light coverage</p>
+                <p class="mb-10 fs-6">
+                    The foundation feels light on my face, and the color matches great. Also the
+                    customer service is phenomenal. I would purchase again.
+                </p>
+                <div class="mb-10">
+                    <img src="#" data-src="@Url.Content("~/assets/images/product-03.webp")"
+                         class="mx-3 w-auto lazy-image">
+                </div>
+                
+            </div>
+        </div>
+        <nav class="d-flex mt-13 pt-3 justify-content-center" aria-label="pagination">
+            <ul class="pagination m-0">
+                <li class="page-item">
+                    <a class="page-link rounded-circle d-flex align-items-center justify-content-center" href="#"
+                       aria-label="Previous">
+                        <svg class="icon">
+                            <use xlink:href="#icon-angle-double-left"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">6</a></li>
+                <li class="page-item">
+                    <a class="page-link rounded-circle d-flex align-items-center justify-content-center" href="#"
+                       aria-label="Next">
+                        <svg class="icon">
+                            <use xlink:href="#icon-angle-double-right"></use>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </section>
 </main>

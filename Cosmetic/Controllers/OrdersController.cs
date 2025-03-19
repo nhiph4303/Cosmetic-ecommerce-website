@@ -45,7 +45,8 @@ namespace Cosmetic.Controllers
             }
 
             var order = await _context.Order
-                .FirstOrDefaultAsync(m => m.ID == id);
+               .Include(o => o.Customer)
+               .FirstOrDefaultAsync(m => m.ID == id);
             if (order == null)
             {
                 return NotFound();
