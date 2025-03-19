@@ -32,11 +32,11 @@ namespace Cosmetic.Controllers
         {
             var categories = new List<string> { "Eyes", "Face", "Lips" };
             var products = _context.Product
-                                   .Where(p => p.Category != null && categories.Contains(p.Category.Name))
+                                   .Where(p => p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock")
                                    .ToList();
 
             var productsUnder50 = _context.Product
-                                          .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name))
+                                          .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock")
                                           .ToList();
 
             Debug.WriteLine($"Total products returned (All): {products.Count}");
@@ -53,6 +53,7 @@ namespace Cosmetic.Controllers
 
         public async Task<IActionResult> Category(int? categoryId, string orderby, decimal? minPrice, decimal? maxPrice)
         {
+            // Kiểm tra xem categoryId có hợp lệ không
             if (categoryId.HasValue)
             {
                 var category = await _context.Category
@@ -63,18 +64,25 @@ namespace Cosmetic.Controllers
                 }
             }
 
+            // Lấy tất cả các sản phẩm và áp dụng điều kiện lọc cho chúng
             var products = _context.Product.AsQueryable();
 
+            // Lọc theo categoryId và status không phải "out of stock"
             if (categoryId.HasValue)
             {
                 products = products.Where(p => p.CategoryID == categoryId.Value);
             }
 
+            // Lọc theo giá và status không phải "out of stock"
             if (minPrice.HasValue && maxPrice.HasValue)
             {
                 products = products.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
             }
 
+            // Lọc theo status không phải "out of stock"
+            products = products.Where(p => p.Status != "out of stock");
+
+            // Sắp xếp theo tên sản phẩm
             if (orderby == "alphabet-asc")
             {
                 products = products.OrderBy(p => p.Name);
@@ -84,8 +92,10 @@ namespace Cosmetic.Controllers
                 products = products.OrderByDescending(p => p.Name);
             }
 
+            // Lấy danh sách sản phẩm sau khi đã lọc và sắp xếp
             var productList = await products.ToListAsync();
 
+            // Truyền dữ liệu cho View
             ViewBag.SelectedCategoryId = categoryId;
             ViewBag.Categories = await _context.Category.Where(c => c.Status == "active").ToListAsync();
             ViewBag.OrderBy = orderby;
@@ -94,6 +104,7 @@ namespace Cosmetic.Controllers
 
             return View(productList);
         }
+
 
         public class ProductDetailViewModel
         {
