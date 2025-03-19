@@ -98,10 +98,10 @@ namespace Cosmetic.Controllers
             return View(productList);
         }
 
-        public IActionResult ProductDetail()
-        {
-            return View();
-        }
+        //public IActionResult ProductDetail()
+        //{
+        //    return View();
+        //}
         public async Task<IActionResult> ProductDetail(int id)
         {
             var product = await _context.Product
