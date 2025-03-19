@@ -13,7 +13,6 @@ namespace Shop.Models
         [StringLength(10)]
         public string PhoneNumber { get; set; }
 
-        // Gán mặc định cho Status là "active"
         public string Status { get; set; } = "active";
     }
 }
