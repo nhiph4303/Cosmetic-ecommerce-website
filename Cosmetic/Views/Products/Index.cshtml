@@ -21,31 +21,31 @@
 				<table class="table table-hover align-middle table-nowrap mb-0">
 					<thead class="table-light">
 						<tr>
-							<th class="align-middle text-center" scope="col">
+							<th class="align-middle text-center" scope="col" style="width: 3%;">
 								#
 							</th>
 							@* <th class="align-middle" scope="col"> *@
 							@* 	@Html.DisplayNameFor(model => model.ImageURL) *@
 							@* </th> *@
-							<th class="align-middle text-center" scope="col">
+							<th class="align-middle text-center" scope="col" style="width: 25%;">
 								@Html.DisplayNameFor(model => model.Name)
 							</th>
-							<th class="align-middle text-center" scope="col">
+							<th class="align-middle text-center" scope="col" style="width: 25%;">
 								@Html.DisplayNameFor(model => model.Description)
 							</th>
-							<th class="align-middle" scope="col">
+							<th class="align-middle" scope="col" style="width: 5%;">
 								@Html.DisplayNameFor(model => model.Price)
 							</th>
-							<th class="align-middle text-center" scope="col">
+							<th class="align-middle text-center" scope="col" style="width: 7%;">
 								@Html.DisplayNameFor(model => model.InStock)
 							</th>
-							<th class="align-middle" scope="col">
+							<th class="align-middle" scope="col" style="width: 5%;">
 								@Html.DisplayNameFor(model => model.Status)
 							</th>
-							 <th class="align-middle" scope="col">
+							<th class="align-middle" scope="col" style="width: 10%;">
 								Category
-							</th> 
-							<th class="align-middle text-center" scope="col">
+							</th>
+							<th class="align-middle text-center" scope="col" style="width: 15%;">
 								Actions
 							</th>
 						</tr>
@@ -57,16 +57,19 @@
 								<td>@(index + 1)</td>
 								<td>
 									<div class="d-flex align-items-center flex-nowrap">
-										<a href="../shop/product-details-v1.html" title="Flowers cotton dress">
-											@* <img src="#" data-src="../assets/images/products/product-03-75x100.jpg" alt="Flowers cotton dress" class="lazy-image" width="60" height="80"> *@
-											<a asp-controller="Products" asp-action="Edit" asp-route-id="@item.ID"><img src="@item.Image" class="lazy-image" width="60" height="80" alt="Product Image" /></a>
-										</a>
+										@* <img src="#" data-src="../assets/images/products/product-03-75x100.jpg" alt="Flowers cotton dress" class="lazy-image" width="60" height="80"> *@
+										<a asp-controller="Products" asp-action="Edit" asp-route-id="@item.ID"><img src="@item.Image" class="lazy-image" width="60" height="80" alt="Product Image" /></a>
 										<a href="../shop/product-details-v1.html" title="Flowers cotton dress" class="ms-6">
 											<a asp-controller="Products" asp-action="Edit" asp-route-id="@item.ID"><p class="fw-semibold text-body-emphasis mb-0">@Html.DisplayFor(modelItem => item.Name)</p></a>
 										</a>
 									</div>
 								</td>
-								<td>@Html.DisplayFor(modelItem => item.Description)</td>
+								<td>
+									<div class="description" id="desc-@item.ID">
+										@Html.DisplayFor(modelItem => item.Description)
+									</div>
+									<span class="see-more" onclick="toggleDescription(@item.ID)">See more</span>
+								</td>
 								<td>@Html.DisplayFor(modelItem => item.Price)</td>
 								<td class="text-center">@Html.DisplayFor(modelItem => item.InStock)</td>
 								@{
@@ -142,5 +145,19 @@
 				alert("Có lỗi xảy ra! Vui lòng thử lại.");
 			});
 		}
+	});
+
+	  function toggleDescription(productId) {
+	  var description = document.getElementById('desc-' + productId);
+	  var seeMore = document.querySelector('#desc-' + productId + ' + .see-more');
+
+	  description.classList.toggle('full');
+	  seeMore.innerHTML = description.classList.contains('full') ? 'See less' : 'See more';
+	}
+
+	document.querySelectorAll('.description').forEach(function (desc) {
+	  if (desc.scrollHeight > desc.clientHeight) {
+		desc.nextElementSibling.style.display = 'inline'; 
+	  }
 	});
 </script>
