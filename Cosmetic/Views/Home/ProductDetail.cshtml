@@ -1,18 +1,17 @@
-﻿@{
+﻿@model Cosmetic.Controllers.HomeController.ProductDetailViewModel
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Product Detail";
 }
 <main id="content" class="wrapper layout-page">
     <section class="container pt-6 pb-13 pb-lg-20">
-        <div class="row ">
+        <div class="row">
             <div class="col-md-6 pe-lg-13 pb-12">
                 <div class="position-sticky top-0">
-                    <div class="slick-slider g-0 "
-                         data-slick-options="{&#34;arrows&#34;:false,&#34;imageSize&#34;:{&#34;img&#34;:{&#34;height&#34;:720,&#34;width&#34;:540}},&#34;items&#34;:[{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-05.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-06.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-07.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-08.jpg&#34;}],&#34;slidesToShow&#34;:1}">
-
-                        <a href="@Url.Content(Model.Image)" data-gallery="gallery4">
-                            <img src="@Url.Content(Model.Image)" class="lazy-image" width="540" height="720" />
-
+                    <div class="slick-slider g-0" data-slick-options="{&#34;arrows&#34;:false,&#34;imageSize&#34;:{&#34;img&#34;:{&#34;height&#34;:720,&#34;width&#34;:540}},&#34;items&#34;:[{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-05.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-06.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-07.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-08.jpg&#34;}],&#34;slidesToShow&#34;:1}">
+                        <a href="@Url.Content(Model.Product.Image)" data-gallery="gallery4">
+                            <img src="@Url.Content(Model.Product.Image)" class="lazy-image" width="540" height="720" />
                         </a>
                     </div>
                 </div>
@@ -20,16 +19,24 @@
             <div class="col-md-6 pt-md-0 pt-10">
                 <p class="d-flex align-items-center mb-6">
                     <span class="text-decoration-line-through">39.00</span>
-                    <span class="fs-18px text-body-emphasis ps-6 fw-bold">@Model.Price</span>
+                    <span class="fs-18px text-body-emphasis ps-6 fw-bold">@Model.Product.Price.00</span>
                     <span class="badge text-bg-primary fs-6 fw-semibold ms-7 px-6 py-3">20%</span>
                 </p>
-                <h1 class="mb-4 pb-2 fs-4">@Model.Name</h1>
-                <p class="fs-15px">@Model.Description</p>
+                <h1 class="mb-4 pb-2 fs-4">@Model.Product.Name</h1>
                 <form>
                     <div class="row align-items-end">
-                        <div class="col-sm-12 form-group">
+                        <div class="col-sm-6 form-group">
+                            <label class="text-body-emphasis fw-semibold py-5" for="size">Select a size: </label>
+                            <select name="size" class="form-control w-100 product-info-2-quantity" id="size">
+                                <option value="50ml" selected>50ml</option>
+                                <option value="70ml">70ml</option>
+                                <option value="90ml">90ml</option>
+                                <option value="100ml">100ml</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 form-group">
                             <label class="text-body-emphasis fw-semibold py-5" for="quantity">Quantity: </label>
-                            <select name="size" class="form-control w-100 product-info-2-quantity" id="quantity">
+                            <select name="quantity" class="form-control w-100 product-info-2-quantity" id="quantity">
                                 <option value="1" selected>1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -37,34 +44,22 @@
                             </select>
                         </div>
                         <div class="col-12">
-                            <button type="submit"
-                                    class="btn btn-lg btn-dark btn-block mb-7 mt-8 w-100 btn-hover-bg-primary btn-hover-border-primary">
+                            <button type="submit" class="btn btn-lg btn-dark btn-block mb-7 mt-8 w-100 btn-hover-bg-primary btn-hover-border-primary">
                                 Add To Bag
                             </button>
                         </div>
                     </div>
                 </form>
                 <div class="d-flex align-items-center flex-wrap">
-                    <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                       href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                       data-bs-title="Quick View">
-
-                        <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                              class="d-flex align-items-center justify-content-center">
-                            <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                        </span>
-                    </a>
-
                     <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                       data-bs-toggle="tooltip" data-bs-placement="top"
-                       data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
+                       data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Compare" href="@Url.Action("Compare", "Home")">
                         <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
                     </a>
                 </div>
                 <ul class="single-product-meta list-unstyled border-top pt-7 mt-7">
                     <li class="d-flex mb-4 pb-2 align-items-center">
                         <span class="text-body-emphasis fw-semibold fs-14px">Categories:</span>
-                        <span class="ps-4">@Model.Category.Name</span>
+                        <span class="ps-4">@Model.Product.Category.Name</span>
                     </li>
                 </ul>
                 <div class="mt-11">
@@ -84,65 +79,17 @@
                         <div id="flush-collapseOne" class="accordion-collapse collapse show"
                              aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                             <div class="pt-8 pb-3">
-                                <p class="fw-semibold text-body-emphasis mb-2 pb-4">
-                                    For Normal, Oily, Combination
-                                    Skin Types
-                                </p>
                                 <p class="mb-2 pb-4">
-                                    Complexion-perfecting natural foundation enriched with
-                                    antioxidant-packed superfruits, vitamins, and other skin-nourishing
-                                    nutrients. Creamy liquid formula sets with a pristine matte finish
-                                    for soft, velvety smooth skin.
+                                    @Model.Product.Description
                                 </p>
-                                <p class="mb-7">
-                                    Say hello to flawless, long-lasting foundation that
-                                    comes in 7
-                                    melt-into-your-skin shades. This lightweight, innovative formula
-                                    creates a smooth, natural matte finish that won’t settle into lines.
-                                    It’s the perfect fit for your skin. 1 fl. oz.
-                                </p>
-                                <p class="fw-semibold text-body-emphasis mb-2 pb-4">Benefits</p>
-                                <ul class="mb-5 ps-6">
-                                    <li class="mb-1">Buildable medium-to-full coverage</li>
-                                    <li class="mb-1">Weightless, airy feel—no caking!</li>
-                                    <li class="mb-1">Long-wearing</li>
-                                    <li class="mb-1">Evens skin tone</li>
-                                    <li>Available in 07 shades (all exclusive to Makeaholic!)</li>
-                                </ul>
-                                <div class="row">
-                                    <div class="col-6 col-md-3 text-center mb-9 pb-2">
-                                        <img class="lazy-image light-mode-img" src="#"
-                                             data-src="@Url.Content("~/assets/images/product-01.webp")" width="66"
-                                             height="77">
-
-                                    </div>
-                                    <div class="col-6 col-md-3 text-center mb-9 pb-2">
-                                        <img class="lazy-image light-mode-img" src="#"
-                                             data-src="@Url.Content("~/assets/images/product-02.webp")" width="66"
-                                             height="77">
-
-                                    </div>
-                                    <div class="col-6 col-md-3 text-center mb-9 pb-2">
-                                        <img class="lazy-image light-mode-img" src="#"
-                                             data-src="@Url.Content("~/assets/images/product-03.webp")" width="66"
-                                             height="77">
-
-                                    </div>
-                                    <div class="col-6 col-md-3 text-center mb-9 pb-2">
-                                        <img class="lazy-image light-mode-img" src="#"
-                                             data-src="@Url.Content("~/assets/images/product-04.webp")" width="66"
-                                             height="77">
-
-                                    </div>
-                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
     <div class="border-top w-100 h-1px"></div>
     <section class="container pt-15 pb-15 pt-lg-17 pb-lg-20">
         <div class="text-center">
@@ -150,368 +97,44 @@
         </div>
         <div class="slick-slider"
              data-slick-options="{&#34;arrows&#34;:true,&#34;centerMode&#34;:true,&#34;centerPadding&#34;:&#34;calc((100% - 1440px) / 2)&#34;,&#34;dots&#34;:true,&#34;infinite&#34;:true,&#34;responsive&#34;:[{&#34;breakpoint&#34;:1200,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:false,&#34;slidesToShow&#34;:3}},{&#34;breakpoint&#34;:992,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:false,&#34;slidesToShow&#34;:2}},{&#34;breakpoint&#34;:576,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:false,&#34;slidesToShow&#34;:1}}],&#34;slidesToShow&#34;:4}">
-            <div class="mb-6">
-                <div class="card card-product grid-2 bg-transparent border-0">
-                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                        <a href="product-details-v1.html" class="hover-zoom-in d-block" title="Shield Conditioner">
-                            <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
-                                 class="img-fluid lazy-image w-100" alt="Shield Conditioner" width="330"
-                                 height="440">
-                        </a>
-                        <div class="position-absolute product-flash z-index-2 ">
-                            <span class="badge badge-product-flash on-sale bg-primary">-25%</span>
+            @foreach (var prod in Model.RelatedProducts)
+            {
+                <div class="mb-6">
+                    <div class="card card-product grid-2 bg-transparent border-0">
+                        <figure class="card-img-top position-relative mb-7 overflow-hidden">
+                            <a href="@Url.Action("ProductDetail", "Home", new { id = prod.ID })" class="hover-zoom-in d-block" title="@prod.Name">
+                                <img src="@Url.Content(prod.Image)" data-src="@Url.Content(prod.Image)"
+                                     class="img-fluid lazy-image w-100" alt="@prod.Name" width="330" height="440">
+                            </a>
+                            <div class="position-absolute d-flex z-index-2 product-actions vertical">
+                                <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
+                                   href="#" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Quick View">
+                                    <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
+                                          class="d-flex align-items-center justify-content-center">
+                                        <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
+                                    </span>
+                                </a>
+                                <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
+                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Compare" href="@Url.Action("Compare", "Home")">
+                                    <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
+                                </a>
+                            </div>
+                            <a href="@Url.Action("AddToCart", "Cart", new { id = prod.ID })"
+                               class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
+                                Add To Cart
+                            </a>
+                        </figure>
+                        <div class="card-body text-center p-0">
+                            <span class="ps-4">@Model.Product.Category?.Name ?? "Unknown Category"</span>
+                            <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
+                                <a class="text-decoration-none text-reset" href="@Url.Action("ProductDetail", "Home", new { id = prod.ID })">
+                                    @prod.Name
+                                </a>
+                            </h4>
                         </div>
-                        <div class="position-absolute d-flex z-index-2 product-actions  vertical">
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Quick View">
-
-                                <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                      class="d-flex align-items-center justify-content-center">
-                                    <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                </span>
-                            </a>
-
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                               data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
-                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
-                            </a>
-                        </div>
-                        <a href="#"
-                           class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
-                            Add
-                            To Cart
-                        </a>
-                    </figure>
-                    <div class="card-body text-center p-0">
-                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-                            <del class=" text-body fw-500 me-4 fs-13px">$40.00</del>
-                            <ins class="text-decoration-none">$30.00</ins>
-                        </span>
-                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-                            <a class="text-decoration-none text-reset" href="product-details-v1.html">
-                                Shield
-                                Conditioner
-                            </a>
-                        </h4>
                     </div>
                 </div>
-            </div>
-            <div class="mb-6">
-                <div class="card card-product grid-2 bg-transparent border-0">
-                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                        <a href="product-details-v1.html" class="hover-zoom-in d-block"
-                           title="Perfecting Facial Oil">
-                            <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
-                                 class="img-fluid lazy-image w-100" alt="Perfecting Facial Oil" width="330"
-                                 height="440">
-                        </a>
-                        <div class="position-absolute d-flex z-index-2 product-actions  vertical">
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Quick View">
-
-                                <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                      class="d-flex align-items-center justify-content-center">
-                                    <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                </span>
-                            </a>
-
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                               data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
-                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
-                            </a>
-                        </div>
-                        <a href="#"
-                           class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
-                            Add
-                            To Cart
-                        </a>
-                    </figure>
-                    <div class="card-body text-center p-0">
-                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">$20.00</span>
-                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-                            <a class="text-decoration-none text-reset" href="product-details-v1.html">
-                                Perfecting
-                                Facial Oil
-                            </a>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-6">
-                <div class="card card-product grid-2 bg-transparent border-0">
-                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                        <a href="product-details-v1.html" class="hover-zoom-in d-block"
-                           title="Enriched Hand &amp; Body Wash">
-                            <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
-                                 class="img-fluid lazy-image w-100" alt="Enriched Hand &amp; Body Wash" width="330"
-                                 height="440">
-                        </a>
-                        <div class="position-absolute product-flash z-index-2 ">
-                            <span class="badge badge-product-flash on-new">New</span>
-                        </div>
-                        <div class="position-absolute d-flex z-index-2 product-actions  vertical">
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Quick View">
-
-                                <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                      class="d-flex align-items-center justify-content-center">
-                                    <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                </span>
-                            </a>
-
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                               data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
-                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
-                            </a>
-                        </div>
-                        <a href="#"
-                           class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
-                            Add
-                            To Cart
-                        </a>
-                    </figure>
-                    <div class="card-body text-center p-0">
-                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">$29.00</span>
-                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-                            <a class="text-decoration-none text-reset" href="product-details-v1.html">
-                                Enriched Hand
-                                &amp; Body Wash
-                            </a>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-6">
-                <div class="card card-product grid-2 bg-transparent border-0">
-                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                        <a href="product-details-v1.html" class="hover-zoom-in d-block" title="Shield Shampoo">
-                            <img src="#" data-src="@Url.Content("~/assets/images/product-05.webp")"
-                                 class="img-fluid lazy-image w-100" alt="Shield Shampoo" width="330" height="440">
-                        </a>
-                        <div class="position-absolute product-flash z-index-2 ">
-                            <span class="badge badge-product-flash on-sale bg-primary">-24%</span>
-                        </div>
-                        <div class="position-absolute d-flex z-index-2 product-actions  vertical">
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Quick View">
-
-                                <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                      class="d-flex align-items-center justify-content-center">
-                                    <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                </span>
-                            </a>
-
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                               data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
-                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
-                            </a>
-                        </div>
-                        <a href="#"
-                           class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
-                            Add
-                            To Cart
-                        </a>
-                    </figure>
-                    <div class="card-body text-center p-0">
-                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-                            <del class=" text-body fw-500 me-4 fs-13px">$25.00</del>
-                            <ins class="text-decoration-none">$19.00</ins>
-                        </span>
-                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-                            <a class="text-decoration-none text-reset" href="product-details-v1.html">
-                                Shield
-                                Shampoo
-                            </a>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-6">
-                <div class="card card-product grid-2 bg-transparent border-0">
-                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                        <a href="product-details-v1.html" class="hover-zoom-in d-block" title="Enriched Hand Wash">
-                            <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
-                                 class="img-fluid lazy-image w-100" alt="Enriched Hand Wash" width="330"
-                                 height="440">
-                        </a>
-                        <div class="position-absolute product-flash z-index-2 ">
-                            <span class="badge badge-product-flash on-sale bg-primary">-26%</span>
-                        </div>
-                        <div class="position-absolute d-flex z-index-2 product-actions  vertical">
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Quick View">
-
-                                <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                      class="d-flex align-items-center justify-content-center">
-                                    <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                </span>
-                            </a>
-
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                               data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
-                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
-                            </a>
-                        </div>
-                        <a href="#"
-                           class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
-                            Add
-                            To Cart
-                        </a>
-                    </figure>
-                    <div class="card-body text-center p-0">
-                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-                            <del class=" text-body fw-500 me-4 fs-13px">$39.00</del>
-                            <ins class="text-decoration-none">$29.00</ins>
-                        </span>
-                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-                            <a class="text-decoration-none text-reset" href="product-details-v1.html">
-                                Enriched Hand
-                                Wash
-                            </a>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-6">
-                <div class="card card-product grid-2 bg-transparent border-0">
-                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                        <a href="product-details-v1.html" class="hover-zoom-in d-block" title="Enriched Duo">
-                            <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
-                                 class="img-fluid lazy-image w-100" alt="Enriched Duo" width="330" height="440">
-                        </a>
-                        <div class="position-absolute d-flex z-index-2 product-actions  vertical">
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Quick View">
-
-                                <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                      class="d-flex align-items-center justify-content-center">
-                                    <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                </span>
-                            </a>
-
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                               data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
-                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
-                            </a>
-                        </div>
-                        <a href="#"
-                           class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
-                            Add
-                            To Cart
-                        </a>
-                    </figure>
-                    <div class="card-body text-center p-0">
-                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">$29.00</span>
-                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-                            <a class="text-decoration-none text-reset" href="product-details-v1.html">
-                                Enriched
-                                Duo
-                            </a>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-6">
-                <div class="card card-product grid-2 bg-transparent border-0">
-                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                        <a href="product-details-v1.html" class="hover-zoom-in d-block" title="Shield Spray">
-                            <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
-                                 class="img-fluid lazy-image w-100" alt="Shield Spray" width="330" height="440">
-                        </a>
-                        <div class="position-absolute d-flex z-index-2 product-actions  vertical">
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Quick View">
-
-                                <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                      class="d-flex align-items-center justify-content-center">
-                                    <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                </span>
-                            </a>
-
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                               data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
-                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
-                            </a>
-                        </div>
-                        <a href="#"
-                           class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
-                            Add
-                            To Cart
-                        </a>
-                    </figure>
-                    <div class="card-body text-center p-0">
-                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">$29.00</span>
-                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-                            <a class="text-decoration-none text-reset" href="product-details-v1.html">
-                                Shield
-                                Spray
-                            </a>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-6">
-                <div class="card card-product grid-2 bg-transparent border-0">
-                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
-                        <a href="product-details-v1.html" class="hover-zoom-in d-block" title="Shield Spray">
-                            <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
-                                 class="img-fluid lazy-image w-100" alt="Shield Spray" width="330" height="440">
-                        </a>
-                        <div class="position-absolute product-flash z-index-2 ">
-                            <span class="badge badge-product-flash on-sale bg-primary">-36%</span>
-                        </div>
-                        <div class="position-absolute d-flex z-index-2 product-actions  vertical">
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Quick View">
-
-                                <span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-                                      class="d-flex align-items-center justify-content-center">
-                                    <i class="icon fs-6 icon-eye-light fa-regular fa-eye"></i>
-                                </span>
-                            </a>
-
-                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-                               data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-bs-title="Compare" asp-controller="Home" asp-action="Compare">
-                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
-                            </a>
-                        </div>
-                        <a href="#"
-                           class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
-                            Add
-                            To Cart
-                        </a>
-                    </figure>
-                    <div class="card-body text-center p-0">
-                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-                            <del class=" text-body fw-500 me-4 fs-13px">$39.00</del>
-                            <ins class="text-decoration-none">$25.00</ins>
-                        </span>
-                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-                            <a class="text-decoration-none text-reset" href="product-details-v1.html">
-                                Shield
-                                Spray
-                            </a>
-                        </h4>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </section>
-    <div class="border-top w-100 h-1px"></div>
 </main>
