@@ -161,9 +161,23 @@ ViewData["Title"] = "Home Page - Anna Beauty";
     @*                                 height="440"> *@
     @*                         </a> *@
 
+<<<<<<< Updated upstream
     @*                         <div class="position-absolute product-flash z-index-2 "> *@
     @*                             <span class="badge badge-product-flash on-sale bg-primary">-25%</span> *@
     @*                         </div> *@
+=======
+            <div class="slick-slider"
+                 data-slick-options="{&#34;arrows&#34;:true,&#34;dots&#34;:false,&#34;responsive&#34;:[{&#34;breakpoint&#34;:1560,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:true,&#34;slidesToShow&#34;:5}},{&#34;breakpoint&#34;:1200,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:true,&#34;slidesToShow&#34;:3}},{&#34;breakpoint&#34;:992,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:true,&#34;slidesToShow&#34;:2}},{&#34;breakpoint&#34;:576,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:true,&#34;slidesToShow&#34;:1}}],&#34;slidesToShow&#34;:5}"
+                 data-animate="fadeInUp">
+                @foreach (var product in Model.AllProducts)
+                {
+                    <div>
+                        <div class="card card-product grid-1 bg-transparent border-0" data-animate="fadeInUp">
+                            <figure class="card-img-top position-relative mb-7 overflow-hidden">
+                                <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@product.ID" class="hover-zoom-in d-block" title="@product.Name">
+                                    <img src="@Url.Content(product.Image)" class="img-fluid lazy-image w-100" alt="@product.Name" width="330" height="440">
+                                </a>
+>>>>>>> Stashed changes
 
     @*                         <div class="position-absolute d-flex z-index-2 product-actions  horizontal"> *@
     @*                             <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart" *@
@@ -190,6 +204,7 @@ ViewData["Title"] = "Home Page - Anna Beauty";
     @*                         </div> *@
     @*                     </figure> *@
 
+<<<<<<< Updated upstream
     @*                     <div class="card-body text-center p-0"> *@
     @*                         <span *@
     @*                             class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6"> *@
@@ -723,6 +738,15 @@ ViewData["Title"] = "Home Page - Anna Beauty";
     @*         </div> *@
     @*     </div> *@
     @* </section> *@
+=======
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+>>>>>>> Stashed changes
 
     <section>
         <div class="container container-xxl">
