@@ -33,13 +33,11 @@ namespace Cosmetic.Controllers
             var categories = new List<string> { "Eyes", "Face", "Lips" };
 
             var products = _context.Product
-                                   .Where(p => (p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock") &&
-                                               (string.IsNullOrEmpty(searchQuery) || p.Name.Contains(searchQuery) || p.Category.Name.Contains(searchQuery)))
+                                   .Where(p => (p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock"))
                                    .ToList();
 
             var productsUnder50 = _context.Product
-                                          .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock" &&
-                                                      (string.IsNullOrEmpty(searchQuery) || p.Name.Contains(searchQuery) || p.Category.Name.Contains(searchQuery)))
+                                          .Where(p => p.Price < 50 && p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock")
                                           .ToList();
 
             Debug.WriteLine($"Total products returned (All): {products.Count}");
@@ -53,11 +51,10 @@ namespace Cosmetic.Controllers
 
             return View(viewModel);
         }
-
-
-        public async Task<IActionResult> Category(int? categoryId, string orderby, decimal? minPrice, decimal? maxPrice)
+        [HttpGet]
+        [Route("home/category")]
+        public async Task<IActionResult> Category(int? categoryId, string orderby, decimal? minPrice, decimal? maxPrice, string searchQuery)
         {
-            // Kiểm tra xem categoryId có hợp lệ không
             if (categoryId.HasValue)
             {
                 var category = await _context.Category
@@ -68,25 +65,25 @@ namespace Cosmetic.Controllers
                 }
             }
 
-            // Lấy tất cả các sản phẩm và áp dụng điều kiện lọc cho chúng
             var products = _context.Product.AsQueryable();
 
-            // Lọc theo categoryId và status không phải "out of stock"
             if (categoryId.HasValue)
             {
                 products = products.Where(p => p.CategoryID == categoryId.Value);
             }
 
-            // Lọc theo giá và status không phải "out of stock"
             if (minPrice.HasValue && maxPrice.HasValue)
             {
                 products = products.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
             }
 
-            // Lọc theo status không phải "out of stock"
             products = products.Where(p => p.Status != "out of stock");
 
-            // Sắp xếp theo tên sản phẩm
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                products = products.Where(p => p.Name.Contains(searchQuery) || p.Category.Name.Contains(searchQuery));
+            }
+
             if (orderby == "alphabet-asc")
             {
                 products = products.OrderBy(p => p.Name);
@@ -96,18 +93,19 @@ namespace Cosmetic.Controllers
                 products = products.OrderByDescending(p => p.Name);
             }
 
-            // Lấy danh sách sản phẩm sau khi đã lọc và sắp xếp
             var productList = await products.ToListAsync();
 
-            // Truyền dữ liệu cho View
             ViewBag.SelectedCategoryId = categoryId;
             ViewBag.Categories = await _context.Category.Where(c => c.Status == "active").ToListAsync();
             ViewBag.OrderBy = orderby;
             ViewBag.MinPrice = minPrice;
             ViewBag.MaxPrice = maxPrice;
+            ViewBag.SearchQuery = searchQuery;
 
             return View(productList);
         }
+
+
 
 
         public class ProductDetailViewModel
@@ -138,7 +136,7 @@ namespace Cosmetic.Controllers
                 RelatedProducts = relatedProducts
             };
 
-            return View(viewModel); // Trả về view với viewModel
+            return View(viewModel);
         }
     
         public IActionResult ShoppingCart() => View();
@@ -181,7 +179,6 @@ namespace Cosmetic.Controllers
             return View(model);
         }
 
-        // ViewModel cho trang Index (đã có sẵn)
         public class ProductViewModel
         {
             public List<Product> AllProducts { get; set; } = new List<Product>();

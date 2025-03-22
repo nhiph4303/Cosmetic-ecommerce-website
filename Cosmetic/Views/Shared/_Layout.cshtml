@@ -227,19 +227,20 @@
                 </div>
 
                 <div class="col-xl-6 d-flex justify-content-center">
-                    
-                    <form method="get" asp-controller="Home" asp-action="Index" class="w-xl-100 w-sm-75 w-100 mt-6 mt-xl-0 px-6 px-xl-0">
+
+                    <form method="get" asp-controller="Home" asp-action="Category" class="w-xl-100 w-sm-75 w-100 mt-6 mt-xl-0 px-6 px-xl-0">
                         <div class="input-group mx-auto">
                             <input type="text" name="searchQuery" class="form-control form-control bg-transparent border-primary"
-                                   placeholder="Search product" value="@Context.Request.Query["searchQuery"]"/>
-                            <div
-                                class="form-control-append position-absolute end-0 top-0 bottom-0 d-flex align-items-center">
+                                   placeholder="Search product" value="@Context.Request.Query["searchQuery"]" />
+                            <div class="form-control-append position-absolute end-0 top-0 bottom-0 d-flex align-items-center">
                                 <button class="input-group-text bg-transparent border-0 px-0 me-6 btn btn-link text-decoration-none" type="submit">
                                     <i class="fa-solid fa-magnifying-glass fs-5"></i>
                                 </button>
                             </div>
                         </div>
                     </form>
+
+
                 </div>
             </nav>
         </div>
