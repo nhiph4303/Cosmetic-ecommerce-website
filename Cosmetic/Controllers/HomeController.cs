@@ -28,9 +28,10 @@ namespace Cosmetic.Controllers
             _context = context;
         }
 
-        public IActionResult Index(string searchQuery)
+        public IActionResult Index()
         {
             var categories = new List<string> { "Eyes", "Face", "Lips" };
+
 
             var products = _context.Product
                                    .Where(p => (p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock"))
@@ -51,6 +52,7 @@ namespace Cosmetic.Controllers
 
             return View(viewModel);
         }
+
         [HttpGet]
         [Route("home/category")]
         public async Task<IActionResult> Category(int? categoryId, string orderby, decimal? minPrice, decimal? maxPrice, string searchQuery)
@@ -145,38 +147,9 @@ namespace Cosmetic.Controllers
         public IActionResult Compare() => View();
         public IActionResult Login() => View();
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(Customer model)
+        public async Task<IActionResult> Register()
         {
-            if (ModelState.IsValid)
-            {
-                model.Status = "active";
-
-                var user = new Customer
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    Name = model.Name,
-                    Address = model.Address,
-                    PhoneNumber = model.PhoneNumber,
-                    Status = model.Status
-                };
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    TempData["Message"] = "Account created successfully!";
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "An error occurred while creating the account.<br/>" +
-                                               string.Join("<br/>", result.Errors.Select(e => e.Description));
-                }
-            }
-            return View(model);
+            return View();
         }
 
         public class ProductViewModel
