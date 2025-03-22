@@ -18,10 +18,23 @@
             </div>
             <div class="col-md-6 pt-md-0 pt-10">
                 <p class="d-flex align-items-center mb-6">
-                    <span class="text-decoration-line-through">39.00</span>
-                    <span class="fs-18px text-body-emphasis ps-6 fw-bold">@Model.Product.Price.00</span>
-                    <span class="badge text-bg-primary fs-6 fw-semibold ms-7 px-6 py-3">20%</span>
+                    @if (Model.Product.Price.HasValue)
+                    {
+                        var originalPrice = Model.Product.Price.Value;
+                        var discountPrice = originalPrice * 0.75m;
+
+                        <span class="text-decoration-line-through">$@originalPrice.ToString("F2")</span>
+                        <span class="fs-18px text-body-emphasis ps-6 fw-bold">$@discountPrice.ToString("F2")</span>
+                        <span class="badge text-bg-primary fs-6 fw-semibold ms-7 px-6 py-3">25%</span>
+                    }
+                    else
+                    {
+                        <span class="text-decoration-line-through">$0.00</span>
+                        <span class="fs-18px text-body-emphasis ps-6 fw-bold">$0.00</span>
+                        <span class="badge text-bg-primary fs-6 fw-semibold ms-7 px-6 py-3">N/A</span>
+                    }
                 </p>
+
                 <h1 class="mb-4 pb-2 fs-4">@Model.Product.Name</h1>
                 <form>
                     <div class="row align-items-end">
@@ -126,7 +139,22 @@
                         </figure>
                         <div class="card-body text-center p-0">
                             <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-                                <ins class="text-decoration-none">$@prod.Price.00</ins>
+                                <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
+                                    @if (prod.Price.HasValue)  
+                                    {
+                                        var originalPrice = prod.Price.Value;  
+                                        var discountPrice = originalPrice * 0.75m;
+
+                                        <del class="text-body fw-500 me-4 fs-13px">$@originalPrice.ToString("F2")</del>
+                                        <ins class="text-decoration-none">$@discountPrice.ToString("F2")</ins>
+                                    }
+                                    else
+                                    {
+                                        <del class="text-body fw-500 me-4 fs-13px">$0.00</del>
+                                        <ins class="text-decoration-none">$0.00</ins>
+                                    }
+                                </span>
+
                             </span>
                             <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
                                 <a class="text-decoration-none text-reset" href="@Url.Action("ProductDetail", "Home", new { id = prod.ID })">
