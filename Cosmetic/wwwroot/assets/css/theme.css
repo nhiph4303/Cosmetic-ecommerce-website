@@ -37684,3 +37684,24 @@ ul.single-product-meta li span:first-child {
     [data-bs-theme=dark] .hover-bg-color-02:hover, [data-bs-theme=dark] .landing-blog-post-background:hover {
         background-color: var(--bs-section-color-8)
     }
+
+/*login*/
+#welcomeMessage {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none; 
+    transition: opacity 0.5s ease-out;
+}
+.custom-alert {
+    background-color: #ffffff; 
+    color: #000000;
+    padding: 0px;
+    border-radius: 5px;
+}

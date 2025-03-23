@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Shop.Models
 {
-    public class Customer : IdentityUser
+    public class Customer
     {
+        [Key]
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

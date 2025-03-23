@@ -5,6 +5,13 @@
 
 <main id="content" class="wrapper layout-page">
     <section>
+        @if (TempData["Message"] != null)
+        {
+            <div id="welcomeMessage" class="alert alert-success">
+                @TempData["Message"]
+            </div>
+        }
+
         <div class="slick-slider hero hero-header-12"
              data-slick-options="{&#34;arrows&#34;:false,&#34;autoplay&#34;:true,&#34;cssEase&#34;:&#34;ease-in-out&#34;,&#34;dots&#34;:false,&#34;fade&#34;:true,&#34;infinite&#34;:true,&#34;slidesToShow&#34;:1,&#34;speed&#34;:600}">
             <div class="vh-100 d-flex align-items-center">
@@ -576,4 +583,18 @@
             document.querySelector(".countdown").innerHTML = "Offer Expired!";
         }
     }, 1000);
+
+    window.onload = function() {
+        // Kiểm tra nếu có thông báo
+        var message = document.getElementById('welcomeMessage');
+        if (message) {
+            message.style.display = 'block'; // Hiển thị thông báo
+
+            // Sau 3 giây, ẩn thông báo
+            setTimeout(function() {
+                message.style.display = 'none';
+            }, 3000); // 3000ms = 3 giây
+        }
+    };
+
 </script>
