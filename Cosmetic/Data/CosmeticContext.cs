@@ -5,7 +5,7 @@ using Shop.Models;
 
 namespace Cosmetic.Data
 {
-    public class CosmeticContext : IdentityDbContext<Customer, IdentityRole, string>  // Kế thừa IdentityDbContext
+    public class CosmeticContext : DbContext 
     {
         public CosmeticContext(DbContextOptions<CosmeticContext> options) : base(options)
         {

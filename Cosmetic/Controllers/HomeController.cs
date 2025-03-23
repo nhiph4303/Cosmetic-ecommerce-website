@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,23 +15,17 @@ namespace Cosmetic.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<Customer> _userManager;
-        private readonly SignInManager<Customer> _signInManager;
         private readonly CosmeticContext _context;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<Customer> userManager,
-                              SignInManager<Customer> signInManager, CosmeticContext context)
+        public HomeController(ILogger<HomeController> logger, CosmeticContext context)
         {
             _logger = logger;
-            _userManager = userManager;
-            _signInManager = signInManager;
             _context = context;
         }
 
         public IActionResult Index()
         {
             var categories = new List<string> { "Eyes", "Face", "Lips" };
-
 
             var products = _context.Product
                                    .Where(p => (p.Category != null && categories.Contains(p.Category.Name) && p.Status != "out of stock"))
@@ -50,8 +44,91 @@ namespace Cosmetic.Controllers
                 ProductsUnder50 = productsUnder50
             };
 
+            ViewBag.WelcomeMessage = TempData["Message"];
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+
             return View(viewModel);
         }
+
+
+        public IActionResult Register() => View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(Customer model)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingCustomer = await _context.Customer
+                                                     .FirstOrDefaultAsync(c => c.Email == model.Email);
+                if (existingCustomer != null)
+                {
+                    TempData["ErrorMessage"] = "Email is already in use.";
+                    return RedirectToAction("Register");
+                }
+
+                model.Status = "active";
+
+                _context.Customer.Add(model);
+                await _context.SaveChangesAsync();
+
+                TempData["Message"] = "Registration successful! You can now log in.";
+
+                return RedirectToAction("Login");
+            }
+
+            return View(model);
+        }
+        public IActionResult Login()
+        {
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (userEmail != null)
+            {
+                
+                TempData["Message"] = "You are already logged in.";
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(string email, string password)
+        {
+            var customer = _context.Customer.FirstOrDefault(c => c.Email == email);
+
+            if (customer == null)
+            {
+                TempData["ErrorMessage"] = "Account does not exist. Please check your email and try again.";
+                return View(); 
+            }
+
+            if (customer.Password == password)
+            {
+                HttpContext.Session.SetString("UserEmail", customer.Email);
+
+                TempData["Message"] = $"Hello, {customer.Email}";
+
+                return RedirectToAction("Index"); 
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Invalid credentials. Please try again.";
+                return View(); 
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("UserEmail");
+            HttpContext.Session.Clear();
+
+            TempData["Message"] = "You have logged out successfully.";
+
+            return RedirectToAction("Login");
+        }
+
 
         [HttpGet]
         [Route("home/category")]
@@ -107,9 +184,6 @@ namespace Cosmetic.Controllers
             return View(productList);
         }
 
-
-
-
         public class ProductDetailViewModel
         {
             public Product Product { get; set; }
@@ -140,17 +214,10 @@ namespace Cosmetic.Controllers
 
             return View(viewModel);
         }
-    
         public IActionResult ShoppingCart() => View();
         public IActionResult CheckOut() => View();
         public IActionResult AboutUs() => View();
         public IActionResult Compare() => View();
-        public IActionResult Login() => View();
-
-        public async Task<IActionResult> Register()
-        {
-            return View();
-        }
 
         public class ProductViewModel
         {
