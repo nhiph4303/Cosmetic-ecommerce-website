@@ -217,7 +217,33 @@ namespace Cosmetic.Controllers
         public IActionResult ShoppingCart() => View();
         public IActionResult CheckOut() => View();
         public IActionResult AboutUs() => View();
-        public IActionResult Compare() => View();
+
+        [HttpGet]
+        [Route("home/compare/{productId}")]
+        public IActionResult Compare(int productId)
+        {
+            var selectedProduct = _context.Product
+                                          .Include(p => p.Category)
+                                          .FirstOrDefault(p => p.ID == productId);
+
+            if (selectedProduct == null)
+            {
+                return NotFound();
+            }
+
+            var relatedProducts = _context.Product
+                                          .Where(p => p.CategoryID == selectedProduct.CategoryID && p.ID != selectedProduct.ID)
+                                          .OrderBy(r => Guid.NewGuid())  
+                                          .Take(3) 
+                                          .ToList();
+
+            ViewData["SelectedProduct"] = selectedProduct;
+            ViewData["RelatedProducts"] = relatedProducts;
+
+            return View();
+        }
+
+
 
         public class ProductViewModel
         {

@@ -1,7 +1,13 @@
-﻿﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Compare Page";
+﻿@{
+    var selectedProduct = ViewData["SelectedProduct"] as Shop.Models.Product;
+    var relatedProducts = ViewData["RelatedProducts"] as List<Shop.Models.Product>;
+
+    if (relatedProducts == null)
+    {
+        relatedProducts = new List<Shop.Models.Product>();
+    }
 }
+
 <main id="content" class="wrapper layout-page">
     <section class="container container-xxl pb-15 pb-lg-17">
         <div class="text-center">
@@ -16,187 +22,80 @@
                         </th>
                         <th scope="col" class="pb-9">
                             <p class="fs-18px text-center mt-4 mb-6 text-body-emphasis fw-semibold">
-                                Priming
-                                Moisturize
+                                @selectedProduct?.Name
                             </p>
-                            <a href="#" class="text-center d-block">
-                                <img src="#" data-src="@Url.Content("~/assets/images/product-01.webp")"
-                                     class="lazy-image" alt="Priming Moisturize" style="max-width: 210px" width="210"
-                                     height="280">
+                            <a href="@Url.Action("ProductDetail", "Home", new { id = selectedProduct?.ID })" class="text-center d-block">
+                                <img src="@Url.Content(selectedProduct?.Image)" class="lazy-image" alt="@selectedProduct?.Name" style="max-width: 210px" width="210" height="280">
                             </a>
                         </th>
-                        <th scope="col" class="pb-9">
-                            <p class="fs-18px text-center mt-4 mb-6 text-body-emphasis fw-semibold">
-                                Priming
-                                Moisturizer Rich
-                            </p>
-                            <a href="#" class="text-center d-block">
-                                <img src="#" data-src="@Url.Content("~/assets/images/product-02.webp")"
-                                     class="lazy-image" alt="Priming Moisturize" style="max-width: 210px" width="210"
-                                     height="280">
-                            </a>
-                        </th>
-                        <th scope="col" class="pb-9">
-                            <p class="fs-18px text-center mt-4 mb-6 text-body-emphasis fw-semibold">
-                                Priming
-                                Moisturizer Balance
-                            </p>
-                            <a href="#" class="text-center d-block">
-                                <img src="#" data-src="@Url.Content("~/assets/images/product-03.webp")"
-                                     class="lazy-image" alt="Priming Moisturize" style="max-width: 210px" width="210"
-                                     height="280">
-                            </a>
-                        </th>
+
+                        @foreach (var product in relatedProducts)
+                        {
+                            <th scope="col" class="pb-9">
+                                <p class="fs-18px text-center mt-4 mb-6 text-body-emphasis fw-semibold">
+                                    @product.Name
+                                </p>
+                                <a href="@Url.Action("ProductDetail", "Home", new { id = product.ID })" class="text-center d-block">
+                                    <img src="@Url.Content(product.Image)" class="lazy-image" alt="@product.Name" style="max-width: 210px" width="210" height="280">
+                                </a>
+                            </th>
+                        }
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr>
-                        <th scope="col" class="text-center align-middle bg-body-tertiary p-5">
-                            <span class="fs-6 text-body-emphasis fw-500">Customer Rattings</span>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
-                            <div class="d-flex align-items-center">
-                                <span class="fw-semibold text-body-emphasis me-6 fs-15px">4.86</span>
-                                <ul class="list-inline mb-0 lh-0 flex-shrink-0">
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                </ul>
-                                <span class="ms-4 fs-14px ps-4 lh-1 text-body border-start me-4 pe-2 fw-500">
-                                    2947
-                                    reviews
-                                </span>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
-                            <div class="d-flex align-items-center">
-                                <span class="fw-semibold text-body-emphasis me-6 fs-15px">4.75</span>
-                                <ul class="list-inline mb-0 lh-0 flex-shrink-0">
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                </ul>
-                                <span class="ms-4 fs-14px ps-4 lh-1 text-body border-start me-4 pe-2 fw-500">
-                                    47
-                                    reviews
-                                </span>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
-                            <div class="d-flex align-items-center">
-                                <span class="fw-semibold text-body-emphasis me-6 fs-15px">4.91</span>
-                                <ul class="list-inline mb-0 lh-0 flex-shrink-0">
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                    <li class="list-inline-item fs-12px text-primary me-0">
-                                        <i class="fas fa-star"></i>
-                                    </li>
-                                </ul>
-                                <span class="ms-4 fs-14px ps-4 lh-1 text-body border-start me-4 pe-2 fw-500">
-                                    296
-                                    reviews
-                                </span>
-                            </div>
-                        </th>
-                    </tr>
                     <tr>
                         <th scope="col" class="text-center align-middle bg-body-tertiary p-5">
                             <span class="fs-6 text-body-emphasis fw-500">Price</span>
                         </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
-                            <span class="pe-3 fs-18px font-weight-bold text-body-emphasis">$29.00</span>
-                            <span class="fs-15px fw-500 text-decoration-line-through text-body ">$39.00</span>
-                            <span class="badge bg-primary ms-4 fs-6">-20%</span>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
-                            <span class="pe-3 fs-18px font-weight-bold text-body-emphasis">$24.00</span>
-                            <span class="fs-15px fw-500 text-decoration-line-through text-body ">$39.00</span>
+                        <td scope="col" class="px-6 px-lg-9 align-middle">
+                            <span class="fs-15px fw-500 text-decoration-line-through text-body">
+                                $@selectedProduct?.Price
+                            </span>
+                            <span class="pe-3 fs-18px font-weight-bold text-body-emphasis">
+                                $@((selectedProduct?.Price ?? 0m) * 0.75m)
+                            </span>
                             <span class="badge bg-primary ms-4 fs-6">-25%</span>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
-                            <span class="pe-3 fs-18px font-weight-bold text-body-emphasis">$27.00</span>
-                        </th>
+                        </td>
+                        @foreach (var product in relatedProducts)
+                        {
+                            <td scope="col" class="px-6 px-lg-9 align-middle">
+                                <span class="fs-15px fw-500 text-decoration-line-through text-body">
+                                    $@selectedProduct?.Price
+                                </span>
+                                <span class="pe-3 fs-18px font-weight-bold text-body-emphasis">
+                                    $@((selectedProduct?.Price ?? 0m) * 0.75m)
+                                </span>
+                                <span class="badge bg-primary ms-4 fs-6">-25%</span>
+                            </td>
+                        }
                     </tr>
                     <tr>
                         <th scope="col" class="text-center align-middle bg-body-tertiary p-5">
                             <span class="fs-6 text-body-emphasis fw-500">Stock Status</span>
                         </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
+                        <td class="px-6 px-lg-9 align-middle">
                             <i class="fas fa-check fs-12px px-2 py-1 rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center"></i>
                             <span class="fs-15px fw-500 ms-3">In stock</span>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
-                            <i class="fas fa-check fs-12px px-2 py-1 rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center"></i>
-                            <span class="fs-15px fw-500 ms-3">In stock</span>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle">
-                            <i class="fas fa-check fs-12px px-2 py-1 rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center"></i>
-                            <span class="fs-15px fw-500 ms-3">In stock</span>
-                        </th>
+                        </td>
+
+                        @foreach (var product in relatedProducts)
+                        {
+                            <td class="px-6 px-lg-9 align-middle">
+                                <i class="fas fa-check fs-12px px-2 py-1 rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center"></i>
+                                <span class="fs-15px fw-500 ms-3">In stock</span>
+                            </td>
+                        }
                     </tr>
-                    <tr>
-                        <th scope="col" class="text-center align-middle bg-body-tertiary p-5">
-                            <span class="fs-6 text-body-emphasis fw-500">Shipping</span>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle fs-15px fw-500">Free shipping</th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle fs-15px fw-500">Free shipping</th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle fs-15px fw-500">Free shipping</th>
-                    </tr>
-                    <tr>
-                        <th scope="col" class="text-center align-middle bg-body-tertiary p-5">
-                            <span class="fs-6 text-body-emphasis fw-500">Sold</span>
-                        </th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle fs-15px fw-500">12546</th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle fs-15px fw-500">3489</th>
-                        <th scope="col" class="px-6 px-lg-9 align-middle fs-15px fw-500">2643</th>
-                    </tr>
-                    <tr>
-                        <th scope="col" class="bg-body-tertiary">
-                        </th>
-                        <th scope="col" class="px-6 text-center align-middle py-7">
-                            <a href="#" class="btn btn-dark btn-hover-bg-primary border-0 py-4">Add To Cart</a>
-                        </th>
-                        <th scope="col" class="px-6 text-center align-middle py-7">
-                            <a href="#" class="btn btn-dark btn-hover-bg-primary border-0 py-4">Add To Cart</a>
-                        </th>
-                        <th scope="col" class="px-6 text-center align-middle py-7">
-                            <a href="#" class="btn btn-dark btn-hover-bg-primary border-0 py-4">Add To Cart</a>
-                        </th>
-                    </tr>
+                    @* <tr> *@
+                    @*     <th scope="col" class="bg-body-tertiary">Add to Cart</th> <!-- Tiêu đề cho cột nút Add to Cart --> *@
+                    @*     @foreach (var product in relatedProducts) *@
+                    @*     { *@
+                    @*         <td class="px-6 text-center align-middle py-7"> *@
+                    @*             <a href="@Url.Action("AddToCart", "Cart", new { id = product.ID })" class="btn btn-dark btn-hover-bg-primary border-0 py-4">Add To Cart</a> *@
+                    @*         </td> *@
+                    @*     } *@
+                    @* </tr> *@
                 </tbody>
             </table>
         </div>
