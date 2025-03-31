@@ -33,25 +33,31 @@
                     <div class="mb-6">
                         <label for="Name" class="visually-hidden">Full Name</label>
                         <input asp-for="Name" class="form-control" placeholder="Full name" required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
 
                     <div class="mb-6">
                         <label for="Email" class="visually-hidden">Email Address</label>
-                        <input asp-for="Email" class="form-control" placeholder="Email address" required />
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Email address" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
                     <div class="mb-7">
                         <label for="Password" class="visually-hidden">Password</label>
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" required />
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" required minlength="8" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
                     <div class="mb-7">
                         <label for="Address" class="visually-hidden">Address</label>
                         <textarea asp-for="Address" class="form-control" placeholder="Address" required></textarea>
+                        <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
+
                     <div class="mb-7">
                         <label for="PhoneNumber" class="visually-hidden">Phone number</label>
                         <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="Phone number" required />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">Sign Up</button>
