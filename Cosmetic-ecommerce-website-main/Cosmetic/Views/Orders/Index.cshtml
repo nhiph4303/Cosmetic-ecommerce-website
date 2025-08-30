@@ -1,0 +1,162 @@
+﻿@model Cosmetic.Models.ViewModels.DashboardOrderViewModel
+
+@{
+    ViewData["Title"] = "Order Management";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+    var orderList = Model.orderList;
+}
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center justify-content-between">
+        <div class="col-md-6 mb-8 mb-md-0">
+            <h2 class="fs-4 mb-0">Order Management</h2>
+        </div>
+        <div class="col-md-6 d-flex flex-wrap justify-content-md-end">
+            <a asp-controller="Orders" asp-action="Create" class="btn btn-primary">
+                Create new
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4 rounded-4 p-7">
+        <div class="card-header bg-transparent px-0 pt-0 pb-7">
+            <form id="filterForm" asp-action="Index" asp-controller="Orders" method="get">
+                <div class="row justify-content-end">
+                    <div class="col-md-3 col-12 mb-md-0 col-lg-3 mt-6">
+                        <select class="form-select" name="status" id="statusSelect">
+                            <option value="All" selected="@(Model.Status == "All" ? true : false)">All</option>
+                            <option value="PENDING" selected="@(Model.Status == "PENDING" ? true : false)">PENDING</option>
+                            <option value="SHIPPED" selected="@(Model.Status == "SHIPPED" ? true : false)">SHIPPED</option>
+                            <option value="COMPLETED" selected="@(Model.Status == "COMPLETED" ? true : false)">COMPLETED</option>
+                            <option value="CANCELLED" selected="@(Model.Status == "CANCELLED" ? true : false)">CANCELLED</option>
+                            <option value="RETURN" selected="@(Model.Status == "RETURN" ? true : false)">RETURN</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-6 col-lg-3 mt-6">
+                        <input type="date" class="form-control bg-input border-0" name="startDate" value="@(Model.StartDate?.ToString("yyyy-MM-dd"))" onchange="loadOrders()">
+                    </div>
+                    <div class="col-md-3 col-6 col-lg-3 mt-6">
+                        <input type="date" class="form-control bg-input border-0" name="endDate" value="@(Model.EndDate?.ToString("yyyy-MM-dd"))" onchange="loadOrders()">
+                    </div>
+                    <div class="col-md-3 col-12 col-lg-2 mt-6">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                    <input type="hidden" name="page" id="pageInput" value="1">
+                </div>
+            </form>
+        </div>
+        <div class="card-body px-0 pt-7 pb-0">
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle table-nowrap mb-0 table-borderless">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="align-middle" scope="col">
+                                Id
+                            </th>
+                            <th class="text-body-emphasis" scope="col">
+                                Customer Name
+                            </th>
+                            <th class="align-middle" scope="col">
+                                Total Price
+                            </th>
+                            <th class="text-body-emphasis" scope="col">
+                                Status
+                            </th>
+                            <th class="align-middle" scope="col">
+                                Date
+                            </th>
+                            <th class="align-middle" scope="col">
+                                Note
+                            </th>
+                            <th class="align-middle text-center" scope="col">
+                                Actions
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var eachOrder in orderList)
+                        {
+                            <tr>
+                                <td>@eachOrder.Id</td>
+                                <td>@eachOrder.Name</td>
+                                <td>$@eachOrder.FinalPrice.ToString("F2")</td>
+                                <td>
+                                    <span class="badge rounded-lg status-@eachOrder.OrderStatus.ToLower()__myOrder border-0 text-capitalize fs-12">@eachOrder.OrderStatus</span>
+                                </td>
+                                <td>@eachOrder.OrderDate.ToString("dd MMM, yyyy")</td>
+                                <td>@eachOrder.Note</td>
+                                <td class="text-center">
+                                    <div class="d-flex flex-nowrap justify-content-center">
+                                        <a asp-action="OrderDetail" asp-controller="Orders" asp-route-id="@eachOrder.Id" class="btn btn-primary py-4 fs-13px btn-xs me-4">Detail</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @if (!orderList.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-4">No orders found matching your criteria.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @if (Model.TotalPages > 0)
+    {
+        <nav aria-label="Page navigation" class="mt-6 mb-4">
+            <ul class="pagination justify-content-start">
+                @if (Model.CurrentPage > 1)
+                {
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@(Model.CurrentPage - 1))">
+                            <i class="far fa-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+
+                @{
+                    int startPage = Math.Max(1, Model.CurrentPage - 2);
+                    int endPage = Math.Min(Model.TotalPages, startPage + 4);
+
+                    if (endPage - startPage < 4 && Model.TotalPages > 4)
+                    {
+                        startPage = Math.Max(1, endPage - 4);
+                    }
+                }
+
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "") mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@i)">@i.ToString("00")</a>
+                    </li>
+                }
+
+                @if (endPage < Model.TotalPages)
+                {
+                    <li class="page-item mx-3"><a class="page-link dot" href="javascript:void(0)">...</a></li>
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@Model.TotalPages)">@Model.TotalPages.ToString("00")</a>
+                    </li>
+                }
+
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@(Model.CurrentPage + 1))">
+                            <i class="far fa-chevron-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
+<script>
+    function navigateToPage(page) {
+        document.getElementById('pageInput').value = page;
+        document.getElementById('filterForm').submit();
+    }
+</script>

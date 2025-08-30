@@ -1,0 +1,206 @@
+﻿@model Cosmetic.Models.ViewModels.CategoryManagementViewModel
+
+@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+    var categories = Model.Categories;
+}
+
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center justify-content-between">
+        <div class="col-sm-6 mb-8 mb-sm-0">
+            <h2 class="fs-4 mb-0">Category Management</h2>
+        </div>
+        <div class="col-sm-6 col-md-3 d-flex flex-wrap justify-content-sm-end">
+            <input id="searchCategory" class="form-control border-primary w-100" type="text" placeholder="Search Categories">
+        </div>
+    </div>
+    <div class="card mb-4 rounded-4 p-7">
+        <div class="card-body p-0">
+            <div class="row">
+                <div class="col-md-3">
+                    <form id="addNewCategory" onsubmit="submitAddCategoryForm('addNewCategory'); return false;">
+                        <div class="mb-8">
+                            <label for="Name" class="mb-5 fs-13px ls-1 fw-semibold text-uppercase">Name</label>
+                            <input type="text" placeholder="Category Name" class="form-control" id="Name" name="Name">
+                            <span asp-validation-for="NewCategory.Name" class="text-danger field-error"></span>
+                        </div>
+                        <div class="mb-8">
+                            <label class="mb-5 fs-13px ls-1 fw-semibold text-uppercase">Status</label>
+                            <select class="form-select" name="Status" id="Status">
+                                <option value="true">Available</option>
+                                <option value="false">Unavailable</option>
+                            </select>
+                            <span asp-validation-for="NewCategory.Status" class="text-danger field-error"></span>
+                        </div>
+                        <div class="mb-8">
+                            <label class="mb-5 fs-13px ls-1 fw-semibold text-uppercase">Description</label>
+                            <textarea placeholder="Description" class="form-control" id="Description" name="Description"></textarea>
+                            <span asp-validation-for="NewCategory.Description" class="text-danger field-error"></span>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Create category</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="card-body px-0 pt-7 pb-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle table-nowrap mb-0 table-borderless">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="align-middle" scope="col">
+                                            Id
+                                        </th>
+                                        <th class="align-middle" scope="col">
+                                            Name
+                                        </th>
+                                        <th class="align-middle" scope="col">
+                                            Description
+                                        </th>
+                                        <th class="align-middle" scope="col">
+                                            Status
+                                        </th>
+                                        <th class="align-middle text-center" scope="col">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="storeAllCategories">
+                                    @foreach (var eachCategory in categories)
+                                    {
+                                        <tr class="categoryRow" data-name="@eachCategory.Name">
+                                            <td>@eachCategory.Id</td>
+                                            <td class="text-body-emphasis">
+                                                <a asp-controller="Categories" asp-action="EditCategoryPage" asp-route-id="@eachCategory.Id"><p class="fw-semibold text-body-emphasis mb-0">@eachCategory.Name</p></a>
+                                            </td>
+                                            <td class="text-body-emphasis">@eachCategory.Description</td>
+
+                                            <td>
+                                                <span id="orderStatusClass-@eachCategory.Id" class="badge rounded-lg rounded-pill alert py-3 px-4 mb-0 border-0 text-capitalize fs-12 @(eachCategory.Status ? "alert-success" : "alert-danger" )">
+                                                    @(eachCategory.Status ? "Available" : "Unavailable")
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="d-flex flex-nowrap justify-content-center">
+                                                    <a asp-controller="Categories" asp-action="EditCategoryPage" asp-route-id="@eachCategory.Id" class="btn btn-primary py-4 px-5 btn-xs fs-13px me-4"><i class="far fa-pen me-2"></i> Edit</a>
+                                                    @if (eachCategory.Status)
+                                                    {
+                                                        <a id="btnToggleCategoryStatus-@eachCategory.Id" href="javascript:;" class="btn btn-outline-primary btn-hover-bg-danger btn-hover-border-danger btn-hover-text-light py-4 px-5 fs-13px btn-xs me-4"
+                                                           onclick="confirmDelete('@eachCategory.Id');">
+                                                            <i class="far fa-trash me-2"></i> Delete
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a id="btnToggleCategoryStatus-@eachCategory.Id" href="javascript:;" class="btn btn-outline-success btn-hover-bg-success btn-hover-border-success btn-hover-text-light py-4 px-5 fs-13px btn-xs me-4"
+                                                           onclick="confirmRestore('@eachCategory.Id');">
+                                                            <i class="fas fa-undo me-2"></i> Restore
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this category?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restoreModalLabel">Restore Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to restore this category?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" id="confirmRestore" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    var categoryId = null;
+
+    function confirmDelete(id) {
+        categoryId = id;
+        var deleteModal = new bootstrap.Modal(document.getElementById("deleteModal"));
+        deleteModal.show();
+    }
+
+    function confirmRestore(id){
+        categoryId = id;
+         var restoreModal = new bootstrap.Modal(document.getElementById("restoreModal"));
+        restoreModal.show();
+    }
+
+    document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+        if (categoryId) {
+            changeStatusCategory(categoryId,true,'deleteModal');
+        }
+    });
+
+     document.getElementById("confirmRestore").addEventListener("click", function () {
+        if (categoryId) {
+            changeStatusCategory(categoryId,false,'restoreModal');
+        }
+    });
+
+
+
+    const allCategories = document.querySelectorAll(".categoryRow");
+    const categorySearchInput = document.getElementById("searchCategory");
+
+    function filterCategory() {
+       const searchText = categorySearchInput.value.trim().toLowerCase();
+       
+        allCategories.forEach(eachCategory => {
+           const categoryName = eachCategory.getAttribute('data-name');
+            
+           if (categoryName.includes(searchText) || searchText == "") {
+               eachCategory.style.display = "table-row";
+           } else {
+              eachCategory.style.display = "none";
+           }
+       });
+    }
+
+     const debouncedFilter = debounce(filterCategory, 300);
+
+     categorySearchInput.addEventListener("input", debouncedFilter);
+
+</script>
+
+
+
+

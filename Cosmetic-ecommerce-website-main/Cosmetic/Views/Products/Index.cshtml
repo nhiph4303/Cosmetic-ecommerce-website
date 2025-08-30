@@ -1,0 +1,235 @@
+﻿@model Cosmetic.Models.ViewModels.DashboardProductIndexViewModel
+@{
+    ViewData["Title"] = "Product Management";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+    var products = Model.productList;
+}
+
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center justify-content-between">
+        <div class="col-md-6 mb-8 mb-md-0">
+            <h2 class="fs-4 mb-0">Product Management</h2>
+        </div>
+        <div class="col-md-6 d-flex flex-wrap justify-content-md-end">
+            <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-primary">
+                Create new
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4 rounded-4 p-7">
+        <form id="filterForm" asp-action="Index" asp-controller="Products" method="get" class="d-none">           
+                <input type="hidden" name="page" id="pageInput" value="1">
+        </form>
+        <div class="card-body px-0 pt-3 pb-0">
+            <div class="table-responsive">  
+                <table class="table table-hover align-middle table-nowrap mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="align-middle text-center" scope="col" style="width: 3%;">
+                                Id
+                            </th>
+                            <th class="align-middle text-center" scope="col" style="width: 25%;">
+                                Name
+                            </th>
+                            <th class="align-middle text-center" scope="col" style="width: 25%;">
+                                Description
+                            </th>
+                            <th class="align-middle text-center" scope="col" style="width: 7%;">
+                                InStock
+                            </th>
+                            <th class="align-middle" scope="col" style="width: 5%;">
+                                IsAvailable
+                            </th>
+                            <th class="align-middle" scope="col" style="width: 10%;">
+                                Category
+                            </th>
+                            <th class="align-middle text-center" scope="col" style="width: 25%;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var eachProduct in products)
+                        {
+                            <tr>
+                                <td>@eachProduct.Id</td>
+                                <td>
+                                    <div class="d-flex align-items-center flex-nowrap">
+                                        <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@eachProduct.Id"><img src="@eachProduct.Image" class="lazy-image" width="60" height="80" alt="@eachProduct.Name" /></a>
+                                        <a href="@Url.Content(eachProduct.Image)" title="@eachProduct.Name" class="ms-6">
+                                            <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@eachProduct.Id"><p class="fw-semibold text-body-emphasis mb-0">@eachProduct.Name</p></a>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="description" id="desc-@eachProduct.Id">
+                                        @eachProduct.Description
+                                    </div>
+                                    <span class="see-more" onclick="toggleDescription(@eachProduct.Id)">See more</span>
+                                </td>
+                                <td class="text-center">@eachProduct.InStock</td>
+                                <td>
+                                    <span id="productStatusClass-@eachProduct.Id" class="badge rounded-lg rounded-pill alert py-3 px-4 mb-0 border-0 text-capitalize fs-12 @(eachProduct.IsAvailable ? "alert-success" : "alert-danger" )">
+                                        @(eachProduct.IsAvailable ? "Available" : "Unavailable")
+                                    </span>
+                                </td>
+                                <td>@eachProduct.Category.Name</td>
+                                <td class="text-center">
+                                    <div class="d-flex flex-nowrap justify-content-center">
+                                        <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@eachProduct.Id" class="btn btn-primary py-4 px-5 btn-xs fs-13px me-4"><i class="far fa-pen me-2"></i> Edit</a>
+                                        @if (eachProduct.IsAvailable)
+                                        {
+                                            <a id="btnToggleProductStatus-@eachProduct.Id" href="javascript:;" class="btn btn-outline-primary btn-hover-bg-danger btn-hover-border-danger btn-hover-text-light py-4 px-5 fs-13px btn-xs me-4"
+                                               onclick="confirmDelete('@eachProduct.Id');">
+                                                <i class="far fa-trash me-2"></i> Delete
+                                            </a>
+                                        }
+                                        else{
+                                            <a id="btnToggleProductStatus-@eachProduct.Id" href="javascript:;" class="btn btn-outline-success btn-hover-bg-success btn-hover-border-success btn-hover-text-light py-4 px-5 fs-13px btn-xs me-4"
+                                               onclick="confirmRestore('@eachProduct.Id');">
+                                            <i class="fas fa-undo me-2"></i> Restore
+                                        </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @if (Model.TotalPages > 0)
+    {
+        <nav aria-label="Page navigation" class="mt-6 mb-4">
+            <ul class="pagination justify-content-start">
+                @if (Model.CurrentPage > 1)
+                {
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@(Model.CurrentPage - 1))">
+                            <i class="far fa-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+
+                @{
+                    int startPage = Math.Max(1, Model.CurrentPage - 2);
+                    int endPage = Math.Min(Model.TotalPages, startPage + 4);
+
+                    if (endPage - startPage < 4 && Model.TotalPages > 4)
+                    {
+                        startPage = Math.Max(1, endPage - 4);
+                    }
+                }
+
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "") mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@i)">@i.ToString("00")</a>
+                    </li>
+                }
+
+                @if (endPage < Model.TotalPages)
+                {
+                    <li class="page-item mx-3"><a class="page-link dot" href="javascript:void(0)">...</a></li>
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@Model.TotalPages)">@Model.TotalPages.ToString("00")</a>
+                    </li>
+                }
+
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@(Model.CurrentPage + 1))">
+                            <i class="far fa-chevron-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this product?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="submit" id="confirmDeleteBtn" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restoreModalLabel">Restore Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to restore this product?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" id="confirmRestore" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    var productId = null;
+
+    function confirmDelete(id) {
+        productId = id;
+        var deleteModal = new bootstrap.Modal(document.getElementById("deleteModal"));
+        deleteModal.show();
+    }
+
+    function confirmRestore(id){
+        productId = id;
+         var restoreModal = new bootstrap.Modal(document.getElementById("restoreModal"));
+        restoreModal.show();
+    }
+
+    document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+        if (productId) {
+            changeStatusProduct(productId,true,'deleteModal');
+        }
+    });
+
+     document.getElementById("confirmRestore").addEventListener("click", function () {
+        if (productId) {
+            changeStatusProduct(productId,false,'restoreModal');
+        }
+    });
+
+
+      function toggleDescription(productId) {
+      var description = document.getElementById('desc-' + productId);
+      var seeMore = document.querySelector('#desc-' + productId + ' + .see-more');
+
+      description.classList.toggle('full');
+      seeMore.innerHTML = description.classList.contains('full') ? 'See less' : 'See more';
+    }
+
+    document.querySelectorAll('.description').forEach(function (desc) {
+      if (desc.scrollHeight > desc.clientHeight) {
+        desc.nextElementSibling.style.display = 'inline';
+      }
+    });
+
+    function navigateToPage(page) {
+        document.getElementById('pageInput').value = page;
+        document.getElementById('filterForm').submit();
+    }
+</script>

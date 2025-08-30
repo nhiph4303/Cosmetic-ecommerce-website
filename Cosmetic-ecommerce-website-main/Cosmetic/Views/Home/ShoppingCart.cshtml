@@ -1,0 +1,327 @@
+﻿@model Cosmetic.DTO.Cart.ShippingCartDTO
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Shopping Cart";
+    var cart = Model;
+    var availableCartItems = cart.cartItems.Where(ci => ci.Status != "Out of Stock").ToList();
+    var totalPriceFromAllCartItems = availableCartItems.Sum(ci => ci.TotalPrice);
+    var tempFinalPrice = availableCartItems.Sum(ci => ci.FinalPrice);
+    var rankDiscount = Model.RankDiscount;
+    var discountPriceFromAllCartItems = totalPriceFromAllCartItems - tempFinalPrice;
+    var finalPriceFromAllCartItems = tempFinalPrice * ((100 - rankDiscount) / 100);
+    var rankDiscountFromAllCartItems = tempFinalPrice - finalPriceFromAllCartItems;
+    var addressShipping = Model.AddressShipping;
+}
+
+<main id="content" class="wrapper layout-page">
+    <section class="container">
+        <div class="shopping-cart">
+            <h2 class="text-center fs-2 mt-12 mb-13">Shopping Cart</h2>
+            <form class="table-responsive-md pb-8 pb-lg-10">
+                <table class="table border">
+                    <thead class="bg-body-secondary">
+                        <tr class="fs-15px letter-spacing-01 fw-semibold text-uppercase text-body-emphasis">
+                            <th scope="col" class="fw-semibold border-1 ps-11">products</th>
+                            <th scope="col" class="fw-semibold border-1">quantity</th>
+                            <th colspan="2" class="fw-semibold border-1">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var eachCartItem in cart.cartItems)
+                        {
+                            <tr class="position-relative @(eachCartItem.Status == "Out of Stock" ? "opacity-50" : "")" id="cartItemRow-@eachCartItem.Id">
+                                <th scope="row" class="pe-5 ps-8 py-7 shop-product">
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input rounded-0 cartItemCheckBox" id="cartItem-checkbox-@eachCartItem.Id" data-cartItemCheckBoxId="@eachCartItem.Id" type="checkbox" @((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? "checked" : "disabled")
+                                                   onchange="handleToggleCheckBoxCartItem(this,'@eachCartItem.ProductSize')">
+                                        </div>
+                                        <div class="ms-6 me-7">
+                                            <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@eachCartItem.Product.Id" class="hover-zoom-in d-block" title="@eachCartItem.Product.Name">
+                                                <img src="@Url.Content(eachCartItem.Product.Image)" class=" lazy-image" alt="@eachCartItem.Product.Name" width="75" height="100">
+                                            </a>
+                                        </div>
+
+                                        <div>
+                                            <p class="fw-500 mb-1 text-body-emphasis">@(eachCartItem.Product.Name) <span class="fw-bold fs-18px">@($"( {eachCartItem.Product.ProductVariant.Name} )")</span></p>
+                                            <p class="card-text">
+                                                @if (eachCartItem.ProductDiscount != 0)
+                                                {
+                                                    <span class="fs-13px fw-500 text-decoration-line-through pe-3" id="productPrice-@eachCartItem.Id">$@eachCartItem.Product.ProductVariant.Price.ToString("F2")</span>
+                                                }
+                                                <span class="fs-15px fw-bold text-body-emphasis" id="productPriceAfterDiscount-@eachCartItem.Id">$@((eachCartItem.Product.ProductVariant.Price * ((100 - eachCartItem.ProductDiscount) / 100)).ToString("F2"))</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @if (eachCartItem.Status != "Available")
+                                    {
+                                        <div class="position-absolute top-0 start-0" >
+                                            @if (eachCartItem.Status == "Out of Stock")
+                                            {
+                                                <span class="badge rounded-0 text-uppercase fs-14px px-5 py-4 bg-danger text-white ls-1 fw-semibold">
+                                                    out of stock
+                                                </span>
+                                            }
+                                            else if (eachCartItem.Status == "Exceeds Stock")
+                                            {
+                                                <span class="badge rounded-0 text-uppercase fs-14px px-5 py-4 bg-warning text-dark ls-1 fw-semibold">
+                                                    exceeds stock
+                                                </span>
+                                            }
+                                        </div>
+                                    }
+                                </th>
+                                <td class="align-middle">
+                                    <div class="input-group position-relative shop-quantity">
+                                        <a href="javascript:;" class="quantity-decrease position-absolute z-index-2 @((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? "" : "text-muted")" id="plusQuantity-@eachCartItem.Id" @((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? "" : "disabled")
+                                           onclick="@((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? $"changeQuantityCartItem({eachCartItem.Id}, '{eachCartItem.Product.ProductVariant.Name}',Math.max(1, parseInt(this.nextElementSibling.value) - 1))" : "")">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </a>
+                                        <input name="number[]" type="number" id="quantity-@eachCartItem.Id"
+                                               class="form-control form-control-sm px-10 py-4 fs-6 text-center border-0 @((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? "" : "bg-light text-muted") "
+                                               value="@eachCartItem.Quantity" required min="1" max="100" @((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? "" : "disabled")
+                                               oninput="@((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? $"changeQuantityCartItem({eachCartItem.Id}, '{eachCartItem.Product.ProductVariant.Name}', null)" : "")">
+                                        <a href="javascript:;" class="quantity-increase position-absolute z-index-2 @((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? "" : "text-muted")" id="minusQuantity-@eachCartItem.Id" @((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? "" : "disabled")
+                                           onclick="@((eachCartItem.Status == "Available" || eachCartItem.Status == "Exceeds Stock") ? $"changeQuantityCartItem({eachCartItem.Id}, '{eachCartItem.Product.ProductVariant.Name}',Math.min(100, parseInt(this.previousElementSibling.value) + 1))" : "")">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </a>
+                                    </div>
+                                    @if (eachCartItem.Status == "Exceeds Stock")
+                                    {
+                                        <div class="small text-danger mt-2">
+                                            Only @eachCartItem.Product.ProductVariant.InStock available
+                                        </div>
+                                    }
+                                </td>
+                                <td class="align-middle">
+                                    <div class="mb-0 text-body-emphasis fw-bold mr-xl-11" id="finalPrice-@eachCartItem.Id">$@eachCartItem.FinalPrice.ToString("F2")</div>
+                                    @if (eachCartItem.ProductDiscount != 0)
+                                    {
+                                        <div class="fs-13px fw-500 text-decoration-line-through pe-3" id="totalPrice-@eachCartItem.Id">$@eachCartItem.TotalPrice.ToString("F2")</div>
+                                    }
+                                </td>
+                                <td class="align-middle text-end pe-8">
+                                    <a href="javascript:;" class="d-block text-secondary"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#deleteCartItemModal"
+                                       data-cartItem-id="@eachCartItem.Id"
+                                       data-cartItem-productSize="@eachCartItem.ProductSize">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </form>
+            <div class="row pt-2 pt-lg-2 pb-4 pb-lg-4">
+                <div class="col-lg-5 pt-lg-0 pt-11">
+                    <div class="card border-0" style="box-shadow: 0 0 10px 0 rgba(0,0,0,0.1)">
+                        <div class="card-body px-9 pt-6">
+                            <div class="d-flex align-items-center justify-content-between mb-5">
+                                <span>Subtotal:</span>
+                                <span class="d-block ml-auto text-body-emphasis fw-bold" id="totalPriceFromAllCartItems">$@totalPriceFromAllCartItems.ToString("F2")</span>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-5">
+                                <span>Total Discount Price:</span>
+                                <span class="d-block ml-auto text-body-emphasis fw-bold" id="discountPriceFromAllCartItems">$@discountPriceFromAllCartItems.ToString("F2")</span>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span>Rank Discount:</span>
+                                <span class="d-block ml-auto text-body-emphasis fw-bold" id="rankDiscountFromAllCartItems">$@rankDiscountFromAllCartItems.ToString("F2")</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent px-0 pt-5 pb-7 mx-9">
+                            <div class="d-none" id="storeTempFinalPrice">@tempFinalPrice</div>
+                            <div class="d-none" id="storeRankDiscount" data-rankDiscount="@rankDiscount"></div>
+                            <div class="d-flex align-items-center justify-content-between fw-bold mb-7">
+                                <span class="text-secondary text-body-emphasis">Total pricre:</span>
+                                <span class="d-block ml-auto text-body-emphasis fs-4 fw-bold" id="finalPriceFromAllCartItems">$@finalPriceFromAllCartItems.ToString("F2")</span>
+                            </div>
+                            <a asp-controller="Home" asp-action="Category" title="Countinue Shopping"
+                               class="btn btn-outline-dark me-8 text-nowrap my-5">
+                                Countinue Shopping
+                            </a>
+                            @if (addressShipping != null)
+                            {
+                                <a href="javascript:;" onclick="handleCheckOut()" aria-expanded="false"
+                                   class="btn w-40 btn-dark btn-hover-bg-primary btn-hover-border-primary"
+                                   title="Check Out">Check Out</a>
+                            }
+                            else
+                            {
+                                <a href="javascript:;" data-bs-toggle="modal"
+                                   data-bs-target="#warnNoAddressModal" aria-expanded="false"
+                                   class="btn w-40 btn-dark btn-hover-bg-primary btn-hover-border-primary"
+                                   title="Check Out">Check Out</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 offset-lg-1 pt-lg-0 pt-11">
+                    <div class="card border-0" style="box-shadow: 0 0 10px 0 rgba(0,0,0,0.1)">
+                        <div class="card-header bg-transparent border-0 pt-4 px-9">
+                            <h5 class="card-title mb-0 d-flex align-items-center gap-4">
+                                <span class="me-2"><i class="fas fa-shipping-fast text-primary"></i></span>
+                                Shipping Address
+                            </h5>
+                        </div>
+                        <div class="card-body px-9 pt-3 pb-6">
+                            @if (addressShipping != null)
+                            {
+
+                                <div class="address-info mb-4 p-4 border rounded bg-light" id="addressShippingInfor" data-id="@addressShipping.Id">
+                                    <div class="d-flex align-items-center mb-3 pb-2 border-bottom gap-4">
+                                        <i class="fas fa-user-circle fa-lg text-primary me-3"></i>
+                                        <div class="d-flex align-items-center gap-4">
+                                            <span class="fw-bold fs-5">@addressShipping.Name</span>
+                                            <span class="ms-3 badge bg-light text-dark border">
+                                                <i class="fas fa-phone-alt me-1"></i> @addressShipping.PhoneNumber
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 ps-1">
+                                        <div class="d-flex mb-2 align-items-center gap-4">
+                                            <i class="fas fa-map-marker-alt text-danger me-3 mt-1"></i>
+                                            <span class="fw-medium">@addressShipping.SpecificPlace</span>
+                                        </div>
+                                        <div class="ps-4 text-muted">
+                                            @addressShipping.Ward,  @addressShipping.District,  @addressShipping.Province
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end mt-3">
+                                        <a asp-controller="Customer" asp-action="Index" asp-route-section="CustomerAddressShipping"
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-pencil-alt me-1"></i> Edit
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-4">
+                                    <label for="orderNote" class="form-label d-flex align-items-center mb-2 gap-4">
+                                        <i class="fas fa-clipboard-list text-secondary me-2"></i>
+                                        Note
+                                    </label>
+                                    <textarea class="form-control" id="orderNote" name="orderNote" placeholder="Your requirements about this order..." rows="3"></textarea>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-5 my-3">
+                                    <div class="mb-4">
+                                        <span class="fa-stack fa-2x">
+                                            <i class="fas fa-circle fa-stack-2x text-light"></i>
+                                            <i class="fas fa-map-marker-alt fa-stack-1x text-primary"></i>
+                                        </span>
+                                    </div>
+                                    <h6 class="mb-4 text-muted">No Shipping Address</h6>
+                                    <a asp-controller="Customer" asp-action="Index" asp-route-section="CustomerAddressShipping"
+                                       class="btn btn-primary px-4 py-2">
+                                        <i class="fas fa-plus-circle me-2"></i> Add Shipping Address
+                                    </a>
+                                </div>
+                            }
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Delete Address Confirmation Modal -->
+<div class="modal fade shipping-address__modal" id="deleteCartItemModal" tabindex="-1" aria-labelledby="deleteCartItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header shipping-address__modal-header">
+                <h5 class="modal-title" id="deleteCartItemModalLabel">
+                    <i class="fas fa-trash-alt me-2 text-danger"></i>
+                    Delete Cart Item
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <input type="hidden" id="deleteCartItemId">
+                <input type="hidden" id="deleteCartItemProductSize">
+                <div class="text-center mb-4">
+                    <div class="shipping-address__delete-icon mb-3">
+                        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 48px;"></i>
+                    </div>
+                    <h5 class="mb-3">Are you sure you want to delete this cart item?</h5>
+                    <p class="shipping-address__text-small text-muted">This action cannot be undone and all information associated with this cart item will be permanently removed.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light shipping-address__cancel-delete-btn" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger shipping-address__confirm-delete-btn" onclick="confirmDeleteCartItem()">
+                    <i class="fas fa-trash-alt me-1"></i>
+                    Delete
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Warning No Address Modal -->
+<div class="modal fade shipping-address__modal" id="warnNoAddressModal" tabindex="-1" aria-labelledby="warnNoAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header shipping-address__modal-header">
+                <h5 class="modal-title" id="warnNoAddressModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    No Address
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <div class="text-center mb-4">
+                    <div class="shipping-address__delete-icon mb-3">
+                        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 48px;"></i>
+                    </div>
+                    <h5 class="mb-3">You have no default shipping address!!</h5>
+                    <p class="shipping-address__text-small text-muted">Click "Add" to add new shipping address to place order!!</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light shipping-address__cancel-delete-btn" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary shipping-address__confirm-delete-btn" onclick="window.location.href='@Url.Action("Index", "Customer", new { section = "CustomerAddressShipping" })'">
+                    Add
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.addEventListener('show.bs.modal', function (event) {
+            const modal = event.target;
+            if (modal.id === 'deleteCartItemModal') {
+                const button = event.relatedTarget;
+                const cartItemId = button.getAttribute('data-cartItem-id');
+                const productSize = button.getAttribute('data-cartItem-productSize')
+                const inputId = modal.querySelector('#deleteCartItemId');
+                const inputProductSize = modal.querySelector('#deleteCartItemProductSize')
+                inputId.value = cartItemId;
+                inputProductSize.value = productSize;
+            }
+        });
+    });
+</script>

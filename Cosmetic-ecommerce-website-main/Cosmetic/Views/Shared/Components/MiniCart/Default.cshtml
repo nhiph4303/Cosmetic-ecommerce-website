@@ -1,0 +1,18 @@
+﻿@model Cosmetic.Models.Cart
+@{
+    var quantity = Model.CartItems.Count();
+    var cartId = Model.Id;
+}
+
+
+<div class="px-5 d-none d-xl-inline-block">
+    <a class="position-relative lh-1 color-inherit text-decoration-none" asp-controller="Home" asp-action="ShoppingCart" asp-route-cartId="@cartId">
+        <i class="icon fs-4 icon-star-light fa-solid fa-cart-shopping"></i>
+        @if (quantity > 0)
+        {
+            <span class="badge bg-dark text-white position-absolute top-0 start-100 translate-middle mt-4 rounded-circle fs-13px p-0 square" style="--square-size: 18px" id="miniCart">
+                @quantity
+            </span>
+        }
+    </a>
+</div>

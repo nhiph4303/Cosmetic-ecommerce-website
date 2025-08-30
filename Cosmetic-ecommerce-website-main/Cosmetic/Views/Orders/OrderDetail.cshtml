@@ -1,0 +1,219 @@
+﻿@model Cosmetic.Models.Order
+
+@{
+    ViewData["Title"] = "Order Detail";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+    var order = Model;
+    var orderStatus = order.OrderStatus;
+}
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center justify-content-between">
+        <div class="col-sm-6 mb-8 mb-sm-0">
+            <h2 class="fs-4 mb-0">Order Details</h2>
+        </div>
+    </div>
+    <div class="card rounded-4">
+        <header class="card-header bg-transparent p-7">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-lg-0 mb-6">
+                    <span class="d-inline-block"><i class="far fa-calendar me-3"></i>@order.OrderDate.ToString("dddd, MMM d, yyyy") </span>
+
+                    <br>
+                    <small class="text-muted">Order ID: @order.Id</small>
+                </div>
+                <div class="col-md-6 ml-auto d-flex justify-content-md-end flex-wrap">
+                    <div class="mw-210 me-5 my-3">
+                        <select class="form-select" id="selectChangeStatusOrder" data-order-id="@order.Id">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="card-body p-7">
+            <div class="row mb-8 mt-4 order-info-wrap">
+                <div class="col-md-12 mb-md-0 mb-7">
+                    <div class="d-flex flex-nowrap">
+                        <div class="icon-wrap">
+                            <span class="rounded-circle px-6 py-5 bg-green-light me-6 text-green d-inline-block">
+                                <i class="fas fa-user px-1"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="mb-4">Customer</h6>
+                            <p class="mb-4 d-flex">
+                                <span class="me-4"><b>Name:</b> @order.Customer?.Name</span>
+                                <span class="me-4"><b>Email:</b> @order.Customer?.User.Email</span>
+                                <span><b>Phone number:</b> @order.Customer?.PhoneNumber</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-md-0 mb-7 mt-4">
+                    <div class="d-flex flex-nowrap">
+                        <div class="icon-wrap">
+                            <span class="rounded-circle p-5 bg-green-light me-6 text-green d-inline-block">
+                                <i class="fas fa-truck px-2"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="mb-4">Order info</h6>
+                            <p class="mb-4 d-flex align-items-center">
+                                <span class="me-4"><b>Shipping:</b> VN Express</span>
+                                <span class="me-4"><b>Pay method:</b> COD</span>
+                                <b>Status:</b> <span id="orderStatusDisplay" class="status-@order.OrderStatus.ToLower()__myOrder text-capitalize p-3 ms-4">@Model.OrderStatus</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Total Price</th>
+                                    <th>Quantity</th>
+                                    <th>Discount</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var eachOrderDetail in order.OrderDetails)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center flex-nowrap">
+
+                                                <a href="@Url.Content(eachOrderDetail.Product.Image)" title="@eachOrderDetail.Product.Name ( @eachOrderDetail.ProductSize )">
+
+                                                    <img src="@Url.Content(eachOrderDetail.Product.Image)" data-src="@eachOrderDetail.Product.Image" alt="@eachOrderDetail.Product.Name"
+                                                         class="lazy-image" width="60" height="80">
+                                                </a>
+
+                                                <a href="@Url.Content(eachOrderDetail.Product.Image)" title="@eachOrderDetail.Product.Name ( @eachOrderDetail.ProductSize )" class="ms-6">
+                                                    <p class="fw-semibold text-body-emphasis mb-0">
+                                                        @eachOrderDetail.Product.Name ( @eachOrderDetail.ProductSize)
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td>$@eachOrderDetail.TotalPrice.ToString("F2")</td>
+                                        <td>
+                                            @eachOrderDetail.Quantity
+                                        </td>
+                                        <td>$@eachOrderDetail.ProductDiscount.ToString("F2")</td>
+                                        <td class="text-end">
+                                            $@eachOrderDetail.FinalPrice.ToString("F2")
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="p-3">
+                                            <h6 class="mb-3 fw-semibold fs-30">Shipping Address</h6>
+                                            <div class="shipping-details__orderDetail">
+                                                <p class="mb-1"><strong>Name:</strong> @order.Name</p>
+                                                <p class="mb-1"><strong>Phone:</strong> @order.PhoneNumber</p>
+                                                <p class="mb-1"><strong>Address:</strong> @order.SpecificPlace, @order.Ward, @order.District, @order.Province</p>
+                                                <p class="mb-1"><strong>Note:</strong> @order.Note</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="3">
+                                        <div class="d-flex flex-column align-items-end justify-content-end finalPrice-container__orderDetail p-6">
+                                            <div class="mw-100 w-100">
+                                                <div class="d-flex w-100">
+                                                    <span class="d-inline-block w-50">Subtotal:</span>
+                                                    <span class="d-inline-block w-50 text-end fw-normal">$@order.TotalPrice</span>
+                                                </div>
+                                                <div class="d-flex w-100">
+                                                    <span class="d-inline-block w-50">Product Discount:</span>
+                                                    <span class="d-inline-block w-50 text-end fw-normal">$@order.ProductDiscount</span>
+                                                </div>
+                                                <div class="d-flex w-100">
+                                                    <span class="d-inline-block w-50">Rank Discount:</span>
+                                                    <span class="d-inline-block w-50 text-end fw-normal">$@order.RankDiscount</span>
+                                                </div>
+                                                <div class="d-flex w-100 mb-5">
+                                                    <span class="d-inline-block w-50">Grand total:</span>
+                                                    <span class="d-inline-block w-50 text-end fs-5 fw-semibold">$@order.FinalPrice</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade shipping-address__modal" id="confirmChangeOrderStatusModal" tabindex="-1" aria-labelledby="confirmChangeOrderStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header shipping-address__modal-header">
+                <h5 class="modal-title" id="confirmChangeOrderStatusModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <div class="text-center mb-4">
+                    <div class="shipping-address__delete-icon mb-3">
+                        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 48px;"></i>
+                    </div>
+                    <h5 class="mb-3">Willing to change order status!!</h5>
+                    <p class="shipping-address__text-small text-muted">Are you sure you want to change status this order?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light shipping-address__cancel-delete-btn" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>
+                    No
+                </button>
+                <button type="button" class="btn btn-primary shipping-address__confirm-delete-btn">
+                    Yes
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var getOrderStatus = '@orderStatus';
+        var orderId = '@order.Id';
+       initialSelectInOrderDetailDashBoard(getOrderStatus);
+       const selectElement = document.getElementById('selectChangeStatusOrder');
+        const confirmModalElement = document.getElementById('confirmChangeOrderStatusModal');
+        const confirmButton = confirmModalElement.querySelector('.shipping-address__confirm-delete-btn');
+
+        let selectedStatus = null;
+
+        const bootstrapModal = new bootstrap.Modal(confirmModalElement);
+
+        selectElement.addEventListener("change", function () {
+            selectedStatus = this.value;
+            bootstrapModal.show();
+        });
+
+        confirmButton.addEventListener("click", function () {
+            if (selectedStatus && orderId) {
+                handleChangeStatusOrderByAdmin("confirmChangeOrderStatusModal", selectedStatus, orderId);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,127 @@
+﻿@model Cosmetic.Models.ViewModels.ProductVariantIndexViewModel
+
+@{
+    ViewData["Title"] = "Product Variant Management";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+    var productVariants = Model.ProductVariants;
+}
+
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center justify-content-between">
+        <div class="col-md-6 mb-8 mb-md-0">
+            <h2 class="fs-4 mb-0">Product Variants</h2>
+        </div>
+        <div class="col-md-6 d-flex flex-wrap justify-content-md-end">
+            <a asp-controller="ProductVariant" asp-action="CreateProductVariant" class="btn btn-primary">
+                Create new
+            </a>
+        </div>
+    </div>
+    <form id="pagingForm" asp-controller="ProductVariant" asp-action="Index">
+        <input type="hidden" name="page" id="pageInput" value="1">
+    </form>
+    <div class="card mb-4 rounded-4 p-7">
+        <div class="card-body px-0 pt-7 pb-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle table-nowrap mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="align-middle text-center" scope="col" style="width: 3%;">
+                                Id
+                            </th>
+                            <th class="align-middle text-center" scope="col" style="width: 25%;">
+                                Name
+                            </th>
+                            <th class="align-middle" scope="col" style="width: 5%;">
+                                Price
+                            </th>
+                            <th class="align-middle text-center" scope="col" style="width: 7%;">
+                                InStock
+                            </th>
+                            <th class="align-middle text-center" scope="col" style="width: 15%;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var eachProductVariant in productVariants)
+                        {
+                            <tr>
+                                <td class="text-center">@eachProductVariant.Id</td>
+                                <td>
+                                    <div class="d-flex align-items-center flex-nowrap">
+                                        <a asp-controller="ProductVariant" asp-action="EditProductVariant" asp-route-id="@eachProductVariant.Id"><p class="fw-semibold text-body-emphasis mb-0">@eachProductVariant.Product.Name ( @eachProductVariant.Name )</p></a>
+                                    </div>
+                                </td>
+                                <td>$@eachProductVariant.Price.ToString("F2")</td>
+                                <td class="text-center">@eachProductVariant.InStock</td>
+                                <td class="text-center">
+                                    <div class="d-flex flex-nowrap justify-content-center">
+                                        <a asp-controller="ProductVariant" asp-action="EditProductVariant" asp-route-id="@eachProductVariant.Id" class="btn btn-primary py-4 px-5 btn-xs fs-13px me-4"><i class="far fa-pen me-2"></i> Edit</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @if (Model.TotalPages > 0)
+    {
+        <nav aria-label="Page navigation" class="mt-6 mb-4">
+            <ul class="pagination justify-content-start">
+                @if (Model.CurrentPage > 1)
+                {
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@(Model.CurrentPage - 1))">
+                            <i class="far fa-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+
+                @{
+                    int startPage = Math.Max(1, Model.CurrentPage - 2);
+                    int endPage = Math.Min(Model.TotalPages, startPage + 4);
+
+                    if (endPage - startPage < 4 && Model.TotalPages > 4)
+                    {
+                        startPage = Math.Max(1, endPage - 4);
+                    }
+                }
+
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "") mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@i)">@i.ToString("00")</a>
+                    </li>
+                }
+
+                @if (endPage < Model.TotalPages)
+                {
+                    <li class="page-item mx-3"><a class="page-link dot" href="javascript:void(0)">...</a></li>
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@Model.TotalPages)">@Model.TotalPages.ToString("00")</a>
+                    </li>
+                }
+
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@(Model.CurrentPage + 1))">
+                            <i class="far fa-chevron-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
+
+<script>
+    function navigateToPage(page) {
+        document.getElementById('pageInput').value = page;
+        document.getElementById('pagingForm').submit();
+    }
+</script>

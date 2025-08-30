@@ -1,0 +1,133 @@
+﻿@model Cosmetic.Models.ViewModels.ProductCreateViewModel
+@using Cosmetic.Enums
+
+@{
+    ViewData["Title"] = "Create Product";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+    var mapProductType = new Dictionary<ProductType, string>
+    {
+        { ProductType.VolumeBased, "ml" },
+        { ProductType.WeightBased, "g" },
+        { ProductType.SizeBased, "size" },
+        { ProductType.Standard, "standard" }
+    };
+}
+
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center">
+        <div class="col-xxl-12">
+            <div class="row">
+                <div class="col-sm-6 mb-8 mb-sm-0">
+                    <h2 class="fs-4 mb-0">Create Product</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xxl-12">
+            <div class="card rounded-4">
+                <div class="card-body p-7">
+                    <div class="row mx-n7">
+                        <div class="col-lg-12 px-7">
+                            <section class="p-xl-5">
+                                <form id="createProductForm" action="/Products/CreateProduct" onsubmit="submitFormDataWithFile('createProductForm','POST'); return false;" enctype="multipart/form-data">
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Name">Name</label>
+                                        <div class="col-lg-9">
+                                            <input asp-for="Name" class="form-control" placeholder="Product Name" />
+                                            <span asp-validation-for="Name" class="text-danger field-error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Description">Description</label>
+                                        <div class="col-lg-9">
+                                            <textarea placeholder="Product Description" class="form-control" asp-for="Description"></textarea>
+                                            <span asp-validation-for="Description" class="text-danger field-error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="CategoryId">Category</label>
+                                        <div class="col-lg-9">
+                                            <select class="form-select" id="CategoryId" asp-for="CategoryId">
+                                                @foreach (var category in Model.CategoryMenu)
+                                                {
+                                                    <option value="@category.Id" selected="@(category.Id == Model.CategoryId)">@category.Name</option>
+                                                }
+                                            </select>
+                                            <span asp-validation-for="CategoryId" class="text-danger field-error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-8">
+                                        <div class="col-lg-4">
+                                            <label class="col-lg-6 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase">Status</label>
+                                            <div class="col-lg-9">
+                                                <select asp-for="IsAvailable" class="form-select">
+                                                    <option value="true">Available</option>
+                                                    <option value="false">Unavailable</option>
+                                                </select>
+                                                <span asp-validation-for="IsAvailable" class="text-danger field-error"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 ">
+                                            <label class="col-lg-6 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Discount">Discount</label>
+                                            <div class="col-lg-9">
+                                                <input asp-for="Discount" class="form-control" placeholder="Product Discount" />
+                                                <span asp-validation-for="Discount" class="text-danger field-error"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4">
+                                            <label class="col-lg-6 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase">Product Type</label>
+                                            <div class="col-lg-9">
+                                                <select asp-for="ProductType" class="form-select">
+                                                    @foreach (ProductType eachProductType in Enum.GetValues(typeof(ProductType)))
+                                                    {
+                                                        <option value="@eachProductType">@eachProductType ( @mapProductType[eachProductType] )</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="ProductType" class="text-danger field-error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase">Image</label>
+                                        <div class="col-lg-9">
+                                            <div class="input-upload">
+                                                <div class="mb-7">
+                                                    <img id="previewImage" src="../assets/images/dashboard/upload.svg" width="102" class="d-block mx-auto" alt="Preview">
+                                                </div>
+                                                <input class="form-control" type="file" id="imageUpload" name="ImageFile" accept="image/*">
+                                                <span asp-validation-for="Image" class="text-danger field-error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button class="btn btn-primary" type="submit">Create</button>
+                                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("imageUpload").addEventListener("change", function(event) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                document.getElementById("previewImage").src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

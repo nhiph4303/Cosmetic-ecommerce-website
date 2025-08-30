@@ -1,0 +1,41 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="containerAccessDenied">
+
+    <div class="container__accessDenied">
+        <svg class="lockIcon__accessDenied" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+
+        <div class="errorCode__accessDenied">403</div>
+        <h1 class="title__accessDenied">ACCESS DENIED</h1>
+        <p class="message__accessDenied">Sorry, you do not have permission to access this page. Please check your login information or contact your administrator if you believe this is an error.</p>
+        <a asp-action="Index" asp-controller="Home" class="button__accessDenied">Return Home</a>
+    </div>
+
+    <div class="particles__accessDenied" id="particles__accessDenied"></div>
+</div>
+
+<script>
+    // Create floating particles effect
+    const particlesContainer = document.getElementById('particles__accessDenied');
+    const particleCount = 15;
+
+    for (let i = 0; i < particleCount; i++) {
+        const size = Math.random() * 20 + 5;
+        const particle = document.createElement('div');
+        particle.className = 'particle__accessDenied';
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        particlesContainer.appendChild(particle);
+    }
+</script>

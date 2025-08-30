@@ -1,0 +1,297 @@
+﻿@model IEnumerable<Cosmetic.Models.Order>
+@{
+    var listOrders = Model;
+}
+<div class="my-orders-header__myOrder">
+    <div class="d-flex align-items-center justify-content-between">
+        <h4 class="mb-0">
+            <i class="fas fa-shopping-bag me-2 text-primary"></i>
+            My Orders
+        </h4>
+        <div class="search-order-container__myOrder">
+            <div class="input-group">
+                <span class="input-group-text bg-light">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" class="form-control" id="orderSearch" placeholder="Search by Order ID">
+                <span class="input-group-text bg-light">
+                    <select id="statusFilter" class="form-select border-0 bg-light">
+                        <option value="">All Statuses</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="SHIPPED">Shipped</option>
+                        <option value="CANCELLED">Cancelled</option>
+                        <option value="RETURN">Return</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (listOrders.Count() > 0)
+{
+    <div id="ordersContainer__myOrder">
+
+        @foreach (var eachOrder in listOrders)
+        {
+            <div class="order-card__myOrder" data-cardOrderId="@eachOrder.Id">
+                <div class="order-header__myOrder d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="order-id__myOrder" data-id="@eachOrder.Id">Order #@eachOrder.Id</span>
+                        <span class="ms-2 order-date__myOrder">
+                            <i class="far fa-calendar-alt me-4"></i>
+                            @eachOrder.OrderDate.ToString("dd/MM/yyyy")
+                        </span>
+                    </div>
+                    <span class="order-status__myOrder status-@eachOrder.OrderStatus.ToLower()__myOrder">
+                        @eachOrder.OrderStatus
+                    </span>
+
+
+                </div>
+                <div class="products-container__myOrder">
+                    @foreach (var eachOrderDetail in eachOrder.OrderDetails)
+                    {
+                        <div class="product-item__myOrder d-flex align-items-center">
+                            <img src="@Url.Content(eachOrderDetail.Product.Image)" alt="@eachOrderDetail.Product.Name" class="product-img__myOrder">
+
+                            <div class="ms-6 flex-grow-1">
+                                <div class="product-name__myOrder">@eachOrderDetail.Product.Name</div>
+                                <div>
+                                    @if (eachOrderDetail.ProductDiscount != 0)
+                                    {
+                                        <span class="product-price-original__myOrder">$@eachOrderDetail.TotalPrice.ToString("F2")</span>
+                                    }
+                                    <span class="fs-15px fw-bold text-body-emphasis">$@eachOrderDetail.FinalPrice.ToString("F2")</span>
+                                </div>
+                            </div>
+                            <span class="product-quantity__myOrder">x @eachOrderDetail.Quantity</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="order-footer__myOrder">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="shipping-info__myOrder">
+                                <div class="shipping-title__myOrder">
+                                    <i class="fas fa-map-marker-alt me-4 text-primary"></i>Shipping Address
+                                </div>
+                                <div class="shipping-detail__myOrder"><strong>Recipient:</strong> @eachOrder.Name</div>
+                                <div class="shipping-detail__myOrder"><strong>Phone:</strong> @eachOrder.PhoneNumber</div>
+                                <div class="shipping-detail__myOrder"><strong>Address:</strong> @eachOrder.SpecificPlace @eachOrder.Ward, @eachOrder.District, @eachOrder.Province</div>
+                                <div class="shipping-detail__myOrder"><strong>Note:</strong> @eachOrder.Note</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="order-summary__myOrder">
+                                <div class="summary-title__myOrder">
+                                    <i class="fas fa-receipt me-4 text-primary"></i>Order Summary
+                                </div>
+                                <div class="summary-row__myOrder">
+                                    <span>Subtotal:</span>
+                                    <span>$@eachOrder.TotalPrice.ToString("F2")</span>
+                                </div>
+                                <div class="summary-row__myOrder">
+                                    <span>Product Discount:</span>
+                                    <span>$@eachOrder.ProductDiscount.ToString("F2")</span>
+                                </div>
+                                <div class="summary-row__myOrder">
+                                    <span>Rank Discount</span>
+                                    <span>$@eachOrder.RankDiscount.ToString("F2")</span>
+                                </div>
+                                <div class="summary-row__myOrder border-top pt-2">
+                                    <span>Total Amount:</span>
+                                    <span class="total-amount">$@eachOrder.FinalPrice.ToString("F2")</span>
+                                </div>
+                            </div>
+
+                            <div class="order-actions__myOrder">
+                                @if (eachOrder.OrderStatus == "PENDING")
+                                {
+                                    <button class="cancel-order-btn__myOrder" data-bs-toggle="modal" data-bs-target="#warnCancelOrderModal" data-order-id="@eachOrder.Id">
+                                        <i class="fas fa-times me-4"></i>Cancel Order
+                                    </button>
+                                }
+                                else if (eachOrder.OrderStatus == "CANCELLED")
+                                {
+                                    <button class="rePurchase-order-btn__myOrder" data-bs-toggle="modal" data-bs-target="#warnRepurchaseOrderModal" data-order-id="@eachOrder.Id">
+                                        <i class="fa-solid fa-check me-4"></i>Repurchase Order
+                                    </button>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+    <div class="text-center mt-4">
+        <button id="loadMoreBtn" class="load-more-btn__myOrder">
+            <i class="fas fa-sync-alt me-4"></i>Load More Orders
+        </button>
+    </div>
+}
+else
+{
+
+    <div class="empty-orders-container__myOrder">
+        <div class="empty-orders-icon__myOrder">
+            <i class="fas fa-shopping-bag"></i>
+        </div>
+        <h2 class="empty-orders-message__myOrder">No Orders</h2>
+        <p class="empty-orders-subtext__myOrder">You have no orders in your shopping history. Explore our products and order now!</p>
+        <a asp-controller="Home" asp-action="Index" class="shop-now-button__myOrder">
+            <i class="fas fa-shopping-cart"></i> Go Shopping
+        </a>
+    </div>
+}
+
+<div class="modal fade shipping-address__modal" id="warnCancelOrderModal" tabindex="-1" aria-labelledby="warnCancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header shipping-address__modal-header">
+                <h5 class="modal-title" id="warnCancelOrderModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    Cancel Order
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <input type="hidden" id="cancelOrderId">
+                <div class="text-center mb-4">
+                    <div class="shipping-address__delete-icon mb-3">
+                        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 48px;"></i>
+                    </div>
+                    <h5 class="mb-3">Willing to cancel order!!</h5>
+                    <p class="shipping-address__text-small text-muted">Are you sure you want to cancel this order?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light shipping-address__cancel-delete-btn" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary shipping-address__confirm-delete-btn" onclick="handleChangeStatusOrder('warnCancelOrderModal','CANCELLED')">
+                    Cancel Order
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade shipping-address__modal" id="warnRepurchaseOrderModal" tabindex="-1" aria-labelledby="warnRepurchaseOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header shipping-address__modal-header">
+                <h5 class="modal-title" id="warnRepurchaseOrderModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <input type="hidden" id="repurchaseOrderId">
+                <div class="text-center mb-4">
+                    <div class="shipping-address__delete-icon mb-3">
+                        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 48px;"></i>
+                    </div>
+                    <h5 class="mb-3">Willing to repurchase order!!</h5>
+                    <p class="shipping-address__text-small text-muted">Are you sure you want to repurchase this order?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light shipping-address__cancel-delete-btn" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary shipping-address__confirm-delete-btn" onclick="handleChangeStatusOrder('warnRepurchaseOrderModal','PENDING')">
+                    Repurchase
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        document.addEventListener('show.bs.modal', function (event) {
+            const modal = event.target;
+            if (modal.id === 'warnCancelOrderModal') {
+                const button = event.relatedTarget;
+                const orderId = button.getAttribute('data-order-id');
+                const input = modal.querySelector('#cancelOrderId');
+                input.value = orderId;
+            }else if(modal.id == 'warnRepurchaseOrderModal'){
+                 const button = event.relatedTarget;
+                const orderId = button.getAttribute('data-order-id');
+                const input = modal.querySelector('#repurchaseOrderId');
+                input.value = orderId;
+            }
+        });
+
+        // LOAD MORE
+        const orders = document.querySelectorAll(".order-card__myOrder");
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+
+        let ordersPerPage = 5;
+        let currentIndex = 0;
+
+        function showNextOrders() {
+            for (let i = currentIndex; i < currentIndex + ordersPerPage && i < orders.length; i++) {
+                orders[i].style.display = "block";
+            }
+            currentIndex += ordersPerPage;
+
+            if (currentIndex >= orders.length) {
+                loadMoreBtn.style.display = "none";
+            }
+        }
+
+        orders.forEach(order => order.style.display = "none");
+        showNextOrders();
+
+        loadMoreBtn.addEventListener("click", showNextOrders);
+
+
+        // DEBOUNCE SEARCH for Id and Status
+
+        const orderSearchInput = document.getElementById("orderSearch");
+        const statusFilterSelect = document.getElementById("statusFilter");
+
+         function filterOrders() {
+            const searchText = orderSearchInput.value.toLowerCase();
+            const selectedStatus = statusFilterSelect.value.trim().toLowerCase();
+
+            orders.forEach(order => {
+                const orderId = order.querySelector(".order-id__myOrder").getAttribute('data-id');
+                const orderStatusText = order.querySelector(".order-status__myOrder")?.textContent.trim().toLowerCase() || "";
+                const matchesId = orderId.includes(searchText);
+                const matchesStatus = selectedStatus === "" || orderStatusText === selectedStatus;
+
+                if (matchesId && matchesStatus) {
+                    order.style.display = "block";
+                } else {
+                    order.style.display = "none";
+                }
+            });
+        }
+
+         const debouncedFilter = debounce(filterOrders, 300);
+
+         orderSearchInput.addEventListener("input", debouncedFilter);
+        statusFilterSelect.addEventListener("change", filterOrders);
+    });
+</script>

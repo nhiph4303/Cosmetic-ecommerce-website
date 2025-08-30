@@ -1,0 +1,256 @@
+﻿@model Cosmetic.Models.ViewModels.AddressShippingViewModel
+
+<div class="card border-0 shadow-sm shipping-address__edit-section mb-4">
+    <div class="card-header bg-white py-4 px-4 px-lg-5 border-bottom">
+        <div class="d-flex align-items-center justify-content-between">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-edit me-2 text-primary"></i>
+                Edit Shipping Address
+            </h5>
+            <a class="shipping-address__back-link text-decoration-none" asp-controller="Customer" asp-action="Index" asp-route-section="CustomerAddressShipping" asp-route-mode="Default">
+                <i class="fas fa-arrow-left me-1"></i>
+                Back to Addresses
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-4 p-lg-5">
+        <form id="editAddressForm" class="shipping-address__form" action="/Customer/EditAddressShipping" onsubmit="submitFormData('editAddressForm','PUT'); return false;">
+            <input type="hidden" asp-for="Id" />
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="shipping-address__form-group mb-3">
+                        <label for="recipientName" class="form-label">Recipient Name <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-user text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control" id="recipientName" asp-for="Name" placeholder="Enter recipient's full name" required>
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger fs-13px field-error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="shipping-address__form-group mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-phone-alt text-muted"></i>
+                            </span>
+                            <input type="tel" class="form-control" id="phoneNumber" asp-for="PhoneNumber" placeholder="Enter recipient's phone number" required>
+                        </div>
+                        <span asp-validation-for="PhoneNumber" class="text-danger fs-13px field-error"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="shipping-address__form-group mb-3">
+                        <label for="editProvince" class="form-label">Province/City <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-city text-muted"></i>
+                            </span>
+                            <select id="editProvince" class="form-select" required>
+                                <option value="">-- Select Province/City --</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="Province" class="text-danger fs-13px field-error"></span>
+                        <input type="hidden" asp-for="Province" id="editProvinceName" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="shipping-address__form-group mb-3">
+                        <label for="editDistrict" class="form-label">District/Quận <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-map text-muted"></i>
+                            </span>
+                            <select id="editDistrict" class="form-select" required disabled>
+                                <option value="">-- Select District --</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="District" class="text-danger fs-13px field-error"></span>
+                        <input type="hidden" asp-for="District" id="editDistrictName" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="shipping-address__form-group mb-3">
+                        <label for="editWard" class="form-label">Ward/Phường <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-map-signs text-muted"></i>
+                            </span>
+                            <select id="editWard" class="form-select" required disabled>
+                                <option value="">-- Select Ward --</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="Ward" class="text-danger fs-13px field-error"></span>
+                        <input type="hidden" asp-for="Ward" id="editWardName" />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="shipping-address__form-group mb-3">
+                        <label for="addressLine" class="form-label">Address Line <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-home text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control" id="addressLine" asp-for="SpecificPlace" placeholder="Enter street address, house number" required>
+                        </div>
+                        <span asp-validation-for="SpecificPlace" class="text-danger fs-13px field-error"></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check mb-0">
+                        <input class="form-check-input" type="checkbox" id="setAsDefault" asp-for="IsDefaultAddress">
+                        <label class="form-check-label" for="setAsDefault">
+                            <i class="fas fa-check-circle me-1 text-primary"></i>
+                            Set as default shipping address
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <div class="d-flex justify-content-end">
+                        <a asp-controller="Customer" asp-action="Index" asp-route-section="CustomerAddressShipping" asp-route-mode="Default" class="btn btn-light shipping-address__cancel-btn me-2">
+                            <i class="fas fa-times me-1"></i>
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary shipping-address__update-btn">
+                            <i class="fas fa-save me-1"></i>
+                            Update Address
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const provinceValue = @Html.Raw(Json.Serialize(Model.Province));
+    const districtValue = @Html.Raw(Json.Serialize(Model.District));
+    const wardValue = @Html.Raw(Json.Serialize(Model.Ward));
+
+    const provinceSelect = document.getElementById('editProvince');
+    const districtSelect = document.getElementById('editDistrict');
+    const wardSelect = document.getElementById('editWard');
+
+    const provinceNameInput = document.getElementById('editProvinceName');
+    const districtNameInput = document.getElementById('editDistrictName');
+    const wardNameInput = document.getElementById('editWardName');
+
+    async function loadProvinces() {
+        try {
+            provinceSelect.disabled = true;
+            const res = await fetch('https://provinces.open-api.vn/api/p/');
+            const provinces = await res.json();
+
+            provinceSelect.innerHTML = '<option value="">-- Select Province/City --</option>';
+            provinces.forEach(p => {
+                const selected = p.name === provinceValue ? 'selected' : '';
+                provinceSelect.innerHTML += `<option value="${p.code}" ${selected}>${p.name}</option>`;
+            });
+
+            if (provinceValue) {
+                const selectedOption = [...provinceSelect.options].find(o => o.text === provinceValue);
+                if (selectedOption) {
+                    provinceNameInput.value = provinceValue;
+                    await loadDistricts(selectedOption.value);
+                }
+            }
+        } catch (err) {
+            console.error('Error loading provinces:', err);
+        } finally {
+            provinceSelect.disabled = false;
+        }
+    }
+
+    async function loadDistricts(provinceCode) {
+        try {
+            districtSelect.disabled = true;
+            wardSelect.disabled = true;
+            const res = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
+            const data = await res.json();
+
+            districtSelect.innerHTML = '<option value="">-- Select District --</option>';
+            wardSelect.innerHTML = '<option value="">-- Select Ward --</option>';
+
+            data.districts.forEach(d => {
+                const selected = d.name === districtValue ? 'selected' : '';
+                districtSelect.innerHTML += `<option value="${d.code}" ${selected}>${d.name}</option>`;
+            });
+
+            if (districtValue) {
+                const selectedOption = [...districtSelect.options].find(o => o.text === districtValue);
+                if (selectedOption) {
+                    districtNameInput.value = districtValue;
+                    await loadWards(selectedOption.value);
+                }
+            }
+        } catch (err) {
+            console.error('Error loading districts:', err);
+        } finally {
+            districtSelect.disabled = false;
+        }
+    }
+
+    async function loadWards(districtCode) {
+        try {
+            wardSelect.disabled = true;
+            const res = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+            const data = await res.json();
+
+            wardSelect.innerHTML = '<option value="">-- Select Ward --</option>';
+            data.wards.forEach(w => {
+                const selected = w.name === wardValue ? 'selected' : '';
+                wardSelect.innerHTML += `<option value="${w.code}" ${selected}>${w.name}</option>`;
+            });
+
+            if (wardValue) {
+                const selectedOption = [...wardSelect.options].find(o => o.text === wardValue);
+                if (selectedOption) {
+                    wardNameInput.value = wardValue;
+                }
+            }
+        } catch (err) {
+            console.error('Error loading wards:', err);
+        } finally {
+            wardSelect.disabled = false;
+        }
+    }
+
+    provinceSelect.addEventListener('change', async function () {
+        const code = this.value;
+        const name = this.options[this.selectedIndex]?.text || '';
+        provinceNameInput.value = name;
+
+        districtNameInput.value = '';
+        wardNameInput.value = '';
+        districtSelect.innerHTML = '<option value="">-- Select District --</option>';
+        wardSelect.innerHTML = '<option value="">-- Select Ward --</option>';
+
+        if (code) await loadDistricts(code);
+        else {
+            districtSelect.disabled = true;
+            wardSelect.disabled = true;
+        }
+    });
+
+    districtSelect.addEventListener('change', async function () {
+        const code = this.value;
+        const name = this.options[this.selectedIndex]?.text || '';
+        districtNameInput.value = name;
+
+        wardNameInput.value = '';
+        wardSelect.innerHTML = '<option value="">-- Select Ward --</option>';
+
+        if (code) await loadWards(code);
+        else wardSelect.disabled = true;
+    });
+
+    wardSelect.addEventListener('change', function () {
+        const name = this.options[this.selectedIndex]?.text || '';
+        wardNameInput.value = name;
+    });
+
+    loadProvinces();
+</script>

@@ -1,0 +1,127 @@
+﻿@model Cosmetic.Models.ViewModels.EditCustomerViewModel;
+
+@{
+    var customer = Model;
+}
+<div class="card border-0 user-profile-content shadow-sm">
+    <div class="card-header bg-white py-4 px-4 px-lg-5 border-bottom user-profile-content__header">
+        <div class="d-flex align-items-center justify-content-between">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-user-edit me-2 text-primary"></i>
+                Edit Profile
+            </h5>
+            <a  class="user-profile-content__back-link text-decoration-none" asp-controller="Customer" asp-action="Index" asp-route-section="CustomerProfile" asp-route-mode="Default">
+                <i class="fas fa-arrow-left me-1"></i>
+                Back to Profile
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-4 p-lg-5">
+        <form id="customerEditForm" action="/Customer/ChangeInforCustomer" onsubmit="submitFormData('customerEditForm','PUT'); return false;">
+
+            <div class="text-center mb-5">
+                <div class="user-profile-edit__avatar-wrapper mx-auto position-relative" style="width: 120px; height: 120px;">
+                    <img src="~/assets/images/defaultAvatar.jpg" alt="User Avatar" class="rounded-circle w-100 h-100 border" style="object-fit: cover;">
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="user-profile-edit__form-group mb-0">
+                        <label for="fullName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-user text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control" id="fullName" asp-for="Name" placeholder="Enter your full name" required>
+
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger fs-13px field-error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="user-profile-edit__form-group mb-0">
+                        <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-envelope text-muted"></i>
+                            </span>
+                            <input type="email" class="form-control" id="email" asp-for="Email" placeholder="Enter your email" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="user-profile-edit__form-group mb-0">
+                        <label for="phoneNumber" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-phone-alt text-muted"></i>
+                            </span>
+                            <input type="tel" class="form-control" id="phoneNumber" asp-for="PhoneNumber" placeholder="Enter your phone number" required>
+
+                        </div>
+                        <span asp-validation-for="PhoneNumber" class="text-danger fs-13px field-error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="user-profile-edit__form-group mb-0">
+                        <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-calendar-alt text-muted"></i>
+                            </span>
+                            <input type="date" class="form-control" asp-for="DoB" id="dateOfBirth">
+
+                        </div>
+                        <span asp-validation-for="DoB" class="text-danger fs-13px field-error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="user-profile-edit__form-group mb-0">
+                        <label class="form-label">Gender</label>
+                        <div class="d-flex">
+                            <div class="form-check me-4">
+                                <input class="form-check-input" type="radio" name="Gender" value="true" @(Model.Gender ? "checked" : "")>
+                                <label class="form-check-label" for="genderMale">
+                                    <i class="fas fa-mars me-1 text-primary"></i> Male
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="Gender" value="false" @(!Model.Gender ? "checked" : "")>
+                                <label class="form-check-label" for="genderFemale">
+                                    <i class="fas fa-venus me-1 text-danger"></i> Female
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="user-profile-edit__form-group mb-0">
+                        <label for="address" class="form-label">Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-home text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control" asp-for="Address" id="address" placeholder="Enter your address">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top mt-5 pt-4 d-flex justify-content-end">
+
+                <a  class="btn btn-light me-3 px-4" asp-controller="Customer" asp-action="Index" asp-route-section="CustomerProfile" asp-route-mode="Default">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fas fa-save me-2"></i>
+                    Save Changes
+                </button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+

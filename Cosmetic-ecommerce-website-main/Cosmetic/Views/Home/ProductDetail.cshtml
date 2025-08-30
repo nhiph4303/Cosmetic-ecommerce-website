@@ -1,0 +1,169 @@
+﻿@using Cosmetic.Models.ViewModels
+@model ProductDetailViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Product Detail";
+    var userEmail = ViewBag.UserEmail as string;
+    var product = Model.Product;
+    string size = Model.Size;
+    int quantity = Model.Quantity != 0 ? Model.Quantity : 1;
+    var productVariants = Model.Variants;
+    var relatedProduct = Model.ListProducts;
+    var originalPrice = (size != null ? productVariants.FirstOrDefault(pv => pv.Name == size).Price : productVariants[0].Price) * quantity;
+    var discount = product.Discount;
+    var discountPrice = originalPrice * ((100 - discount) / 100);
+
+
+}
+<main id="content" class="wrapper layout-page">
+
+
+    <section class="container pt-6 pb-13 pb-lg-20">
+        <div class="row">
+            <div class="col-md-6 pe-lg-13 pb-12">
+                <div class="position-sticky top-0">
+                    <div class="slick-slider g-0" data-slick-options="{&#34;arrows&#34;:false,&#34;imageSize&#34;:{&#34;img&#34;:{&#34;height&#34;:720,&#34;width&#34;:540}},&#34;items&#34;:[{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-05.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-06.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-07.jpg&#34;},{&#34;img&#34;:&#34;/assets/images/shop/product-gallery-08.jpg&#34;}],&#34;slidesToShow&#34;:1}">
+                        <a href="@Url.Content(product.Image)" data-gallery="gallery4">
+                            <img src="@Url.Content(product.Image)" class="lazy-image" width="540" height="720" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 pt-md-0 pt-10">
+                <p class="d-flex align-items-center justify-content-start mb-6">
+                    @if (discount != 0)
+                    {
+                        <span class="text-decoration-line-through" id="original-price">$@originalPrice.ToString("F2")</span>
+                        <span class="fs-18px text-body-emphasis ps-6 fw-bold" id="discount-price">$@discountPrice.ToString("F2")</span>
+                        <span class="badge text-bg-primary fs-6 fw-semibold ms-7 px-6 py-3">-@discount%</span>
+                    }
+                    else
+                    {
+                        <span class="fs-18px text-body-emphasis fw-bold" id="discount-price">$@discountPrice.ToString("F2")</span>
+                    }
+                </p>
+
+                <h1 class="mb-4 pb-2 fs-4">@product.Name</h1>
+                <form>
+                    <div class="row align-items-end">
+                        <div class="col-sm-6 form-group">
+                            <label class="text-body-emphasis fw-semibold py-5" for="size">Select a size: </label>
+                            <select asp-for="Size" class="form-control w-100 product-info-2-quantity" id="size" onchange="updatePriceInProductDetail(@discount)">
+                                @for (int i = 0; i < productVariants.Count(); i++)
+                                {
+                                    <option value="@productVariants[i].Name" data-price="@productVariants[i].Price" selected="@( i == 0 ? string.IsNullOrEmpty(size) || size == productVariants[i].Name : size == productVariants[i].Name)">@productVariants[i].Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="text-body-emphasis fw-semibold py-5" for="quantity">Quantity: </label>
+                            <input asp-for="Quantity" type="number" class="form-control" value="@quantity" min="1" max="999" id="quantity" oninput="updatePriceInProductDetail(@discount)" />
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="btn btn-lg btn-dark btn-block mb-7 mt-8 w-100 btn-hover-bg-primary btn-hover-border-primary"
+                                    onclick="@(string.IsNullOrEmpty(userEmail) ? "showLoginPopup('HomeIndex')" : $"addToCart({product.Id})")">
+                                Add To Cart
+                            </button>
+                        </div>
+                    </div>x
+                </form>
+                <div class="d-flex align-items-center flex-wrap">
+                    <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
+                       data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Compare"
+                       asp-controller="Home" asp-action="Compare" asp-route-productId="@product.Id">
+                        <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
+                    </a>
+                </div>
+                <ul class="single-product-meta list-unstyled border-top pt-7 mt-7">
+                    <li class="d-flex mb-4 pb-2 align-items-center">
+                        <span class="text-body-emphasis fw-semibold fs-14px">Categories:</span>
+                        <span class="ps-4">@product.Category.Name</span>
+                    </li>
+                </ul>
+                <div class="mt-11">
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <div class="accordion-item pb-4">
+                            <h2 class="accordion-header" id="flush-headingOne">
+                                <a class="product-info-accordion text-decoration-none" href="#"
+                                   data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                   aria-expanded="false" aria-controls="flush-collapseOne">
+                                    <svg class="icon icon-accordion" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" style="margin-right: 10px;">
+                                        <path d="M10 5.2393L8.5149 3.77392C6.79996 2.08174 4.01945 2.08174 2.30451 3.77392C0.589562 5.4661 0.589563 8.2097 2.30451 9.90188L10 17.4952L17.6955 9.90188C19.4104 8.2097 19.4104 5.4661 17.6955 3.77392C15.9805 2.08174 13.2 2.08174 11.4851 3.77392L10 5.2393ZM10.765 3.06343C12.8777 0.978857 16.3029 0.978856 18.4155 3.06343C20.5282 5.148 20.5282 8.52779 18.4155 10.6124L10.72 18.2057C10.3224 18.5981 9.67763 18.5981 9.27996 18.2057L1.58446 10.6124C-0.528154 8.52779 -0.528154 5.14801 1.58446 3.06343C3.69708 0.978859 7.12233 0.978858 9.23495 3.06343L10 3.81832L10.765 3.06343Z" fill-rule="evenodd" />
+                                    </svg>
+                                    <span class="fs-4">Description</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse show"
+                             aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                            <div class="pt-8 pb-3">
+                                <p class="mb-2 pb-4">
+                                    @product.Description
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="border-top w-100 h-1px"></div>
+    <section class="container pt-15 pb-15 pt-lg-17 pb-lg-20">
+        <div class="text-center">
+            <h2 class="mb-12">You may also like</h2>
+        </div>
+        <div class="slick-slider"
+             data-slick-options="{&#34;arrows&#34;:true,&#34;centerMode&#34;:true,&#34;centerPadding&#34;:&#34;calc((100% - 1440px) / 2)&#34;,&#34;dots&#34;:true,&#34;infinite&#34;:true,&#34;responsive&#34;:[{&#34;breakpoint&#34;:1200,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:false,&#34;slidesToShow&#34;:3}},{&#34;breakpoint&#34;:992,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:false,&#34;slidesToShow&#34;:2}},{&#34;breakpoint&#34;:576,&#34;settings&#34;:{&#34;arrows&#34;:false,&#34;dots&#34;:false,&#34;slidesToShow&#34;:1}}],&#34;slidesToShow&#34;:4}">
+            @foreach (var prod in relatedProduct)
+            {
+                <div class="mb-6">
+                    <div class="card card-product grid-2 bg-transparent border-0">
+                        <figure class="card-img-top position-relative mb-7 overflow-hidden">
+                            <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@prod.Id" class="hover-zoom-in d-block" title="@prod.Name">
+                                <img src="@Url.Content(prod.Image)" data-src="@Url.Content(prod.Image)"
+                                     class="img-fluid lazy-image w-100" alt="@prod.Name" width="330" height="440">
+                            </a>
+                            @if (prod.Discount > 0)
+                            {
+                                <div class="position-absolute product-flash z-index-2">
+                                    <span class="badge badge-product-flash on-sale bg-primary">-@prod.Discount%</span>
+                                </div>
+                            }
+                            <div class="position-absolute d-flex z-index-2 product-actions vertical">
+                                <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
+                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Compare"
+                                   asp-controller="Home" asp-action="Compare" asp-route-productId="@prod.Id">
+                                    <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
+                                </a>
+                            </div>
+                            <a href="javascript:;" onclick="@(string.IsNullOrEmpty(userEmail) ? "showLoginPopup('HomeIndex')" : $"addToCart({product.Id})")"
+                               class="btn btn-add-to-cart btn-dark btn-hover-bg-primary btn-hover-border-primary position-absolute z-index-2 text-nowrap">
+                                Add To Cart
+                            </a>
+                        </figure>
+                        <div class="card-body text-center p-0">
+                            <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
+                                <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
+                                    @if (discount != 0)
+                                    {
+                                        <del class="text-body fw-500 me-4 fs-13px">$@prod.ProductVariants[0].Price.ToString("F2")</del>
+                                    }
+                                    <ins class="text-decoration-none">$@prod.Discount.ToString("F2")</ins>
+                                </span>
+
+                            </span>
+                            <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
+                                <a class="text-decoration-none text-reset" href="@Url.Action("ProductDetail", "Home", new { id = prod.Id })">
+                                    @prod.Name ( @prod.ProductVariants[0].Name )
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+</main>
+
+

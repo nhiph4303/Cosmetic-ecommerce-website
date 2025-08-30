@@ -1,0 +1,83 @@
+﻿@model Cosmetic.Models.ViewModels.EditCategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+}
+
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center">
+        <div class="col-xxl-9">
+            <div class="row">
+                <div class="col-sm-6 mb-8 mb-sm-0">
+                    <h2 class="fs-4 mb-0">Edit Category</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xxl-12">
+            <div class="card rounded-4">
+                <div class="card-body p-7">
+                    <div class="row mx-n7">
+                        <div class="col-lg-12 px-7">
+                            <section class="p-xl-5">
+                                <form id="editCategoryForm" action="/Categories/EditCategory" onsubmit="submitFormData('editCategoryForm','PUT'); return false;">
+
+                                    <div class="row mb-8">
+                                        <div class="col-lg-6 col-md-6">
+                                            <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Id">Id</label>
+                                            <div class="col-lg-9">
+                                                <input asp-for="Id" class="form-control" placeholder="Category Id" readonly />
+                                                <span asp-validation-for="Id" class="text-danger field-error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="CreateTime">CreateTime</label>
+                                            <div class="col-lg-9">
+                                                <input asp-for="CreateTime" class="form-control" placeholder="CreateTime" readonly />
+                                                <span asp-validation-for="CreateTime" class="text-danger field-error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Name">Name</label>
+                                        <div class="col-lg-9">
+                                            <input asp-for="Name" class="form-control" placeholder="Category Name" />
+                                            <span asp-validation-for="Name" class="text-danger field-error"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Description">Description</label>
+                                        <div class="col-lg-9">
+                                            <textarea asp-for="Description" class="form-control" placeholder="Category Description" rows="3"></textarea>
+                                            <span asp-validation-for="Description" class="text-danger field-error"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase">Status</label>
+                                        <div class="col-lg-9">
+                                            <select asp-for="Status" class="form-select" name="Status">
+                                                <option value="true">Available</option>
+                                                <option value="false">Unavailable</option>
+                                            </select>
+                                            <span asp-validation-for="Status" class="text-danger field-error"></span>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                                    <a asp-controller="Categories" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

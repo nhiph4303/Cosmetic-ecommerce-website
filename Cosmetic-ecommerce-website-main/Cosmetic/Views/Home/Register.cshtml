@@ -1,0 +1,90 @@
+﻿@using Cosmetic.Models.ViewModels
+@model RegisterViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Register";
+}
+
+<main id="content" class="wrapper layout-page">
+    <section class="pb-lg-20 pb-16">
+        <div class="container">
+            <div class="text-center pt-13 mb-12 mb-lg-15">
+                <h2 class="fs-36px mb-11 mb-lg-14">Register</h2>
+            </div>
+            <div class="col-lg-5 col-md-8 mx-auto">
+
+                @if (TempData["RegisterSuccessMessage"] != null)
+                {
+                    <div class="alert alert-success" id="registerSuccessPopup">
+                        @TempData["RegisterSuccessMessage"]
+                    </div>
+                    <script>
+                         setTimeout(function () {
+                            window.location.href = '/Home/Login'; 
+                        }, 2000);
+                    </script>
+                }
+
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+                }
+                <form asp-controller="Home" asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-6">
+                        <label for="Name" class="visually-hidden">Full Name</label>
+                        <input asp-for="Name" class="form-control" placeholder="Full name" required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-6">
+                        <label for="Email" class="visually-hidden">Email Address</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Email address" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="row mb-7">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="Password" class="visually-hidden">Password</label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" required minlength="5" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ConfirmPassword" class="visually-hidden">Confirm Password</label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" required minlength="5" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-7">
+                        <label for="DoB" class="form-label">Date of Birth</label>
+                        <input asp-for="DoB" type="date" class="form-control" required />
+                        <span asp-validation-for="DoB" class="text-danger"></span>
+                    </div>
+                    <div class="mb-7">
+                        <label class="form-label d-block">Gender</label>
+                        <div class="form-check form-check-inline">
+                            <input asp-for="Gender" class="form-check-input" type="radio" id="genderMale" value="true" checked />
+                            <label class="form-check-label" for="genderMale">Male</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input asp-for="Gender" class="form-check-input" type="radio" id="genderFemale" value="false" />
+                            <label class="form-check-label" for="genderFemale">Female</label>
+                        </div>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="mb-7">
+                        <label for="Address" class="visually-hidden">Address</label>
+                        <textarea asp-for="Address" class="form-control" placeholder="Address"></textarea>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="mb-7">
+                        <label for="PhoneNumber" class="visually-hidden">Phone number</label>
+                        <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="Phone number" required />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>

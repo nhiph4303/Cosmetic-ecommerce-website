@@ -1,0 +1,368 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
+    string userEmail = "";
+    IList<string> roles = new List<string>();
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = await UserManager.GetUserAsync(User);
+        userEmail = user?.Email ?? "";
+        roles = await UserManager.GetRolesAsync(user);
+    }
+
+    bool isAdmin = roles.Contains("ADMIN");
+}﻿
+
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@ViewData["Title"]</title>
+    <link rel="icon" href="~/assets/images/icon.webp">
+    <link rel="stylesheet" href="~/assets/css/lightgallery-bundle.min.css">
+    <link rel="stylesheet" href="~/assets/css/all.min.css">
+    <link rel="stylesheet" href="~/assets/css/animate.min.css">
+    <link rel="stylesheet" href="~/assets/css/slick.css">
+    <link rel="stylesheet" href="~/assets/css/mapbox-gl.min.css">
+    <link rel="stylesheet" href="~/assets/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/assets/css/stylesheet.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+    integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="~/assets/css/theme-orange.css">
+    <link rel="stylesheet" href="~/assets/css/theme.css">
+    <script src="@Url.Content("~/assets/js/myJS.js")"></script>
+    @RenderSection("Styles", required: false)
+</head>
+
+<body>
+    <header id="header" class="header header-sticky header-sticky-smart disable-transition-all z-index-5">
+
+        <div id="messageContainer" class="alert alert-success">
+        </div>
+
+        <div id="warningContainer" class="alert alert-danger">
+        </div>
+
+        <div class="modal fade" id="loginRequiredModalHomeIndex" tabindex="-1" aria-labelledby="loginRequiredLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold" id="loginRequiredLabel">You have to login</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>You have to login to buy this product. Login now?</p>
+                    </div>
+                    <div class="modal-footer border-0 justify-content-center">
+                        <button type="button" class="btn btn-secondary px-4" style="width: 100px" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary px-4" style="width: 100px" onclick="redirectToLogin()">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky-area">
+            <div class="main-header nav navbar bg-body navbar-light navbar-expand-xl py-6 py-xl-0">
+                <div class="container-wide container flex-nowrap">
+                    <div class="w-72px d-flex d-xl-none">
+                        <button class="navbar-toggler align-self-center  border-0 shadow-none px-0 canvas-toggle p-4"
+                        type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasNavBar"
+                        aria-controls="offCanvasNavBar" aria-expanded="false" aria-label="Toggle Navigation">
+                            <span class="fs-24 toggle-icon"></span>
+                        </button>
+                    </div>
+
+                    <div class="w-xl-34">
+                        <a asp-controller="Home" asp-action="Index" class="navbar-brand px-0 py-4 mx-auto">
+                            <img class="light-mode-img" src="~/assets/images/logo.png" width="250" height="70"
+                            alt="Anna Cosmetic">
+                        </a>
+                    </div>
+
+                    <ul class="d-none d-xl-flex navbar-nav">
+                        <li class="nav-item transition-all-xl-1 py-xl-11 py-0 mx-xl-7 dropdown dropdown-hover dropdown-fullwidth">
+                            <a class="nav-link d-flex justify-content-between position-relative py-xl-0 px-xl-0 text-uppercase fw-semibold ls-1 fs-15px fs-xl-14px "
+                            asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+                        <li class="nav-item transition-all-xl-1 py-xl-11 py-0 mx-xl-7 dropdown dropdown-hover">
+                            <a class="nav-link d-flex justify-content-between position-relative py-xl-0 px-xl-0 text-uppercase fw-semibold ls-1 fs-15px fs-xl-14px "
+                            asp-controller="Home" asp-action="Category">Shop</a>
+                        </li>
+
+                        <li class="nav-item transition-all-xl-1 py-xl-11 py-0 mx-xl-7 dropdown dropdown-hover dropdown-fullwidth">
+                            <a class="nav-link d-flex justify-content-between position-relative py-xl-0 px-xl-0 text-uppercase fw-semibold ls-1 fs-15px fs-xl-14px "
+                            asp-controller="Home" asp-action="AboutUs">About Us</a>
+                        </li>
+
+                        <li class="nav-item transition-all-xl-1 py-xl-11 py-0 mx-xl-7 dropdown dropdown-hover dropdown-fullwidth">
+                            <a class="nav-link d-flex justify-content-between position-relative py-xl-0 px-xl-0 text-uppercase fw-semibold ls-1 fs-15px fs-xl-14px "
+                            asp-controller="Home" asp-action="News">News</a>
+                        </li>
+                    </ul>
+
+                    <div class="icons-actions d-flex justify-content-end w-xl-30 fs-28px text-body-emphasis">
+                        <div class="px-xl-5 d-inline-block">
+                            <a class="lh-1 color-inherit text-decoration-none" href="#" data-bs-toggle="offcanvas"
+                            data-bs-target="#searchModal" aria-controls="searchModal" aria-expanded="false">
+                                <i class="icon fs-4 icon-magnifying-glass-light fa-solid fa-magnifying-glass"></i>
+                            </a>
+                        </div>
+
+                        <div class="px-5 d-none d-xl-inline-block">
+                            @if (string.IsNullOrEmpty(userEmail))
+                            {
+                                <a class="lh-1 color-inherit text-decoration-none" asp-controller="Home" asp-action="Login">
+                                    <i class="icon fs-4 icon-user-light fa-regular fa-user"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <div class="userIconParent d-inline-flex align-items-center position-relative">
+
+                                    <a class="lh-1 text-decoration-none" href="#">
+                                        <i class="icon fs-4 icon-user-light fa-regular fa-user"></i>
+                                    </a>
+
+                                    <span class="helloUser ms-4">Hello, @userEmail.Split("@")[0]...</span>
+
+                                    <ul class="userIconChildList position-absolute mt-2">
+                                        @if (roles.Contains("ADMIN"))
+                                        {
+                                            <li class="userIconChildItem">
+                                                <i class="fa-solid fa-id-card"></i>
+                                                <a asp-controller="Admin" asp-action="Index" >DashBoard</a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="userIconChildItem">  
+                                                <i class="fa-solid fa-id-card"></i>
+                                                <a asp-controller="Customer" asp-action="Index" asp-route-section="CustomerProfile"  asp-route-mode="Default">My Profile</a>
+                                            </li>
+                                            <li class="userIconChildItem">
+                                                <i class="fa-solid fa-basket-shopping"></i>
+                                                <a asp-controller="Customer" asp-action="Index" asp-route-section="CustomerOrder" asp-route-mode="Default">My Order</a>
+                                            </li>
+                                            <li class="userIconChildItem">
+                                                <i class="fa-solid fa-truck-fast"></i>
+                                                <a asp-controller="Customer" asp-action="Index" asp-route-section="CustomerAddressShipping" asp-route-mode="Default">My Address</a>
+                                            </li>
+                                        }
+                                        <li class="userIconChildItem text-danger">
+                                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                            <a class="text-danger" asp-controller="Home" asp-action="Logout">Log out</a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                            }
+                        </div>
+                        @if (!string.IsNullOrEmpty(userEmail) && !isAdmin)
+                        {
+                            <div id="miniCartContainer">
+                                @await Component.InvokeAsync("MiniCart")
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div id="client-layout" class="client-pcoded">
+        @RenderBody()
+    </div>
+
+    <footer class="pt-14 pt-lg-17 pb-16 footer">
+        <div class="container container-xxl pt-4">
+            <div class="row">
+                <div class="col-lg-5 col-12 mb-13 mb-lg-0">
+                    <h3 class="mb-6 text-body-emphasis font-primary fw-normal">
+                        Care for Your Skin,
+                        <br>
+                        Care for Your Beauty
+                    </h3>
+                    <p>Give your inbox some love with new products, tips, &amp; more.</p>
+
+                    <form class="pt-6 pe-xl-8 form-border-transparent">
+                        <div class="input-group position-relative">
+                            <input type="email" class="form-control rounded pe-15 lh-1 py-7" placeholder="Your email">
+                            <button type="submit"
+                                    class="btn fs-28px bg-transparent text-secondary position-absolute btn-custom px-8 z-index-5 h-100 lh-0">
+                                <i class="icon fs-5 icon-long-arrow-right fa-solid fa-arrow-right-long"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md col-12 mb-12 mb-lg-0 offset-lg-2">
+                    <h3 class="fs-5 mb-6 ">About Us</h3>
+                    <ul class="list-unstyled mb-0 fw-medium ">
+                        <li class="pt-3 mb-4">
+                            <a asp-controller="Home" asp-action="AboutUs" title="About us" class="text-body">About us</a>
+                        </li>
+                        <li class="pt-3 mb-4">
+                            <a href="#" title="Careers" class="text-body">Careers</a>
+                        </li>
+                        <li class="pt-3 mb-4">
+                            <a href="#" title="Store Locations" class="text-body">Store Locations</a>
+                        </li>
+                        <li class="pt-3 mb-4">
+                            <a href="#" title="Our Blog" class="text-body">Our Blog</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md col-12 mb-12 mb-lg-0">
+                    <h3 class="fs-5 mb-6 ">Information</h3>
+                    <ul class="list-unstyled mb-0 fw-medium ">
+                        <li class="pt-3 mb-4">
+                            <a href="#" title="Contact Us" class="text-body">Contact Us</a>
+                        </li>
+                        <li class="pt-3 mb-4">
+                            <a href="#" title="Shipping FAQ" class="text-body">Shipping FAQ</a>
+                        </li>
+                        <li class="pt-3 mb-4">
+                            <a href="#" title="Terms &amp; Conditions" class="text-body">Terms &amp; Conditions</a>
+                        </li>
+                        <li class="pt-3 mb-4">
+                            <a href="#" title="Privacy Policy" class="text-body">Privacy Policy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row align-items-center mt-0 mt-lg-20 pt-lg-4">
+                <div class="col-sm-12 col-md-6 col-lg-4 d-flex align-items-center order-2 order-lg-1 fs-6 mt-7 mt-md-11 mt-lg-0">
+                    <p class="mb-0">© Anna 2024</p>
+                    <ul class="list-inline fs-18px ms-6 mb-0">
+                        <li class="list-inline-item me-8">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </li>
+                        <li class="list-inline-item me-8">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        </li>
+                        <li class="list-inline-item me-8">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-sm-12 col-lg-4 text-md-center order-1 order-lg-2 ">
+                    <a class="d-inline-block" asp-controller="Home" asp-action="Index">
+                        <img class="lazy-image img-fluid light-mode-img" src="~/assets/images/footer-logo.png" width="300" height="100" alt="Anna Cosmetic">
+                    </a>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-4 order-3 text-sm-start text-lg-end mt-7 mt-md-11 mt-lg-0">
+                    <img src="#" data-src="@Url.Content("~/assets/images/img_1.png")" width="313" height="28" alt="Paypal"
+                         class="img-fluid lazy-image">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.js"></script>
+    <script src="~/assets/js/clipboard.min.js"></script>
+    <script src="~/assets/js/lazyload.min.js"></script>
+    <script src="~/assets/js/jquery.waypoints.min.js"></script>
+    <script src="~/assets/js/lightgallery.min.js"></script>
+    <script src="~/assets/js/lg-zoom.min.js"></script>
+    <script src="~/assets/js/lg-thumbnail.min.js"></script>
+    <script src="~/assets/js/lg-video.min.js"></script>
+    <script src="~/assets/js/lg-vimeo-thumbnail.min.js"></script>
+    <script src="~/assets/js/isotope.pkgd.min.js"></script>
+    <script src="~/assets/js/slick.min.js"></script>
+    <script src="~/assets/js/gsap.min.js"></script>
+    <script src="~/assets/js/ScrollToPlugin.min.js"></script>
+    <script src="~/assets/js/ScrollTrigger.min.js"></script>
+    <script src="~/assets/js/mapbox-gl.js"></script>
+    <script src="~/assets/js/theme.min.js"></script>
+
+
+    <div id="searchModal" data-bs-scroll="false" class="offcanvas offcanvas-top" style="--bs-offcanvas-height: auto">
+        <div class="container-wide container-xxl">
+            <nav class="navbar navbar-expand-xl px-0 py-6 py-xl-12 row align-items-start">
+                <div class="col-xl-3 d-flex justify-content-center justify-content-xl-start">
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand py-4 d-lg-inline-block">
+                        <img src="~/assets/images/logo.png" height="35" alt="Anna Beauty">
+                    </a>
+                </div>
+
+                <div class="col-xl-6 d-flex justify-content-center">
+
+                    <form method="get" asp-controller="Home" asp-action="Category" class="w-xl-100 w-sm-75 w-100 mt-6 mt-xl-0 px-6 px-xl-0">
+                        <div class="input-group mx-auto">
+                            <input type="text" name="SearchQuery" class="form-control form-control bg-transparent border-primary"
+                                   placeholder="Search product" value="@Context.Request.Query["SearchQuery"]" />
+                            <div class="form-control-append position-absolute end-0 top-0 bottom-0 d-flex align-items-center">
+                                <button class="input-group-text bg-transparent border-0 px-0 me-6 btn btn-link text-decoration-none" type="submit">
+                                    <i class="fa-solid fa-magnifying-glass fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="position-fixed z-index-10 bottom-0 end-0 p-10">
+        <a href="#"
+           class="gtf-back-to-top text-decoration-none bg-body text-primary bg-primary-hover text-light-hover shadow square p-0 rounded-circle d-flex align-items-center justify-content-center"
+           title="Back To Top" style="--square-size: 48px">
+            <i class="fa-solid fa-arrow-up"></i>
+        </a>
+    </div>
+    <script>
+        const loginSuccess = '@TempData["LoginSuccess"]';
+        const userEmail = '@userEmail';
+        const isAdmin = @isAdmin.ToString().ToLower();
+
+
+        if (loginSuccess) {
+            showMessage("Hello " + userEmail);
+        }
+
+        if(userEmail && !isAdmin){
+                $(document).ready(function () {
+            $.ajax({
+                url: '/Carts/ReloadMiniCart',
+                method: 'POST',
+                success: function (html) {
+                    $("#miniCartContainer").html(html);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading MiniCart:', error);
+                }
+            });
+        });
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>

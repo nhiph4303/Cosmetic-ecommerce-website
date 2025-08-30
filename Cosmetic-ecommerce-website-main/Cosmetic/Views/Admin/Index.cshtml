@@ -1,0 +1,238 @@
+﻿@model Cosmetic.Models.ViewModels.DashboardIndexViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+}
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center">
+        <div class="col-sm-6 mb-8 mb-sm-0">
+            <h2 class="fs-4 mb-0">Dashboard</h2>
+        </div>
+        <div class="col-sm-6 d-flex flex-wrap justify-content-sm-end">
+            <a href="#" class="btn btn-primary">
+                <svg class="icon mt-n3">
+                    <use xlink:href="#file-plus"></use>
+                </svg>
+                <span class="d-inline-block ml-1">Create report</span>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-xxl-3 mb-7">
+            <div class="card rounded-4">
+                <div class="card-body p-7">
+                    <div class="d-flex">
+                        <div class="me-6">
+                            <span class="square d-flex align-items-center justify-content-center fs-5 badge rounded-circle text-green bg-green-light" style="--square-size: 48px">
+                                <svg class="icon">
+                                    <use xlink:href="#circle-dollar"></use>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="mb-4 card-title">Revenue</h6>
+                            <span class="fs-4 d-block font-weight-500 text-primary lh-12">$@Model.TotalRevenue.ToString("N2")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xxl-3 mb-7">
+            <div class="card rounded-4">
+                <div class="card-body p-7">
+                    <div class="d-flex">
+                        <div class="me-6">
+                            <span class="square d-flex align-items-center justify-content-center fs-5 badge rounded-circle text-success bg-success-light" style="--square-size: 48px">
+                                <i class="fas fa-truck"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="mb-4 card-title">Orders</h6>
+                            <span class="fs-4 d-block font-weight-500 text-primary lh-12">@Model.TotalOrder</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xxl-3 mb-7">
+            <div class="card rounded-4">
+                <div class="card-body p-7">
+                    <div class="d-flex">
+                        <div class="me-6">
+                            <span class="square d-flex align-items-center justify-content-center fs-5 badge rounded-circle text-warning bg-warning-light" style="--square-size: 48px">
+                                <i class="fas fa-qrcode"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="mb-4 card-title">Products</h6>
+                            <span class="fs-4 d-block font-weight-500 text-primary lh-12">@Model.TotalProducts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xxl-3 mb-7">
+            <div class="card rounded-4">
+                <div class="card-body p-7">
+                    <div class="d-flex">
+                        <div class="me-6">
+                            <span class="square d-flex align-items-center justify-content-center fs-5 badge rounded-circle text-info bg-info-light" style="--square-size: 48px">
+                                <i class="fas fa-shopping-bag"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="mb-4 card-title">Monthly Earning</h6>
+                            <span class="fs-4 d-block font-weight-500 text-primary lh-12">$@Model.TotalMonthlyEarning.ToString("N2")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4 rounded-4 p-7">
+        <div class="card-header bg-transparent px-0 pt-0 pb-7">
+            <h4 class="card-title fs-18px mb-2">Latest orders</h4>
+            <form id="filterForm" asp-action="Index" asp-controller="Admin">
+                <div class="row justify-content-end">
+                    <div class="col-md-3 col-12 mb-md-0 col-lg-3 mt-6">
+                        <select class="form-select" name="status" id="statusSelect">
+                            <option value="All" selected="@(Model.Status == "All" ? true : false)">All</option>
+                            <option value="PENDING" selected="@(Model.Status == "PENDING" ? true : false)">PENDING</option>
+                            <option value="SHIPPED" selected="@(Model.Status == "SHIPPED" ? true : false)">SHIPPED</option>
+                            <option value="COMPLETED" selected="@(Model.Status == "COMPLETED" ? true : false)">COMPLETED</option>
+                            <option value="CANCELLED" selected="@(Model.Status == "CANCELLED" ? true : false)">CANCELLED</option>
+                            <option value="RETURN" selected="@(Model.Status == "RETURN" ? true : false)">RETURN</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-6 col-lg-3 mt-6">
+                        <input type="date" class="form-control bg-input border-0" name="startDate" value="@(Model.StartDate?.ToString("yyyy-MM-dd"))" onchange="loadOrders()">
+                    </div>
+                    <div class="col-md-3 col-6 col-lg-3 mt-6">
+                        <input type="date" class="form-control bg-input border-0" name="endDate" value="@(Model.EndDate?.ToString("yyyy-MM-dd"))" onchange="loadOrders()">
+                    </div>
+                    <div class="col-md-3 col-12 col-lg-2 mt-6">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                    <input type="hidden" name="page" id="pageInput" value="1">
+                </div>
+            </form>
+        </div>
+        <div class="card-body px-0 pt-7 pb-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle table-nowrap mb-0 table-borderless">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="align-middle" scope="col">
+                                Order ID
+                            </th>
+                            <th class="align-middle" scope="col">
+                                Recipient Name
+                            </th>
+                            <th class="align-middle" scope="col">
+                                Date
+                            </th>
+                            <th class="align-middle" scope="col">
+                                Total
+                            </th>
+                            <th class="align-middle" scope="col">
+                                Order Status
+                            </th>
+                            <th class="align-middle" scope="col">
+                                Phone Number
+                            </th>
+                            <th class="align-middle text-center" scope="col">
+                                View Details
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.OrderList)
+                        {
+                            <tr>
+                                <td><a href="#">#@order.Id</a></td>
+                                <td class="text-body-emphasis">@order.Name</td>
+                                <td>@order.OrderDate.ToString("dd MMM, yyyy")</td>
+                                <td>$@order.FinalPrice.ToString("N2")</td>
+                                <td>
+                                    <span class="badge rounded-lg status-@order.OrderStatus.ToLower()__myOrder border-0 text-capitalize fs-12">@order.OrderStatus</span>
+                                </td>
+                                <td>
+                                    @order.PhoneNumber
+                                </td>.
+                                <td class="text-center">
+                                    <a asp-action="OrderDetail" asp-controller="Orders" asp-route-id="@order.Id" class="btn btn-primary fs-13px btn-xs py-4"> View details</a>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.OrderList.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-4">No orders found matching your criteria.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 0)
+    {
+        <nav aria-label="Page navigation" class="mt-6 mb-4">
+            <ul class="pagination justify-content-start">
+                @if (Model.CurrentPage > 1)
+                {
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@(Model.CurrentPage - 1))">
+                            <i class="far fa-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+
+                @{
+                    int startPage = Math.Max(1, Model.CurrentPage - 2);
+                    int endPage = Math.Min(Model.TotalPages, startPage + 4);
+
+                    if (endPage - startPage < 4 && Model.TotalPages > 4)
+                    {
+                        startPage = Math.Max(1, endPage - 4);
+                    }
+                }
+
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "") mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@i)">@i.ToString("00")</a>
+                    </li>
+                }
+
+                @if (endPage < Model.TotalPages)
+                {
+                    <li class="page-item mx-3"><a class="page-link dot" href="javascript:void(0)">...</a></li>
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@Model.TotalPages)">@Model.TotalPages.ToString("00")</a>
+                    </li>
+                }
+
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <li class="page-item mx-3">
+                        <a class="page-link" href="javascript:void(0)" onclick="navigateToPage(@(Model.CurrentPage + 1))">
+                            <i class="far fa-chevron-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
+
+<script>
+    function navigateToPage(page) {
+        document.getElementById('pageInput').value = page;
+        document.getElementById('filterForm').submit();
+    }
+</script>

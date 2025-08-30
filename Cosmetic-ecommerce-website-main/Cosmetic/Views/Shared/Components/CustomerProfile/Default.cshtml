@@ -1,0 +1,152 @@
+﻿@model Cosmetic.Models.Customer
+@{
+    var customer = Model;
+}
+
+
+@functions {
+    public string GetRankColorClass(string rank)
+    {
+        return rank switch
+        {
+            "NONE" => "user-profile-rank__none",
+            "SILVER" => "user-profile-rank__silver",
+            "GOLD" => "user-profile-rank__gold",
+            "PLATINUM" => "user-profile-rank__platinum",
+            _ => "user-profile-rank__none"
+        };
+    }
+
+    public string GetRankBadgeClass(string rank)
+    {
+        return rank switch
+        {
+            "NONE" => "user-profile-rank-badge__none",
+            "SILVER" => "user-profile-rank-badge__silver",
+            "GOLD" => "user-profile-rank-badge__gold",
+            "PLATINUM" => "user-profile-rank-badge__platinum",
+            _ => "user-profile-rank-badge__none"
+        };
+    }
+
+    public string GetRankIcon(string rank)
+    {
+        return rank switch
+        {
+            "NONE" => "fa-user",
+            "SILVER" => "fa-medal",
+            "GOLD" => "fa-award",
+            "PLATINUM" => "fa-crown",
+            _ => "fa-user"
+        };
+    }
+}
+<div class="card border-0 shadow-sm user-profile-content">
+    <div class="card-header bg-white py-3 border-bottom">
+        <h4 class="card-title mb-0">
+            <i class="fas fa-user-circle me-2 text-primary"></i>
+            My Profile
+        </h4>
+    </div>
+    <div class="card-body p-4">
+        <div class="row mb-4">
+
+            <div class="col-12 mb-4">
+                <div class="loyalty-card p-6 rounded @GetRankColorClass(customer.Rank.Name)">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="user-profile-loyalty__title text-white mb-5">@customer.Name</h4>
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="user-profile-loyalty__badge rounded px-4 py-2 me-3 d-flex align-items-center gap-4 @GetRankBadgeClass(customer.Rank.Name)">
+                                    <i class="fas @GetRankIcon(customer.Rank.Name) me-1"></i>
+                                    <span class="fw-bold">@customer.Rank.Name</span>
+                                </div>
+                                <div class="user-profile-loyalty__points text-white d-flex align-items-center gap-4">
+                                    <i class="fas fa-gem me-1"></i>
+                                    <span>@customer.LoyalPoints Points</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-profile-loyalty__logo">
+                            <i class="fas fa-crown fa-2x text-white opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <h6 class="user-profile-content__section-title mb-3 py-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Personal Information
+                </h6>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="user-profile-info__item border rounded p-6">
+                            <label class="text-muted small mb-1">Full Name</label>
+                            <div class="d-flex align-items-center gap-4">
+                                <i class="fas fa-user text-primary me-2"></i>
+                                <span class="fw-medium">@customer.Name</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="user-profile-info__item border rounded p-6">
+                            <label class="text-muted small mb-1">Email Address</label>
+                            <div class="d-flex align-items-center gap-4">
+                                <i class="fas fa-envelope text-primary me-2"></i>
+                                <span class="fw-medium">@customer.User.Email</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="user-profile-info__item border rounded p-6">
+                            <label class="text-muted small mb-1">Phone Number</label>
+                            <div class="d-flex align-items-center gap-4">
+                                <i class="fas fa-phone-alt text-primary me-2"></i>
+                                <span class="fw-medium">@customer.PhoneNumber</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="user-profile-info__item border rounded p-6">
+                            <label class="text-muted small mb-1">Gender</label>
+                            <div class="d-flex align-items-center gap-4">
+                                <i class="fas @(customer.Gender ? "fa-mars" : "fa-venus") text-primary me-2"></i>
+                                <span class="fw-medium">@(customer.Gender ? "Male" : "Female")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="user-profile-info__item border rounded p-6">
+                            <label class="text-muted small mb-1">Date of Birth</label>
+                            <div class="d-flex align-items-center gap-4">
+                                <i class="fas fa-birthday-cake text-primary me-2"></i>
+                                <span class="fw-medium">@customer.DateOfBirth.ToString("dd/MM/yyyy")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="user-profile-info__item border rounded p-6 ">
+                            <label class="text-muted small mb-1">Address</label>
+                            <div class="d-flex align-items-center gap-4">
+                                <i class="fas fa-home text-primary me-2"></i>
+                                <span class="fw-medium">@(customer.Address == null ? "No Address" : customer.Address)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-end mt-3">
+            <a class="btn btn-outline-secondary me-2 user-profile-content__btn-password" asp-controller="Customer" asp-action="Index" asp-route-section="CustomerProfile" asp-route-mode="ChangePassword">
+                <i class="fas fa-lock me-1"></i>
+                Change Password
+            </a>
+            <a class="btn btn-primary user-profile-content__btn-edit" type="button" asp-controller="Customer" asp-action="Index" asp-route-section="CustomerProfile" asp-route-mode="EditProfile">
+                <i class="fas fa-edit me-1"></i>
+                Edit Profile
+            </a>
+        </div>
+    </div>
+</div>

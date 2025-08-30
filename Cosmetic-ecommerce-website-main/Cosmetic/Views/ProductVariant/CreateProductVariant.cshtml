@@ -1,0 +1,92 @@
+﻿@model Cosmetic.Models.ViewModels.ProductVariantCreateViewModel
+
+@{
+    ViewData["Title"] = "Create ProductVariant";
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
+
+    var products = Model.Products;
+}
+
+<div class="dashboard-page-content">
+    <div class="row mb-9 align-items-center">
+        <div class="col-xxl-9">
+            <div class="row">
+                <div class="col-sm-6 mb-8 mb-sm-0">
+                    <h2 class="fs-4 mb-0">Create ProductVariant</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xxl-12">
+            <div class="card rounded-4">
+                <div class="card-body p-7">
+                    <div class="row mx-n7">
+                        <div class="col-lg-12 px-7">
+                            <section class="p-xl-5">
+
+                                <form id="createProductVariantForm" action="/ProductVariant/CreateProductVariant" onsubmit="submitFormData('createProductVariantForm','POST'); return false;">
+                                    <div class="row mb-8">
+                                        <div class="col-lg-6 col-md-6">
+                                            <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Id">Id</label>
+                                            <div class="col-lg-9">
+                                                <select class="form-select" id="selectProduct" onchange="SelectProductOnChange()" asp-for="ProductId">
+                                                    <option value="" data-type="">Select Product</option>
+                                                    @foreach (var eachProduct in products)
+                                                    {
+                                                        <option value="@eachProduct.Id" data-type="@eachProduct.ProductType">@eachProduct.Name</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="ProductId" class="text-danger field-error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="ProductId">Product Id</label>
+                                            <div class="col-lg-9">
+                                                <input class="form-control" asp-for="ProductId" readonly id="inputProductId"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-8">
+                                        <div class="col-lg-6 col-md-6">
+                                            <label class="col-lg-5 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Name" id="labelProductVariantName">Name  </label>
+                                            <div class="col-lg-7" id="storeProductVariantName">
+
+                                               <input name="Name"  class="form-control" placeholder="Product Variant Name" id="inputProductVariantName"  />
+                                                
+                                                <span asp-validation-for="Name" class="text-danger field-error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Name">Product Type</label>
+                                            <div class="col-lg-9">
+                                                <input class="form-control"  id="inputProductType" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="Price">Price</label>
+                                        <div class="col-lg-9">
+                                            <input asp-for="Price" class="form-control" placeholder="Product Price" />
+                                            <span asp-validation-for="Price" class="text-danger field-error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-8">
+                                        <label class="col-lg-3 col-form-label mb-2 fs-13px ls-1 fw-semibold text-uppercase" for="InStock">In Stock</label>
+                                        <div class="col-lg-9">
+                                            <input asp-for="InStock" class="form-control" />
+                                            <span asp-validation-for="InStock" class="text-danger field-error"></span>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                                    <a asp-controler="ProductVariant" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

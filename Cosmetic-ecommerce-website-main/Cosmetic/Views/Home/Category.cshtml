@@ -1,0 +1,198 @@
+﻿@model IEnumerable<Cosmetic.Models.Product>
+@{
+    var categories = ViewBag.Categories as List<Cosmetic.Models.Category>;
+    var userEmail = ViewBag.UserEmail as string;
+}
+
+
+
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Product Category";
+}
+
+<main id="content" class="wrapper layout-page">
+
+
+    <section>
+        <div class="text-center py-13">
+            <div class="container">
+                <h2 class="mb-0">Product Category</h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="container container-xxl">
+        <div class="tool-bar mb-11 align-items-center justify-content-between d-lg-flex">
+            <div class="tool-bar-right align-items-center d-flex ms-2">
+                <ul class="list-unstyled d-flex align-items-center list-inline mb-0 ms-auto">
+                    <li class="list-inline-item me-0">
+                        <form method="get" action="@Url.Action("Category", "Home")">
+                            <input type="hidden" name="CategoryId" value="@ViewBag.Filter.CategoryId" />
+                            <input type="hidden" name="MinPrice" value="@ViewBag.Filter.MinPrice" />
+                            <input type="hidden" name="MaxPrice" value="@ViewBag.Filter.MaxPrice" />
+                            <select class="form-select" name="OrderBy" onchange="this.form.submit()">
+                                <option value="alphabet-asc" selected="@(ViewBag.Filter.OrderBy == "alphabet-asc")">Sort A-Z</option>
+                                <option value="alphabet-desc" selected="@(ViewBag.Filter.OrderBy == "alphabet-desc")">Sort Z-A</option>
+                            </select>
+                        </form>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+
+    <div class="container container-xxl pb-16 pb-lg-18">
+        <div class="row">
+            <div class="col-lg-9 order-lg-1">
+                <div class="row gy-11">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var product in Model)
+                        {
+                            <div class="col-sm-6 col-lg-4 col-xl-3">
+                                <div class="card card-product grid-2 bg-transparent border-0" data-animate="fadeInUp">
+                                    <figure class="card-img-top position-relative mb-7 overflow-hidden">
+                                        <a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@product.Id" class="hover-zoom-in d-block">
+                                            <img src="@Url.Content(product.Image)" class="img-fluid lazy-image w-100" alt="@product.Name" width="330" height="440">
+                                        </a>
+                                        <div class="position-absolute top-0 end-0 z-index-2 m-2">
+                                            <span class="badge bg-light text-dark fs-12px px-4 py-4" title="@product.ProductVariants[0].Name">
+                                                @product.ProductVariants[0].Name
+                                            </span>
+                                        </div>
+                                        <div class="position-absolute product-flash z-index-2">
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="badge badge-product-flash on-sale bg-primary">-@product.Discount%</span>
+                                            }
+                                        </div>
+
+                                        <div class="position-absolute d-flex z-index-2 product-actions horizontal">
+                                            @if (!string.IsNullOrEmpty(userEmail))
+                                            {
+                                                <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
+                                                   href="javascript:;" onclick="addToCart(@product.Id)"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart">
+                                                    <i class="icon fs-6 icon-shopping-bag-open-light fa-solid fa-cart-shopping"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+
+                                                <a class="cursor-pointer text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart" onclick="showLoginPopup('HomeIndex')">
+                                                    <i class="icon fs-6 icon-shopping-bag-open-light fa-solid fa-cart-shopping"></i>
+                                                </a>
+                                            }
+                                            <a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
+                                               data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Compare"
+                                               asp-controller="Home" asp-action="Compare" asp-route-productId="@product.Id">
+                                                <i class="icon fs-6 icon-arrows-left-right-light fa-solid fa-arrow-right-arrow-left"></i>
+                                            </a>
+                                        </div>
+                                    </figure>
+                                    <div class="card-body text-center p-0">
+                                        <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
+                                            @if (product.Discount > 0)
+                                            {
+                                                <del class="text-body fw-500 me-4 fs-13px">$@product.ProductVariants[0].Price.ToString("F2")</del>
+                                            }
+                                            <ins class="text-decoration-none">$@((product.ProductVariants[0].Price * ((100 - product.Discount) / 100)).ToString("F2"))</ins>
+                                        </span>
+
+                                        <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
+                                            <a class="text-decoration-none text-reset" asp-action="ProductDetail" asp-controller="Home" asp-route-id="@product.Id">
+                                                @product.Name
+                                            </a>
+                                        </h4>
+                                        @* <div class="d-flex align-items-center fs-12px justify-content-center"> *@
+                                        @*     <div class="rating"> *@
+                                        @*         <div class="empty-stars"> *@
+                                        @*             @for (int i = 0; i < 5; i++) *@
+                                        @*             { *@
+                                        @*                 <span class="star"> *@
+                                        @*                     <i class="icon star-o fa-regular fa-star"></i> *@
+                                        @*                 </span> *@
+                                        @*             } *@
+                                        @*         </div> *@
+                                        @*         <div class="filled-stars" style="width: 80%"> *@
+                                        @*             @for (int i = 0; i < 4; i++) *@
+                                        @*             { *@
+                                        @*                 <span class="star"> *@
+                                        @*                     <i class="icon star fa-solid fa-star"></i> *@
+                                        @*                 </span> *@
+                                        @*             } *@
+                                        @*         </div> *@
+                                        @*     </div> *@
+                                        @*     <span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span> *@
+                                        @* </div> *@
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    }
+                    else
+                    {
+                        <p class="text-center">There are no products in this category.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="col-lg-3 d-lg-block d-none">
+                <div class="position-sticky top-0">
+                    <aside class="primary-sidebar pe-xl-9 me-xl-2 mt-12 pt-2 mt-lg-0 pt-lg-0">
+                        <div class="widget widget-product-category">
+                            <h4 class="widget-title fs-5 mb-6">Category</h4>
+                            <ul class="navbar-nav navbar-nav-cate" id="widget_product_category">
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Category", "Home", new {CategoryId = category.Id,OrderBy = ViewBag.Filter.OrderBy ,MinPrice = ViewBag.Filter.MinPrice,MaxPrice = ViewBag.Filter.MaxPrice})"
+                                           class="text-reset position-relative d-block text-decoration-none text-body-emphasis-hover d-flex align-items-center text-uppercase fs-14px fw-semibold letter-spacing-5 @(ViewBag.Filter.CategoryId == category.Id ? "active" : "")">
+                                            <span class="text-hover-underline">@category.Name</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="widget widget-product-price">
+                            <h4 class="widget-title fs-5 mb-6">Price</h4>
+                            <ul class="navbar-nav navbar-nav-cate" id="widget_product_price">
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Category", "Home", new {CategoryId = ViewBag.Filter.CategoryId,OrderBy = ViewBag.Filter.OrderBy})"
+                                       class="text-reset position-relative d-block text-decoration-none text-body-emphasis-hover d-flex align-items-center">
+                                        <span class="text-hover-underline @(ViewBag.Filter.MinPrice == null ? "active" : "")">All</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Category", "Home", new {CategoryId = ViewBag.Filter.CategoryId,OrderBy = ViewBag.Filter.OrderBy,MinPrice = 10,MaxPrice =50})"
+                                       class="text-reset position-relative d-block text-decoration-none text-body-emphasis-hover d-flex align-items-center @(ViewBag.Filter.MinPrice == 10 ? "active" : "")">
+                                        <span class="text-hover-underline">$10 - $50</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Category", "Home", new {CategoryId = ViewBag.Filter.CategoryId,OrderBy = ViewBag.Filter.OrderBy,MinPrice = 50,MaxPrice =100})"
+                                       class="text-reset position-relative d-block text-decoration-none text-body-emphasis-hover d-flex align-items-center @(ViewBag.Filter.MinPrice == 50 ? "active" : "")">
+                                        <span class="text-hover-underline">$50 - $100</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Category", "Home", new {CategoryId = ViewBag.Filter.CategoryId,OrderBy = ViewBag.Filter.OrderBy,MinPrice = 100,MaxPrice =200})"
+                                       class="text-reset position-relative d-block text-decoration-none text-body-emphasis-hover d-flex align-items-center @(ViewBag.Filter.MinPrice == 100 ? "active" : "")">
+                                        <span class="text-hover-underline">$100 - $200</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
